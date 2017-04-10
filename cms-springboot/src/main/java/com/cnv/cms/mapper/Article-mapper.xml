@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    
+<mapper namespace="com.cnv.cms.mapper.ArticleMapper">
+   
+<!--  BaseMapper  -->
+	<!--  添加  -->
+    <insert id="add" parameterType="Article"
+    useGeneratedKeys="true" keyProperty="id"> 
+        insert into t_article
+        values(#{id},#{title},#{summary},#{content},#{keywords},
+        	#{userId},#{channelId},#{status},#{createDate},#{recommend},
+        	#{chiefPic},#{readTimes},#{fellows});  
+    </insert>   
+ 	<!--删除操作  -->
+	<select id="delete" parameterType="int">
+		delete from t_article where id= #{id}
+	</select>   
+	<!--更新操作  -->
+     <select id="update" parameterType="Article"> 
+        update  t_article set 
+        title=#{title},summary=#{summary},content=#{content},keywords=#{keywords},
+        	userId=#{userId},channelId=#{channelId},status=#{status},recommend=#{recommend},
+        	chiefPic=#{chiefPic},readTimes=#{readTimes},fellows=#{fellows}
+        	where id=#{id};  
+    </select> 
+    <!-- 根据id查询-->
+     <select id="selectById" parameterType="int" resultType="Article">
+        select ta.*, tu.username as author from t_article ta, t_user tu where ta.id=#{id} and ta.userId=tu.id;
+	</select>    
+	<select id="maxId"  resultType="int">
+        select max(id) from t_article
+    </select>    
+             
+    <!-- 删除栏目下全部文章 -->
+    <select id="deleteByChannel" parameterType="int">
+         delete from t_article where channelId=#{id}
+    </select>
+
+	<!--改变文章状态 -->
+     <select id="changeStatus" parameterType="int"> 
+        update t_article set status=1-status where id=#{id}; 
+    </select> 
+	<!--设置文章查看次数-->
+     <select id="addReadTimes"> 
+        update  t_article set readTimes=readTimes+#{param2} where id=#{param1};  
+    </select>     
+  	<!--设置文章关注人数-->
+     <select id="addFellows"> 
+        update  t_article set fellows=fellows+#{param2} where id=#{param1};  
+    </select>    
+ 
+ 
+ <!--检索功能  -->   
+    <!-- 分页查询-->
+     <select id="selectFromTo"  resultType="Article">
+        select * from t_article order by id  limit #{0},#{1};
+	</select>
+	
+    <!-- 通过标题检索 -->
+    <select id="selectByTitle" parameterType="string" resultType="Article">
+        select * from t_article where title like #{title};
+    </select>	
+	
+    <!-- 通过栏目id检索 -->
+    <select id="selectByChannel" parameterType="int" resultType="Article">
+        select tu.username as author,ta.* from t_article ta, t_user tu where ta.channelId=#{id} and ta.userId=tu.id;
+    </select>	
+    <!-- 通过关键字检索 -->
+    <select id="selectByKeywords" parameterType="string" resultType="Article">
+        select * from t_article where keywords like #{keywords};
+    </select>	
+     <!-- 检索推荐文章 -->
+    <select id="selectRecommends" resultType="Article">
+        select * from t_article where recommend=1;
+    </select>	   
+    <select id="selectRecommendsInChannel" parameterType="int" resultType="Article">
+        select * from t_article where recommend=1 and channelId=#{channelId};
+    </select>	    
+
+     <!-- 检索查看次数最多的文章 -->
+    <select id="selectTopRead" parameterType="int" resultType="Article">
+        select * from t_article order by readTimes desc limit #{n};
+    </select>	   
+    <select id="selectTopReadInChannel" resultType="Article">
+        select * from t_article where  channelId=#{1} order by readTimes desc limit #{0};
+    </select>	
+    
+    <!-- 检索关注次数最多的文章 -->
+    <select id="selectTopFellow" parameterType="int" resultType="Article">
+        select * from t_article order by fellows desc limit #{n};
+    </select>	
+</mapper>
