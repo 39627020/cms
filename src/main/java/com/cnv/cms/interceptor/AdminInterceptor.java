@@ -1,8 +1,7 @@
-package com.cnv.cms.web;
+package com.cnv.cms.interceptor;
 
 import java.util.Set;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,9 +14,9 @@ import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.model.User;
 
 /*
- *user目录静态资源拦截
+ *Adminl目录静态资源拦截，只有管理员用户可以访问
  */
-public class UserInterceptor extends HandlerInterceptorAdapter {
+public class AdminInterceptor extends HandlerInterceptorAdapter {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean preHandle(HttpServletRequest request,
@@ -26,33 +25,30 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
 		
 		String url = request.getRequestURI();
 		if(CmsConfig.isDebug()){
-			System.out.println("------User Home Interceptor: "+url);
+			System.out.println("------Admin Interceptor: "+url);
 		}
-		//session中是否保存了登录信息
+		
+		
+		//TODO 只有login方法未登录可以访问
+		if(url.equals(request.getContextPath()+"/admin/login.html") ){
+			return super.preHandle(request, response, handler);
+		}
 		User user = (User)session.getAttribute("loginUser");
 		if(user==null) {
-			//删除cookie
-			Cookie[] cookies = request.getCookies();
-			
-			if (cookies !=null) {
-				for (Cookie ck : cookies) {
-					if (ck.getName().equals("loginUser") || ck.getName().equals("loginId")
-							|| ck.getName().equals("isAdmin")) {
-						ck.setValue(null);
-						ck.setPath("/");
-						ck.setMaxAge(0);
-						response.addCookie(ck);
-					}
-				} 
-			}
 			//如果未登录就跳转到登录页面
 			response.sendRedirect(request.getContextPath()+"/login.html");
-			//response.sendError(403, "无权访问");
 			return false;
-		} 
-			
+		} else {
+			boolean isAdmin = (Boolean)session.getAttribute("isAdmin");
+			if(!isAdmin) {
+				if(CmsConfig.isDebug()){
+					System.out.println("没有权限访问该功能");
+				}
+				response.sendRedirect(request.getContextPath()+"user/home.html");
+				return false;
+			}
+		}
 	
-		//System.out.println(request.getRequestURL());
 		return super.preHandle(request, response, handler);
 		
 				

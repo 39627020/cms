@@ -1,4 +1,4 @@
-package com.cnv.cms.web;
+package com.cnv.cms.interceptor;
 
 import java.util.Map;
 import java.util.Set;
