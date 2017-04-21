@@ -13,27 +13,9 @@ import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.model.Group;
 
 @Controller
-@RequestMapping("/test")
-public class TestController {
-	@RequestMapping(value="/a",method=RequestMethod.GET)
-	public  void test1(Model model){
-		System.out.println("controller testing.........");
-		System.out.println("user:"+CmsConfig.getFtpUser());
-		System.out.println("password:"+CmsConfig.getFtpPassword());
-		System.out.println("file path:"+CmsConfig.getFilePath());
-		System.out.println("Is Debug:"+CmsConfig.getDebug());
-		//return "test";
-	}
-	@RequestMapping(value="/b",method=RequestMethod.GET)
-	public @ResponseBody Group testGroup(){
-		Group g = new Group();
-		g.setId(11);
-		g.setName("testg");
-		g.setDescr("desrc");
-		return g;
-		
-	}
-	
+@RequestMapping("/")
+public class SaticResourcesController {
+
 	@RequestMapping(value="/user/{file}.html",method=RequestMethod.GET)
 	public String userInterceptro(@PathVariable("file") String file){
 		return "user/"+file;

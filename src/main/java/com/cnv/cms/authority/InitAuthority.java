@@ -1,4 +1,4 @@
-package com.cnv.cms.interceptor;
+package com.cnv.cms.authority;
 
 import java.util.Map;
 import java.util.Set;
@@ -9,8 +9,6 @@ import javax.servlet.ServletException;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
-import com.cnv.cms.authority.AuthUtil;
 
 @Component
 public class InitAuthority implements  ServletContextInitializer  {

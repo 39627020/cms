@@ -134,6 +134,12 @@ function showUserCenter(){
 		obj = $("#top-usercenter");
 		obj.html(str);
 		
+		
+		$.get(getContextPath()+'/api/admin/login.check',function(data,status){
+			if(status == "success" && data.flag == "success"){
+				var loginUser = getCookie("loginUser");
+			}
+		});
 		//$("#login-link").html('<a href="'+getContextPath()+'/login.html">登录</a>');
 		//$("#register-link").html('<a href="'+getContextPath()+'/register.html">注册</a>');
 	}else{

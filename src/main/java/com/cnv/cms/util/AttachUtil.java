@@ -9,6 +9,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +25,9 @@ import com.cnv.cms.service.GroupService;
  * 临时附件的操作
  */
 @Component("attachUtil")  
-public class AttachUtil {
+public class AttachUtil implements InitializingBean, DisposableBean{
+	private final Logger logger = LoggerFactory.getLogger(AttachUtil.class);
 	@Autowired
-	//@Qualifier("attachServiceImpl")
 	private AttachmentService attachService;
 	
 	@Autowired
@@ -34,32 +38,7 @@ public class AttachUtil {
 	private final ConcurrentMap<String,List<Integer>> tempAttachs = new ConcurrentHashMap<String,List<Integer>>();
 	private static ScheduledThreadPoolExecutor exec = null;
 	public AttachUtil(){
-		Thread t =new Thread(new Runnable(){
 
-			@Override
-			public void run() {
-				Calendar   c   =   Calendar.getInstance();  
-				//得到2小时前的时间
-				c.add(Calendar.HOUR_OF_DAY, -2); 
-				Date date = c.getTime();
-				attachService.deletetUnused(date);
-				if(CmsConfig.isDebug()){
-					System.out.println("记录：--附件清理线程执行---------");
-				}
-				
-			}
-			
-		});
-		t.setDaemon(true);
-		//t.start();
-		exec = new ScheduledThreadPoolExecutor(1);
-		//线程6个小时执行一次
-		//exec.schedule(t, 20, TimeUnit.SECONDS);
-		exec.scheduleAtFixedRate(t,2, 2*60, TimeUnit.MINUTES);
-		if(CmsConfig.isDebug()){
-			System.out.println("------附件清理线程启动---------");
-		}
-		//testTrsaction();
 	}
 	public void testTrsaction(){
 		
@@ -93,6 +72,7 @@ public class AttachUtil {
 		});
 		exec.schedule(task, 5, TimeUnit.SECONDS);  
 	}
+	
 	public void addTempAttachs(String clientid, int id){
 		List<Integer> tempAtsList = tempAttachs.get(clientid);
 		if(tempAtsList==null){
@@ -116,9 +96,38 @@ public class AttachUtil {
 			tempAttachs.remove(client);
 		}
 	}
-	public static void stop(){
+	public  void stop(){
 		if(exec!=null)
 			exec.shutdown();
-		//System.out.println("调用shutdown");
+		logger.info("附件清理线程停止");
+	}
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		Thread t =new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				Calendar   c   =   Calendar.getInstance();  
+				//得到2小时前的时间
+				c.add(Calendar.HOUR_OF_DAY, -2); 
+				Date date = c.getTime();
+				attachService.deletetUnused(date);
+				logger.info("附件清理线程执行");
+				
+			}
+			
+		});
+		t.setDaemon(true);
+		//t.start();
+		exec = new ScheduledThreadPoolExecutor(1);
+		//线程6个小时执行一次
+		//exec.schedule(t, 20, TimeUnit.SECONDS);
+		exec.scheduleAtFixedRate(t,2, 2*60, TimeUnit.MINUTES);
+		logger.info("附件清理线程启动");
+
+	}
+	@Override
+	public void destroy() throws Exception {
+		this.stop();
 	}
 }

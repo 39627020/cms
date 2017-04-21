@@ -2,6 +2,7 @@ package com.cnv.cms.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.mapper.GroupMapper;
+import com.cnv.cms.mapper.LoginSessionMapper;
 import com.cnv.cms.mapper.RoleMapper;
 import com.cnv.cms.mapper.UserGroupMapper;
 import com.cnv.cms.mapper.UserMapper;
 import com.cnv.cms.mapper.UserRoleMapper;
 import com.cnv.cms.model.Group;
+import com.cnv.cms.model.LoginSession;
 import com.cnv.cms.model.Pager;
 import com.cnv.cms.model.Role;
 import com.cnv.cms.model.User;
@@ -37,6 +40,9 @@ public class UserServiceImpl implements UserService {
 	private RoleMapper roleMapper;
 	@Autowired
 	private GroupMapper groupMapper;
+	
+	@Autowired
+	private  LoginSessionMapper loginMapper;
 	
 	@Autowired
 	//@Qualifier("articleServiceImpl")
@@ -299,6 +305,18 @@ public class UserServiceImpl implements UserService {
 			throw new CmsException("用户不存在");
 		}
 		return user;
+	}
+	@Override
+	public void addLoginSession(String sessionid, int userid) {
+		// TODO Auto-generated method stub
+		Date date = new Date();
+		date.setTime(date.getTime()+1000*3600);
+		LoginSession loginSession = new LoginSession();
+		loginSession.setSessionid(sessionid);
+		loginSession.setUserid(userid);
+		loginSession.setExpired(date);
+		loginMapper.deleteByUser(userid);
+		loginMapper.add(loginSession);
 	}
 
 }

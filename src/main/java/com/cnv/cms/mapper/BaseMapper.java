@@ -1,6 +1,6 @@
 package com.cnv.cms.mapper;
 
-public interface BaseMapper<T> {
+public interface BaseMapper<T> {	
 	Integer maxId();
 	void add(T t);
 	void delete(int id);
