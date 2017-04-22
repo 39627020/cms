@@ -16,7 +16,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.mapper.UserGroupMapper;
 import com.cnv.cms.model.UserGroup;
 import com.cnv.cms.service.AttachmentService;

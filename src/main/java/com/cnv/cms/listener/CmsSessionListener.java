@@ -1,12 +1,8 @@
 package com.cnv.cms.listener;
 
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-
-import com.cnv.cms.mapper.LoginSessionMapper;
-import com.cnv.cms.util.SpringContextUtil;
 
 //@WebListener
 public class CmsSessionListener implements HttpSessionListener {

@@ -2,8 +2,6 @@ package com.cnv.cms.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.cnv.cms.model.Group;
 import com.cnv.cms.model.User;
 import com.cnv.cms.model.UserGroup;

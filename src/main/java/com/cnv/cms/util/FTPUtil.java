@@ -2,8 +2,6 @@ package com.cnv.cms.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.SocketException;
-
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;

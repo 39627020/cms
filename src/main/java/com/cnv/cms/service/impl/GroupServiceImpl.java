@@ -3,10 +3,7 @@ package com.cnv.cms.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.mapper.GroupMapper;
 import com.cnv.cms.mapper.UserGroupMapper;

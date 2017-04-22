@@ -13,8 +13,11 @@ var contextPath = null;
 function getContextPath(){
 	if(contextPath == null){
 		var localObj = window.location;
-		var contextPath = localObj.pathname.split("/")[1];
-		var basePath = localObj.protocol+"//"+localObj.host+"/"+contextPath;
+		var test = localObj.pathname.split("/");
+		var contextPath = localObj.pathname.split("/")[0];
+		var basePath = localObj.protocol+"//"+localObj.host;
+		if(contextPath != "")
+			basePath += "/"+contextPath;
 		contextPath = basePath;
 	}
 	return contextPath;
@@ -97,12 +100,5 @@ document.write('<script src="'+getContextPath()+'/js/common.js" type="text/javas
       </div>
 </footer>
 
- 
-<script type="text/javascript">
-//回到顶部
-backToTop('body');
-</script>
-
- 
 </body>
 </html>

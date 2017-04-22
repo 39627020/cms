@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.model.LoginSession;
 import com.cnv.cms.util.LoginSessionUtil;
 

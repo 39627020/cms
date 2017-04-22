@@ -1,20 +1,14 @@
 package com.cnv.cms.interceptor;
 
-import java.util.Set;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.cnv.cms.config.CmsConfig;
-import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.model.LoginSession;
-import com.cnv.cms.model.User;
 import com.cnv.cms.util.LoginSessionUtil;
 
 /*

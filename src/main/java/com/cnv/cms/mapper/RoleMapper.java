@@ -2,7 +2,6 @@ package com.cnv.cms.mapper;
 
 import java.util.List;
 
-import com.cnv.cms.model.Group;
 import com.cnv.cms.model.Role;
 
 public interface RoleMapper {

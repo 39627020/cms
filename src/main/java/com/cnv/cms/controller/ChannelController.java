@@ -22,8 +22,6 @@ import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.model.Channel;
 import com.cnv.cms.model.ChannelType;
-import com.cnv.cms.model.Group;
-import com.cnv.cms.model.RoleType;
 import com.cnv.cms.service.ChannelService;
 
 @AuthClass
