@@ -40,38 +40,7 @@ public class AttachUtil implements InitializingBean, DisposableBean{
 	public AttachUtil(){
 
 	}
-	public void testTrsaction(){
-		
-		//ApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);
-		Thread task =new Thread(new Runnable(){
-			@Override
-			public void run() {
-				
-				//UserService gs = context.getBean(UserService.class);	
-				
-				System.out.println("测试：------- 事务测试-------------");
-				UserGroup ug = new UserGroup();
-				int id=122;
-				ug.setId(id);
-				ug.setG_id(id);
-				ug.setU_id(id);
-				
-				try{
-					userGroupMapper.delete(ug.getId());
-					userGroupMapper.add(ug);
-					System.out.println("执行前:"+userGroupMapper.selectByUID(id));
-					groupService.deleteUserGroup(id);
-					//gs.delete(id);
-				}catch(RuntimeException e){
-					System.out.println(e.getMessage());
-				}
-				
-				System.out.println("执行后:"+userGroupMapper.selectByUID(id));
-			}
-			
-		});
-		exec.schedule(task, 5, TimeUnit.SECONDS);  
-	}
+
 	
 	public void addTempAttachs(String clientid, int id){
 		List<Integer> tempAtsList = tempAttachs.get(clientid);
@@ -97,8 +66,9 @@ public class AttachUtil implements InitializingBean, DisposableBean{
 		}
 	}
 	public  void stop(){
-		if(exec!=null)
+		if(exec!=null){
 			exec.shutdown();
+		}
 		logger.info("附件清理线程停止");
 	}
 	@Override
@@ -130,4 +100,37 @@ public class AttachUtil implements InitializingBean, DisposableBean{
 	public void destroy() throws Exception {
 		this.stop();
 	}
+	
+	public void testTrsaction(){
+		
+		//ApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);
+		Thread task =new Thread(new Runnable(){
+			@Override
+			public void run() {
+				
+				//UserService gs = context.getBean(UserService.class);	
+				
+				System.out.println("测试：------- 事务测试-------------");
+				UserGroup ug = new UserGroup();
+				int id=122;
+				ug.setId(id);
+				ug.setG_id(id);
+				ug.setU_id(id);
+				
+				try{
+					userGroupMapper.delete(ug.getId());
+					userGroupMapper.add(ug);
+					System.out.println("执行前:"+userGroupMapper.selectByUID(id));
+					groupService.deleteUserGroup(id);
+					//gs.delete(id);
+				}catch(RuntimeException e){
+					System.out.println(e.getMessage());
+				}
+				
+				System.out.println("执行后:"+userGroupMapper.selectByUID(id));
+			}
+			
+		});
+		exec.schedule(task, 5, TimeUnit.SECONDS);  
+	}	
 }
