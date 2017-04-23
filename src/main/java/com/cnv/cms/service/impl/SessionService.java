@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 import com.cnv.cms.model.LoginSession;
 import com.cnv.cms.util.JsonUtil;
 import com.cnv.cms.util.RedisKeyUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class SessionService implements InitializingBean{
@@ -29,13 +28,12 @@ public class SessionService implements InitializingBean{
 	private final int EXPIRED_TIME = 3600;
 
     @Autowired  
-    private RedisTemplate<String,String> redisTemplate1;  
+    private RedisTemplate<String,String> redisTemplate;  
     
 	//@Autowired  
     //private RedisTemplate<String,LoginSession> redisTemplate2;  
     
-	private ValueOperations<String,String> valueOps1=null;
-    private ValueOperations<String,LoginSession> valueOps2=null;
+	private ValueOperations<String,String> valueOps=null;
     
     
     @Override
@@ -43,7 +41,8 @@ public class SessionService implements InitializingBean{
 		// TODO Auto-generated method stub
     	logger.info("SessionService 初始化");
     	//valueOps2 = redisTemplate2.opsForValue();
-    	valueOps1 = redisTemplate1.opsForValue();
+    	valueOps = redisTemplate.opsForValue();
+    	
 	}
 	
 	public  String getSessionId(HttpServletRequest request){
@@ -67,7 +66,7 @@ public class SessionService implements InitializingBean{
 	}
 	public  LoginSession getLoginSession(String sessionid){
 		String sessionkey = RedisKeyUtil.getSessionKey(sessionid);
-		String objStr = valueOps1.get(sessionkey);
+		String objStr = valueOps.get(sessionkey);
 		LoginSession loginSession = null;
 		if(objStr != null){
 			loginSession = JsonUtil.readValue(objStr, LoginSession.class);
@@ -100,12 +99,12 @@ public class SessionService implements InitializingBean{
 		//loginMapper.deleteByUser(userid);
 		String sessionkey = RedisKeyUtil.getSessionKey(sessionid);
 		String loginSessionStr = JsonUtil.toJSon(loginSession);
-		valueOps1.set(sessionkey, loginSessionStr,EXPIRED_TIME,TimeUnit.SECONDS);
+		valueOps.set(sessionkey, loginSessionStr,EXPIRED_TIME,TimeUnit.SECONDS);
 	}
 	
 	public void removeLoginSession(String sessionid){
 		String sessionkey = RedisKeyUtil.getSessionKey(sessionid);
-		redisTemplate1.delete(sessionkey);
+		redisTemplate.delete(sessionkey);
 	}
 	
 
