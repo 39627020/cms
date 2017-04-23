@@ -104,5 +104,4 @@ public interface UserService extends BaseService<User>{
 	
 	public User login(String username,String password);
 	
-	public void addLoginSession(String sessionid, int userid);
 }

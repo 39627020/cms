@@ -304,17 +304,6 @@ public class UserServiceImpl implements UserService {
 		}
 		return user;
 	}
-	@Override
-	public void addLoginSession(String sessionid, int userid) {
-		// TODO Auto-generated method stub
-		Date date = new Date();
-		date.setTime(date.getTime()+1000*3600);
-		LoginSession loginSession = new LoginSession();
-		loginSession.setSessionid(sessionid);
-		loginSession.setUserid(userid);
-		loginSession.setExpired(date);
-		loginMapper.deleteByUser(userid);
-		loginMapper.add(loginSession);
-	}
+
 
 }

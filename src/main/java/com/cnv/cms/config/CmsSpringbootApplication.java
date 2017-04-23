@@ -11,9 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.cnv.cms.util.LoginSessionUtil;
-import com.cnv.cms.util.SpringContextUtil;
-
 
 @SpringBootApplication
 @ServletComponentScan("com.cnv.cms.listener")//扫描Servlet组件
@@ -28,7 +25,7 @@ public class CmsSpringbootApplication extends SpringBootServletInitializer{
     }
 	public static void main(String[] args) {
 		ApplicationContext app = SpringApplication.run(CmsSpringbootApplication.class, args);
-		SpringContextUtil.setApplicationContext(app);
-		LoginSessionUtil.init();
+		//SpringContextUtil.setApplicationContext(app);
+		//LoginSessionUtil.init();
 	}
 }

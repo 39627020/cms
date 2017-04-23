@@ -2,15 +2,15 @@ package com.cnv.cms.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.cnv.cms.model.LoginSession;
-import com.cnv.cms.util.LoginSessionUtil;
+import com.cnv.cms.service.impl.SessionService;
 
 /*
  *Adminl目录静态资源拦截，只有管理员用户可以访问
@@ -18,23 +18,25 @@ import com.cnv.cms.util.LoginSessionUtil;
 @Component
 public class SessionAdminInterceptor extends HandlerInterceptorAdapter {
 	private final Logger logger = LoggerFactory.getLogger(SessionAdminInterceptor.class);
+	
+	@Autowired
+	private SessionService sessionService;
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
-		HttpSession session = request.getSession();
 		
 		String url = request.getRequestURI();
 		
 		logger.info("Admin Interceptor:",url);
 		
 		//session中是否保存了登录信息
-		LoginSession loginSession = LoginSessionUtil.getLoginSession(request);
+		LoginSession loginSession = sessionService.getLoginSession(request);
 				
 		if(loginSession==null) {
 			logger.info("未登录，跳转到：",request.getContextPath(),"/login.html");
 
 			//删除cookie
-			LoginSessionUtil.removeLoginCookies(request, response);
+			sessionService.removeLoginCookies(request, response);
 			//如果未登录就跳转到登录页面
 			response.sendRedirect(request.getContextPath()+"/login.html");
 

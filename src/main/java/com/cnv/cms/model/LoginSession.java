@@ -1,8 +1,13 @@
 package com.cnv.cms.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class LoginSession {
+public class LoginSession implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String sessionid;
 	private int userid;
@@ -39,6 +44,11 @@ public class LoginSession {
 	}
 	public void setExpired(Date expired) {
 		this.expired = expired;
+	}
+	@Override
+	public String toString() {
+		return "LoginSession [id=" + id + ", sessionid=" + sessionid + ", userid=" + userid + ", admin=" + admin
+				+ ", expired=" + expired + "]";
 	}
 	
 	

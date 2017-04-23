@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -22,25 +24,29 @@ import com.cnv.cms.authority.AuthClass;
 import com.cnv.cms.authority.AuthMethod;
 import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.exception.CmsException;
-import com.cnv.cms.mapper.LoginSessionMapper;
+import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.LoginSession;
 import com.cnv.cms.model.Role;
 import com.cnv.cms.model.RoleType;
 import com.cnv.cms.model.User;
 import com.cnv.cms.service.UserService;
-import com.cnv.cms.util.LoginSessionUtil;
+import com.cnv.cms.service.impl.SessionService;
 
 @AuthClass
 @Controller
 @RequestMapping("/api/admin")
 public class AdminController {
 	
+	private final Logger logger = LoggerFactory.getLogger(AdminController.class);
+	
+	@Autowired
+	private SessionService sessionService;
+	@Autowired
+	private HostHolder hostHolder;
 	@Autowired
 	 @Qualifier("userServiceImpl")
 	private UserService userService;
 	
-	@Autowired
-	private  LoginSessionMapper loginMapper;
 	
 	@AuthMethod(role="customer")
 	@RequestMapping(value="/login",method=RequestMethod.POST)
@@ -58,37 +64,12 @@ public class AdminController {
 			User user = userService.login(userForm.getUsername(), userForm.getPassword());
 			//是否是管理员
 			boolean isAdmin = this.isAdmin(user.getId());
-/*			
-			httpSession.setAttribute("loginUser", user); 
-			httpSession.setAttribute("isAdmin", isAdmin);
 			
-			//该用户所有可以访问的方法
-			Set<String> allActions = new HashSet<String>();
-			Map<String,Set<String>> auths = (Map<String, Set<String>>) httpSession.getServletContext().getAttribute("allAuths");
-			//contomer方法和base方法都可以访问
-			Set<String> customAuths = auths.get("customer");
-			allActions.addAll(customAuths);
-			Set<String> baseAuths = auths.get("base");
-			allActions.addAll(baseAuths);
-			
-			//查询每个角色对应的权限
-			for(int rid : user.getRoleIDs()){
-				//数据库中role id 从1开始
-				String rname =RoleType.values()[rid-1].toString();
-				Set<String> roleAuths = auths.get(rname);
-				if(roleAuths != null){
-					allActions.addAll(roleAuths);	
-				}
-			}*/
-			//把该用户能访问的权限放到session中
-			//httpSession.setAttribute("allActions", allActions);
-			
-			String sessionid = LoginSessionUtil.getSessionId(request);
-			LoginSession loginSession = loginMapper.selsetBySession(sessionid);
+			String sessionid = sessionService.getSessionId(request);
+			LoginSession loginSession = sessionService.getLoginSession(sessionid);
 			if(loginSession==null || loginSession.getExpired().before(new Date())) {
-				userService.addLoginSession(sessionid, user.getId());
+				sessionService.addLoginSession(sessionid, user.getId());
 			}
-			
 			
 			//设置cookie记录登录信息
 			Cookie[] cookies = new Cookie[3];
@@ -125,12 +106,12 @@ public class AdminController {
 		System.out.println("login get");
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		LoginSession loginSession = LoginSessionUtil.getLoginSession(request);
+		LoginSession loginSession = sessionService.getLoginSession(request);
 		
 		
 		if(loginSession==null){
 			//删除cookie
-			LoginSessionUtil.removeLoginCookies(request, response);
+			sessionService.removeLoginCookies(request, response);
 			map.put("flag", "failure");
 		}else{
 			if(CmsConfig.isDebug){
@@ -150,12 +131,13 @@ public class AdminController {
 	}
 	@AuthMethod(role="base")
 	@RequestMapping(value="/selfinfo",method=RequestMethod.GET)
-	public  @ResponseBody Map<String, Object>  selfInfo(HttpSession httpSession){
+	public  @ResponseBody Map<String, Object>  selfInfo(HttpServletRequest request){
 		
 	
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		User loginUser = (User) httpSession.getAttribute("loginUser");
+		LoginSession loginSession = hostHolder.getLoginSession();
+		User loginUser = userService.selectById(loginSession.getUserid());
 		
 		if(CmsConfig.isDebug){
 			System.out.println("---------self info  query---------");
@@ -178,14 +160,12 @@ public class AdminController {
 	public   @ResponseBody Map<String, Object>   loginOut(HttpServletRequest request,HttpServletResponse response){
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("flag", "false");
-/*		HttpSession httpSession = request.getSession();
-		httpSession.removeAttribute("loginUser");
-		httpSession.removeAttribute("isAdmin");
-		httpSession.removeAttribute("allActions");*/
-		String sessionid = LoginSessionUtil.getSessionId(request);
-		loginMapper.deleteBySession(sessionid);
+
+		String sessionid = hostHolder.getLoginSession().getSessionid();
+		//删除session
+		sessionService.removeLoginSession(sessionid);
 		//删除cookie
-		LoginSessionUtil.removeLoginCookies(request, response);
+		sessionService.removeLoginCookies(request, response);
 		
 		if(CmsConfig.isDebug){
 			System.out.println("login out");
