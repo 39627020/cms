@@ -18,5 +18,18 @@ public class HostHolder {
     	session.remove();
     }
 
-    
+    public String getUserName(){
+    	LoginSession ls = this.getLoginSession();
+    	if(ls != null){
+    		return ls.getUsername();
+    	}
+    	return null;
+    }
+    public int getUserId(){
+    	LoginSession ls = this.getLoginSession();
+    	if(ls != null){
+    		return ls.getUserid();
+    	}
+    	return -1;
+    }
 }

@@ -15,10 +15,9 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.cnv.cms.config.CmsSpringbootApplication;
+import com.cnv.cms.CmsSpringbootApplication;
 import com.cnv.cms.model.LoginSession;
 
 @RunWith(SpringRunner.class)

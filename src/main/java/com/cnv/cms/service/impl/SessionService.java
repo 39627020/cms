@@ -88,13 +88,14 @@ public class SessionService implements InitializingBean{
 			}
 		}
 	}
-	public void addLoginSession(String sessionid, int userid) {
+	public void addLoginSession(String sessionid, int userid, String username) {
 		// TODO Auto-generated method stub
 		Date date = new Date();
 		date.setTime(date.getTime()+EXPIRED_TIME*1000);
 		LoginSession loginSession = new LoginSession();
 		loginSession.setSessionid(sessionid);
 		loginSession.setUserid(userid);
+		loginSession.setUsername(username);
 		loginSession.setExpired(date);
 		//loginMapper.deleteByUser(userid);
 		String sessionkey = RedisKeyUtil.getSessionKey(sessionid);

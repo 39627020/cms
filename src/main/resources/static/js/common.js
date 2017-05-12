@@ -38,13 +38,14 @@ function getUrlParam(name) {
 
 //读取导航栏
 function loadNavigation(){
-	$.get(getContextPath()+"/navigation.html",function(data,status){
+/*	$.get(getContextPath()+"/navigation.html",function(data,status){
 		 var head = $("#navigation-div");
 		 head.empty();
 		 head.html(data);
 		 loadChannel();
-		 showUserCenter();
-	}); 	
+		 //showUserCenter();
+	}); */
+	loadChannel();
 }
 
 //加载栏目

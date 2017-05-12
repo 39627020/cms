@@ -11,6 +11,7 @@ public class LoginSession implements Serializable{
 	private int id;
 	private String sessionid;
 	private int userid;
+	private String username;
 	private boolean admin;
 	private Date expired;
 	
@@ -44,6 +45,15 @@ public class LoginSession implements Serializable{
 	}
 	public void setExpired(Date expired) {
 		this.expired = expired;
+	}
+	
+	
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	@Override
 	public String toString() {

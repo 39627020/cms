@@ -17,6 +17,6 @@ function loadSidebar(){
 
 $(document).ready(function () {
 	
-	loadSidebar();
+	//loadSidebar();
 	
 });	

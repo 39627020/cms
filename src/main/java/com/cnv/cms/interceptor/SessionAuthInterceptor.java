@@ -76,7 +76,7 @@ public class SessionAuthInterceptor extends HandlerInterceptorAdapter {
 				return false;
 			} else {
 				//设置线程独立的loginSession对象
-				hostHolder.setLoginSession(loginSession);
+				//hostHolder.setLoginSession(loginSession);
 				boolean isAdmin = loginSession.getAdmin();
 				if(!isAdmin) {
 					//不是超级管理人员，就需要判断是否有权限访问某些功能
@@ -99,7 +99,7 @@ public class SessionAuthInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		hostHolder.clear();
+		//hostHolder.clear();
 		super.postHandle(request, response, handler, modelAndView);
 	}
 	private Set<String> getAllActions(HttpSession httpSession,int userid){

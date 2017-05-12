@@ -6,6 +6,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.cnv.cms.interceptor.HostHolderInterceptor;
 import com.cnv.cms.interceptor.SessionAdminInterceptor;
 import com.cnv.cms.interceptor.SessionAuthInterceptor;
 import com.cnv.cms.interceptor.SessionUserInterceptor;
@@ -24,6 +25,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Autowired
 	private SessionUserInterceptor userInterceptor;
 	
+	@Autowired
+	private HostHolderInterceptor hostHolderInterceptor;
+	
 	//Spring Boot 默认配置的/**映射到/static（或/public ，/resources，/META-INF/resources）
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -38,7 +42,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		registry.addInterceptor(adminInterceptor).addPathPatterns("/admin/**");
 		registry.addInterceptor(authInterceptor).addPathPatterns("/api/**");
 		registry.addInterceptor(userInterceptor).addPathPatterns("/user/**");
-		registry.addInterceptor(new TestInterceptor()).addPathPatterns("/test/*");
+		registry.addInterceptor(hostHolderInterceptor);
 		super.addInterceptors(registry);
 	}
 /*	
