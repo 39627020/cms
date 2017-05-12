@@ -34,11 +34,11 @@
 		<ul class="nav navbar-nav navbar-right">
 		
 				<li  id="register-link">
-					<a th:if="!${user}" th:href="@{${contextPath}+'/login.html'}">登录</a>
+					<a th:if="!${user}" th:href="@{'/login.html'}">登录</a>
 					<a th:if="${user}" th:text="'您好, &nbsp;'+${user}" >您好, &nbsp;</a>
 				</li>
 				<li  th:if="!${user}" id="login-link">
-					<a th:href="@{${contextPath}+'/register.html'}">注册</a>
+					<a th:href="@{'/register.html'}">注册</a>
 				</li>
 		
 			<li>test</li>
@@ -48,12 +48,12 @@
 					<i class="glyphicon glyphicon-menu-down"></i>
 				</a>
 				<ul class="dropdown-menu dropdown-user">
-					 <li><a th:href="@{${contextPath}+'/user/home.html'}" ><i class="glyphicon glyphicon-user"></i>用户中心</a>
+					 <li><a th:href="@{'/user/home.html'}" ><i class="glyphicon glyphicon-user"></i>用户中心</a>
 					</li>
-					<li><a th:href="@{${contextPath}+'/user/user_profile.html'}" href="#"><i class="glyphicon glyphicon-cog"></i> 设置</a>
+					<li><a th:href="@{'/user/user_profile.html'}" href="#"><i class="glyphicon glyphicon-cog"></i> 设置</a>
 					</li>
 					<li class="divider"></li>
-					<li><a th:href="@{${contextPath}+'/api/admin/login.out'}" ><i class="glyphicon glyphicon-log-out"></i>退出</a>
+					<li><a th:href="@{'/api/admin/login.out'}" ><i class="glyphicon glyphicon-log-out"></i>退出</a>
 					</li> 
 				</ul>
 				
@@ -71,4 +71,18 @@
     <p class="lead">欢迎来到 CMS</p>
   </div>
 </header>
+
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    var webPath = [[${contextPath}]];
+    var channels = [[${channels}]];
+    var username = [[${user}]];
+    var userid = [[${userid}]];
+    var arts = [[${articles}]];
+
+/*]]>*/
+</script>
+
 </div>

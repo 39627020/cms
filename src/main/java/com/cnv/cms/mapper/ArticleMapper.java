@@ -37,7 +37,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
 	/*
 	 * 通过用户id检索
 	 */
-	@Select("select * from t_article where userId = #{userId}")
+	@Select("select id,title,readTimes,createDate from t_article where userId = #{userId}")
 	List<Article> selectByUserId(@Param("userId")int userId);
 	/*
 	 * 通过标题检索

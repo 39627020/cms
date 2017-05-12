@@ -71,26 +71,37 @@
 				<!-- <div class="label-main"> -->
 					<!-- <div class="clearfix label-public pt-25"> -->
   					  <div class="panel panel-primary"  >
-                        <div class="panel-heading">欢迎来到用户中心
-                        
-                        </div>
+                        <div class="panel-heading">我的资讯列表  </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                         	<table class="table table-bordered">
                                 
-                                
-                                <tbody>
+                                <thead>
+                                	<tr>
+                                		<th width="5%" >ID</th>
+                                		<th width="55%" >标题</th>
+                                		<th width="25%" >发表时间</th>
+                                		<th width="15%" >操作</th>
+                                	</tr>
+                                </thead>
+                                <tbody th:remove="all-but-first">
+                                  <tr th:each="art:${articles}">
+                                    <th th:text="${art.id}">1</th>
+                                   <td ><a th:text="${art.title}" th:href="@{/article.html?id=}+${art.id}"></a></td>
+                                   <td th:text="${art.createDate}">2017-5-1</td>
+                                   <td >编辑 | 删除</td>
+                                  </tr>                                
                                   <tr>
-                                      <th width="15%" style='text-align:right'>欢迎：</th>
-                                      <td>用户1</td>
+                                   <th>1</th>
+                                   <td>题目1</td>
+                                   <td>2017-5-1</td>
+                                   <td>编辑 | 删除</td>
                                   </tr>
                                   <tr>
-                                   <th style='text-align:right'>我的文章:</th>
-                                      <td>2 篇    </td>
-                                  </tr>
-                                  <tr>
-                                   <th style='text-align:right'>关注:</th>
-                                      <td>4 <label>人</label>    </td>
+                                   <th>2</th>
+                                   <td>题目2</td>
+                                   <td>2017-5-1</td>
+                                   <td>编辑 | 删除</td>
                                   </tr>
                                 </tbody>
                            </table>

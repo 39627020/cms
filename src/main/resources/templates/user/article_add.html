@@ -30,7 +30,7 @@
 	
 	<!-- 自定义js -->
 	<script src="../js/common.js"></script>
-	<script src="../js/user_home_common.js"></script>
+	<!-- <script src="../js/user_home_common.js"></script> -->
 	<script src="../js/article_add.js"></script>
 
 
@@ -96,8 +96,8 @@
                                       <td>
                                       <div class="col-sm-6">
                                      
-                                         <select class="form-control" id="input_pchannel">
-							         		<option value="0">栏目0</option>
+                                         <select class="form-control"  onchange="showSubChannel();" id="input_pchannel" th:remove="all-but-first">
+							         		<option th:each="ch:${topChannels}" th:value="${ch.id}" th:text="${ch.name}">栏目0</option>
 							            	<option value="1">栏目1</option>
 
 	                                      </select>

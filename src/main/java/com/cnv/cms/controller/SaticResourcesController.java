@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.cnv.cms.interceptor.HostHolderInterceptor;
 import com.cnv.cms.model.HostHolder;
+import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.ChannelService;
 
 @Controller
@@ -30,8 +31,11 @@ public class SaticResourcesController {
 	private HostHolder hostHolder;
 	@Autowired
 	private ChannelService channelService;
+	@Autowired
+	private ArticleService articleService;
 	
-
+	//----------------------------------------------------------------------
+	
 	@RequestMapping(value="/user/{file}.html",method=RequestMethod.GET)
 	public String userInterceptro(@PathVariable("file") String file){
 		return "user/"+file;
@@ -46,20 +50,47 @@ public class SaticResourcesController {
 	@RequestMapping(value="/user/article_add.html",method=RequestMethod.GET)
 	public String userArticlAdd(Model model,HttpServletRequest request){
 		model.addAllAttributes(this.getCommontInfo(request));
+		model.addAttribute("topChannels", channelService.selectTopChannels());
 		return "user/article_add";
 	}
+	@RequestMapping(value="/user/mynews.html",method=RequestMethod.GET)
+	public String usernews(Model model,HttpServletRequest request){
+		model.addAllAttributes(this.getCommontInfo(request));
+		model.addAttribute("articles", articleService.selectByUserId(hostHolder.getUserId()));
+		return "user/mynews";
+	}
 	
-	
-	
+	//-----------------------------------------------------------------
 	
 	@RequestMapping(value="/admin/{file}.html",method=RequestMethod.GET)
 	public String adminInterceptro(@PathVariable("file") String file){
 		return "admin/"+file;
 		
 	}
+	
+	
+	//---------------------------------------------------------------
     @RequestMapping("/")
     public String index() {
         return "forward:/index.html";
+    }
+    @RequestMapping("/article.html")
+    public String article(Model model,HttpServletRequest request){    	
+    	model.addAllAttributes(this.getCommontInfo(request));
+    	
+    	return "/article";
+    }
+    @RequestMapping("/article_list.html")
+    public String articlelist(Model model,HttpServletRequest request){    	
+    	model.addAllAttributes(this.getCommontInfo(request));
+    	
+    	return "/article_list";
+    }
+    @RequestMapping("/login.html")
+    public String login(Model model,HttpServletRequest request){    	
+    	model.addAllAttributes(this.getCommontInfo(request));
+    	
+    	return "/login";
     }
     @RequestMapping("/test")
     public String test(Model model,HttpServletRequest request){
@@ -73,12 +104,8 @@ public class SaticResourcesController {
     	model.addAttribute("test", "test str");
     	return "/test";
     }
-    @RequestMapping("/a")
-    public String testa(Model model){
-    	model.addAttribute("test", "test str");
-    	return "/a";
-    }
-    
+
+    //*********************************************************************
     public void setChannelAndUser(Model model){
     	logger.info("hostHolder username: "+hostHolder.getUserName());
     	logger.info("hostHolder userid: "+hostHolder.getUserId());

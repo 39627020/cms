@@ -50,8 +50,8 @@ function loadNavigation(){
 
 //加载栏目
 function loadChannel(){
-	$.get(getContextPath()+"/api/channel/channels",function(data,status){
-		var channels = data.data;
+	//$.get(getContextPath()+"/api/channel/channels",function(data,status){
+		//var channels = data.data;
 		//筛选出顶层栏目
         var topChannels = $.grep(channels,function(value){
             return value.parentId < 0;//筛选父id为-1的
@@ -64,6 +64,9 @@ function loadChannel(){
 	        var subChannels = $.grep(channels,function(value){
 	            return value.parentId == pchannel.id;
 	        });
+	        
+	        subChannelMap[pchannel.id] = subChannels;
+	        
 	        substr = "";
 	        if(subChannels != null && subChannels.length>0){
 	        	substr += '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">';
@@ -97,7 +100,7 @@ function loadChannel(){
 			var obj  = $("a[columnid='"+cid+"']").parents(".topcol"); 
 			obj.attr("class","dropdown active topcol");
 		 }
-	}); 	
+	//}); 	
 }
 function loginOut(){
 	$.get(getContextPath()+'/api/admin/login.out',function(data,status){
@@ -167,7 +170,9 @@ function changeNav(){
  * 如http://111.111.111.111/abc
  */
 function getContextPath(){
-	if(contextPath == null){
+	//webPath;
+	//contextPath;
+/*	if(contextPath == null){
 		var localObj = window.location;
 		var test = localObj.pathname.split("/");
 		var contextPath = localObj.pathname.split("/")[0];
@@ -175,15 +180,14 @@ function getContextPath(){
 		if(contextPath != "")
 			basePath += "/"+contextPath;
 		contextPath = basePath;
-	}
-	return contextPath;
+	}*/
+	return webPath;
 	
 }
 
 //当前网站根路径
-var contextPath = null;
 var navshow = false;
-
+var subChannelMap = new Object();
 
 $(document).ready(function () {
 	

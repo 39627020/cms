@@ -1,3 +1,14 @@
+function showSubChannel(){
+	pcid = $("#input_pchannel").val();
+	subchs = subChannelMap[pcid];
+	substr = "";
+	for(i in subchs){
+		var sc = subchs[i];
+		substr += '<option value="'+sc.id+'">'+sc.name+'</option>';
+	}
+	$("#input_channel").html(substr);
+};
+
 function fileUpload(){
 	var formData = new FormData();
 	var name = $("#user_pic").val();
@@ -88,13 +99,6 @@ function articleSubmit(){
 	content = $("#temp-text").html();
 	
 	
-/*	var picUrl = getUrl(/<img.*?src=\".*?\"/gi,content);
-	for(i in picUrl){
-		pu = fileIds[picUrl[i]];
-		if(pu != null)
-			attchids[attchids.length] = pu;
-	}*/
-	
 	
 	//attchids=[7,8];
 	var article = {
@@ -102,8 +106,8 @@ function articleSubmit(){
 		"summary":$("#article-summary").val(),
 		"content":content,
 		"keywords":$("#input_keywords").val(),
-		"userId":26,
-		"channelId":14,
+		"userId":userid,
+		"channelId":$("#input_channel").val(),
 		"status":$("#input_status").val(),
 		"recommend":$("#input_recommend").val(),
 		"chiefPic":1,
@@ -148,10 +152,15 @@ function getClientId(){
 		setCookie("clientId",clientId);
 	}
 };
+
+
+
 var clientId = "";
 var editor = null;
 var fileIds =new Object();
 $(document).ready(function() {
+	
+	showSubChannel();
 	
 	//每次打开页面 生成一个客户端id
 	getClientId();
@@ -162,11 +171,6 @@ $(document).ready(function() {
 		//取消事件行为，非常重要！否则add中的post请求会被取消
 		event.preventDefault();		
 		articleSubmit();
-
-		
-		//var reg = /<img src=\".*?\">/gi;
-		//var reg = /<img.*src=\".*?\"/gi;
-
 	});
 	
 	//test

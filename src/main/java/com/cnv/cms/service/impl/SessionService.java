@@ -48,6 +48,8 @@ public class SessionService implements InitializingBean{
 	public  String getSessionId(HttpServletRequest request){
 		Cookie[] cookies = request.getCookies();
 		String sessionid = null;
+		if(cookies == null) 
+			return null;
 		for(Cookie ck : cookies){
 			if (ck.getName().equals("LOGINSESSIONID")){
 				sessionid = ck.getValue();

@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>CNV CMS系统</title>
+	<!-- 添加Boostrap 和 JQuery -->
+	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"/>
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!-- <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css"> -->
+	<!-- 自定义css -->
+	<link rel="stylesheet" href="css/basic.css"/>
+	<link rel="stylesheet" href="css/article.css"/>
+	
+	<!-- 自定义js -->
+	<script src="js/common.js"></script>
+	<script src="js/article.js"></script>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<div id="navigation-div" th:include="navigation::navigation"> </div>
+
+<!-- Page Content -->
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<h4 class="page-header col-md-offset-1">当前位置:</h4>
+		</div>
+		<!-- /.col-lg-12 -->
+	  <!-- 页面左侧内容区 -->
+	  <div class="page-div col-md-7 col-md-offset-1">
+		<div class="article-header">
+			<h3  id="artical_topic">正在加载...</h3>
+			<div class="article-info">
+				<p>
+                <span class="ss01" id="article_date">2017年01月22日 22:36</span><br/>   
+                <span class="ss02">来源：</span>
+					<span id="publisher">
+						<span it="name" class="ss03">
+							<a href="void(0)"  target="_blank">CNV-CMS</a>
+						</span>
+					</span>                
+					<span it="author" class="ss04">作者：<span id="article_author" itemprop="name">Admin</span></span>
+            </p>			
+			</div>
+		
+		</div>	
+		<div class="article-content" id="article_content">
+		   <!--mainContent begin-->
+		   	<p>正在加载...</p>
+		  <!--mainContent end-->		
+		</div>
+		<div class="article-commend">
+			<h3  style="font-weight:bold;">最新评论</h3>
+			<div class="comment-item">
+				<p class="c-username">
+					<a href="void(0)" target="_blank">会飞的瘦猪</a> 
+				</p>
+							  
+				<p class="p-comment">水能载舟，亦能覆舟，习主席能如此亲民，就一定能更站在人民的角度为人民谋福利，这真是我们国家的荣幸，我们的国家定能更强大！</p>
+				<div class="c-bottomBar">
+					<span class="reply">
+					<a href="#"><span>推荐</span><em>250</em></a>
+					<em>/</em> 
+					<a href="#">回复</a>
+					<em>/</em>
+					<a href="#">举报</a>
+					</span>
+					<span class="commentTime">2017-01-23 10:19</span>
+				</div>
+			</div>
+			<div class="comment-item">
+				<p class="c-username">
+					<a href="void(0)" target="_blank">会飞的瘦猪</a> 
+				</p>
+							  
+				<p class="p-comment">水能载舟，亦能覆舟，习主席能如此亲民，就一定能更站在人民的角度为人民谋福利，这真是我们国家的荣幸，我们的国家定能更强大！</p>
+				<div class="c-bottomBar">
+					<span class="reply">
+					<a href="#"><span>推荐</span><em>250</em></a>
+					<em>/</em> 
+					<a href="#">回复</a>
+					<em>/</em>
+					<a href="#">举报</a>
+					</span>
+					<span class="commentTime">2017-01-23 10:19</span>
+				</div>
+			</div>
+		
+		</div>
+	  </div> <!-- /.col-md-9 -->	
+	  
+		<!-- 页面右侧导航区 -->	
+		<div class="page-div col-md-3">
+			<div class="panel panel-default page-panel">
+				<div class="panel-heading">
+					右侧导航
+				</div>
+			
+				<div class="panel-body">
+					<ul class="">
+						<li>CNV-CMS系统</li>
+						<li><a href="#" >文章标题 1</a></li>
+						<li><a href="#" >文章标题 2</a></li>
+						<li><a href="#" >文章标题 3</a></li>
+					</ul>					
+				</div>
+
+			</div>
+			<div class="panel panel-default  page-panel">
+				<div class="panel-heading">
+					热点推荐
+				</div>
+				<div class="panel-body">
+					<ol>
+						<li>CNV-CMS系统</li>
+						<li><a href="#" >文章标题 1</a></li>
+						<li><a href="#" >文章标题 2</a></li>
+						<li><a href="#" >文章标题 3</a></li>
+					</ol>					
+				</div>
+
+			</div>			
+		</div>		
+		<!-- /.col-md-3 -->			
+	</div>
+	<!-- /.row -->
+</div>
+<!-- /.container -->
+
+
+<!-- Page Footer -->
+<div th:replace="footer::footer"></div>
+</body>
+</html>

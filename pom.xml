@@ -6,7 +6,6 @@
 	<groupId>com.cnv.cms</groupId>
 	<artifactId>CmsSpringBoot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
 
 	<name>cms-springboot</name>
 	<description>Demo project for Spring Boot</description>
@@ -78,4 +77,5 @@
 	</build>
 
 
+	<packaging>war</packaging>
 </project>

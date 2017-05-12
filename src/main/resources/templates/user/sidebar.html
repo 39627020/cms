@@ -1,7 +1,7 @@
  <div  th:fragment="sidebar"> 
- <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet"/>
+<!--  <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet"/>
   <script src="../vendor/metisMenu/metisMenu.min.js"></script>
- <script src="../dist/js/sb-admin-2.js"></script>
+ <script src="../dist/js/sb-admin-2.js"></script> -->
 <div class="side-div col-md-2">
 	<div class="panel panel-default page-panel">
 		<!-- <div class="panel-heading">
@@ -14,7 +14,7 @@
 			<!-- <a href="#"><img class="btn" src="../images/new_article.jpg"></a> -->
 			<div class="user-action" id="side-action-btn">	
 				<a href="article_add.html" class="btn btn-default">发表文章</a>
-				<a th:href="@{${contextPath}+'/admin/index.html'}" class="btn btn-default">管理员入口</a>'
+				<a th:href="@{'/admin/index.html'}" class="btn btn-default">管理员入口</a>'
 			</div>
 		</div>
 
@@ -24,17 +24,24 @@
       <ul class="nav" id="side-menu">
      
      	<li>
-             <a href="home.html"><i class="fa fa-dashboard fa-fw"></i>个人中心</a>
+             <a href="home.html"><i class="fa fa-home fa-fw"></i>个人中心</a>
          </li>
          <li>
              <a href="user_profile.html"><i class="fa fa-dashboard fa-fw"></i>我的资料</a>
          </li>
-          <li class="active">
+          <li>
+             <a href="mynews.html"><i class="fa  fa-list-alt fa-fw"></i>我的文章</a>
+         </li> 
+          <li>
+             <a href="innermsg.html"><i class="fa  fa-envelope fa-fw"></i>站内信</a>
+         </li> 
+          <li>
+             <a href="subscribe.html"><i class="fa fa-dashboard fa-fw"></i>我的订阅</a>
+         </li>                          
+<!--           <li class="active">
              <a href="index.html"><i class="fa fa-list-alt fa-fw"></i>我的文章<span class="fa arrow"></span></a>
              <ul class="nav nav-second-level">
-             	<!-- <li>
-                     <a href="#">发表文章</a>
-                 </li> -->
+
                  <li>
                      <a href="#">已发布</a>
                  </li>
@@ -43,7 +50,7 @@
                  </li>
             
               </ul>
-         </li>
+         </li> -->
          <li class="active">
              <a href="index.html"><i class="fa fa-user fa-fw"></i>好友管理<span class="fa arrow"></span></a>
     	     <ul class="nav nav-second-level">

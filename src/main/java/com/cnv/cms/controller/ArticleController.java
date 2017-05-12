@@ -20,6 +20,7 @@ import com.cnv.cms.authority.AuthMethod;
 import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.model.Article;
+import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.User;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.AttachmentService;
@@ -28,6 +29,9 @@ import com.cnv.cms.service.AttachmentService;
 @Controller
 @RequestMapping("/api/article")
 public class ArticleController {
+	
+	@Autowired
+	private HostHolder hostHolder;
 	
 	@Autowired
 	 @Qualifier("articleServiceImpl")
@@ -43,8 +47,8 @@ public class ArticleController {
 			@RequestBody Article article, HttpSession httpSession){
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		User loginUser = (User) httpSession.getAttribute("loginUser"); 
-		article.setUserId(loginUser.getId());
+		//User loginUser = (User) httpSession.getAttribute("loginUser"); 
+		article.setUserId(hostHolder.getUserId());
 		
         if(CmsConfig.isDebug()){
         	System.out.println("-------article add---------");  
