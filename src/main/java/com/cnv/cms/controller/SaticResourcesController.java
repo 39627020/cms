@@ -70,20 +70,24 @@ public class SaticResourcesController {
 	
 	
 	//---------------------------------------------------------------
-    @RequestMapping("/")
-    public String index() {
-        return "forward:/index.html";
-    }
-    @RequestMapping("/article.html")
-    public String article(Model model,HttpServletRequest request){    	
+    @RequestMapping(path={"/","index","index.html"})
+    public String index(Model model,HttpServletRequest request) {
     	model.addAllAttributes(this.getCommontInfo(request));
-    	
+    	model.addAttribute("articles", articleService.selectTopRead(15));
+        return "/index";
+    }
+    @RequestMapping(value="/article/{id}",method=RequestMethod.GET)
+    public String article(Model model,HttpServletRequest request, @PathVariable int id){    	
+    	model.addAllAttributes(this.getCommontInfo(request));
+    	model.addAttribute("aid", id);
+    	logger.info("访问Article : "+id);
     	return "/article";
     }
-    @RequestMapping("/article_list.html")
-    public String articlelist(Model model,HttpServletRequest request){    	
+    @RequestMapping("/article_list/{id}")
+    public String articlelist(Model model,HttpServletRequest request, @PathVariable int id){    	
     	model.addAllAttributes(this.getCommontInfo(request));
-    	
+    	model.addAttribute("articles", articleService.selectByChannel(id));
+    	model.addAttribute("channelname", channelService.selectById(id).getName());
     	return "/article_list";
     }
     @RequestMapping("/login.html")

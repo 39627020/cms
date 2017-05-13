@@ -3,7 +3,7 @@ function addListItem(a){
 	var str = '\
 	<div class="list-item">\
 		<div class="col-sm-4 col-lg-3">\
-		<a href="javascript:;" title="标题"><img  class="img-responsive" alt="标题标题" src="images/list_item.jpg"></a>\
+		<a href="javascript:;" title="标题"><img  class="img-responsive" alt="标题标题" src="../images/list_item.jpg"></a>\
 		</div>\
 		<div class="col-sm-8 col-lg-9">\
 			<div class="item-head">\
@@ -27,7 +27,13 @@ function addListItem(a){
 	return str;
 }
 function showArticleList(){
-	var channelId = getUrlParam("cid");
+	//var articles = data.data;
+	var str = "";
+	for(var i in articles){
+		str += addListItem(articles[i]);
+	}
+	$("#article-list-div").html(str);
+/*	var channelId = getUrlParam("cid");
 	//alert(channelId);
 	if(channelId  == null){
 		window.location.href= getContextPath()+"/index.html";
@@ -50,8 +56,8 @@ function showArticleList(){
 			alert("获取内容失败");
 			window.location.href= getContextPath()+"/index.html";
 		}
-	});	
+	});	*/
 }
 $(document).ready(function () {
-	showArticleList();
+	//showArticleList();
 });	

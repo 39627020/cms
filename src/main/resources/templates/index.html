@@ -4,23 +4,18 @@
 	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>CNV CMS系统</title>
 	<!-- 添加Boostrap 和 JQuery -->
-	<link rel="stylesheet" th:href="@{'/vendor/bootstrap/css/bootstrap.min.css'}"/>
-	<script th:src="@{'/vendor/jquery/jquery.min.js'}"></script>
-	<script th:src="@{'/vendor/bootstrap/js/bootstrap.min.js'}"></script>
-	<!-- 自定义css -->
-	<link rel="stylesheet" th:href="@{'/css/basic.css'}"/>
-	<link rel="stylesheet" th:href="@{'/css/list.css'}"/>
+	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"/>
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!-- 自定义模板css -->
+	<link rel="stylesheet" href="css/basic.css"/>
+	<link rel="stylesheet" href="css/list.css"/>
 	
 	<!-- 自定义js -->
-	<script th:src="@{'/js/common.js'}"></script>
-	<script th:src="@{'/js/article_list.js'}"></script>
+	<script src="js/common.js"></script>
+	<!-- <script src="js/article_list.js"></script> -->
 </head>
 <body>
-<script th:inline="javascript">
-/*<![CDATA[*/
-    var articles = [[${articles}]];
-/*]]>*/
-</script>
 <!-- 导航栏 -->
 <div id="navigation-div" th:include="navigation::navigation"> </div>
 
@@ -35,7 +30,7 @@
 	  <div class="page-div col-md-9">
 		<div class="list-header">
 		  <div>
-			<a class="header" href="#"><strong id="channel-title" th:text="${channelname}">栏目标题</strong></a>			
+			<a class="header" href="#"><strong id="channel-title">最新资讯</strong></a>			
 			<!-- 右侧搜索输入框 -->
 			<div class="col-sm-4 pull-right">
 				<div class="input-group custom-search-form">
@@ -49,27 +44,26 @@
 			</div>
 			<div style="clear:both"></div>
 		  </div>	
-		  <div style="border-bottom: 1px solid #E8E8E8;padding-top:15px"></div>
-			<!-- <div class="head-tag">
-				<a class="tags" href="#">关键字1</a>
-				<a class="tags" href="#">关键字2</a>
+		<!-- 	<div class="head-tag">
+				<a class="tags" href="#">子栏目1</a>
+				<a class="tags" href="#">子栏目2</a>
 			</div> -->
 		
 		
 		</div>	
-		<div  th:remove="all-but-first" id="article-list-div">
-				<div th:each="art : ${articles}" class="list-item">	
+		<div th:remove="all-but-first" id="article-list-div">
+		<div th:each="art : ${articles}" class="list-item">	
 		
 			<!-- 左侧图片 -->
 			<div class="col-sm-4 col-lg-3">
-				<a href="javascript:;" th:title="${art.title}"><img  class="img-responsive" alt="标题标题" th:src="${contextPath}+'/images/list_item.jpg'"/></a>					
+				<a href="javascript:;" th:title="${art.title}"><img  class="img-responsive" alt="标题标题" src="images/list_item.jpg"/></a>					
 			</div>
 			<!-- 右侧内容 -->
 			<div class="col-sm-8 col-lg-9">
 				<!-- 头部信息：标题作者等 -->
 				<div class="item-head">
 					<h4 class="head">
-						<a th:title="${art.title}" th:text="${art.title}" th:href="@{'/article/'+${art.id}}">标题标题标题标题标题标题标题标题标题</a>
+						<a th:title="${art.title}" th:text="${art.title}" th:href="@{'article/'+${art.id}}">标题标题标题标题标题标题标题标题标题</a>
 					</h4>
 					
 					<div class="pull-left">	
@@ -86,6 +80,38 @@
 				<!-- 文章描述 -->
 				<div class="item-body">
 					<p th:text="${art.summary}">描述描述描述描述描述描述描述描述描述描述描述描述描述
+					描述描述描述描述描述描述描述描述描述描述描述描述描述</p>
+				</div>
+			</div>
+		</div>		
+		<div class="list-item">	
+		
+			<!-- 左侧图片 -->
+			<div class="col-sm-4 col-lg-3">
+				<a href="javascript:;" title="标题"><img  class="img-responsive" alt="标题标题" src="images/list_item.jpg"/></a>					
+			</div>
+			<!-- 右侧内容 -->
+			<div class="col-sm-8 col-lg-9">
+				<!-- 头部信息：标题作者等 -->
+				<div class="item-head">
+					<h4 class="head">
+						<a title="标题标题标题标题" href="javascript:;">标题标题标题标题标题标题标题标题标题</a>
+					</h4>
+					
+					<div class="pull-left">	
+				   
+						<i class="info"><a href="javascript:;" target="_blank">作者</a></i>  
+						<i class="info"><a href="javascript:;" target="_blank">分类</a></i>   
+						<i class="info">2013/03/02</i>
+					</div>	
+					<div class="pull-right">
+						<span class="glyphicon glyphicon-heart  " href="void(0);" title="3人关注">3人</span>	
+						<span class="glyphicon glyphicon-eye-open" href="void(0);" title="100次查看">100次</span>							
+					</div>
+				</div>
+				<!-- 文章描述 -->
+				<div class="item-body">
+					<p>描述描述描述描述描述描述描述描述描述描述描述描述描述
 					描述描述描述描述描述描述描述描述描述描述描述描述描述</p>
 				</div>
 			</div>
@@ -121,9 +147,7 @@
 					描述描述描述描述描述描述描述描述描述描述描述描述描述</p>
 				</div>
 			</div>
-		</div>
-		
-		
+		</div>	
 		</div>	
 		<div class="page-number">
 			<ul class="pagination">

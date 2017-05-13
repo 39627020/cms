@@ -73,7 +73,7 @@ function loadChannel(){
 	        	for(j in subChannels){
 	        		var sc = subChannels[j];
 		        	substr += '<li><a columnid="'+sc.id+'" \
-		        	href="'+getContextPath()+'/article_list.html?cid='+sc.id+'">'+sc.name+'</a></li>';
+		        	href="'+getContextPath()+'/article_list/'+sc.id+'">'+sc.name+'</a></li>';
 		        }
 	        	substr += '</ul>';
 	        }

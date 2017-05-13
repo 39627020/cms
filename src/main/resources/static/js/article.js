@@ -1,6 +1,6 @@
 
 function showArticle(){
-	var aid = getUrlParam("id");
+	//var aid = getUrlParam("id");
 	if(aid  == null){
 		window.location.href= getContextPath()+"/index.html";
 	}
