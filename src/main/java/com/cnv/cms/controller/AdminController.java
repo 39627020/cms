@@ -68,7 +68,7 @@ public class AdminController {
 			String sessionid = sessionService.getSessionId(request);
 			LoginSession loginSession = sessionService.getLoginSession(sessionid);
 			if(loginSession==null || loginSession.getExpired().before(new Date())) {
-				sessionService.addLoginSession(sessionid, user.getId(), user.getUsername());
+				sessionService.addLoginSession(sessionid, user, isAdmin);
 			}
 			
 			//设置cookie记录登录信息

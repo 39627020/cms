@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import com.cnv.cms.model.LoginSession;
+import com.cnv.cms.model.User;
 import com.cnv.cms.util.JsonUtil;
 import com.cnv.cms.util.RedisKeyUtil;
 
@@ -90,14 +91,15 @@ public class SessionService implements InitializingBean{
 			}
 		}
 	}
-	public void addLoginSession(String sessionid, int userid, String username) {
+	public void addLoginSession(String sessionid, User user, boolean isAdmin) {
 		// TODO Auto-generated method stub
 		Date date = new Date();
 		date.setTime(date.getTime()+EXPIRED_TIME*1000);
 		LoginSession loginSession = new LoginSession();
 		loginSession.setSessionid(sessionid);
-		loginSession.setUserid(userid);
-		loginSession.setUsername(username);
+		loginSession.setUserid(user.getId());
+		loginSession.setUsername(user.getUsername());
+		loginSession.setAdmin(isAdmin);
 		loginSession.setExpired(date);
 		//loginMapper.deleteByUser(userid);
 		String sessionkey = RedisKeyUtil.getSessionKey(sessionid);
