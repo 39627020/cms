@@ -153,8 +153,8 @@ public class AttachmentServiceImpl implements AttachmentService {
 		List<Attachment> attachs = this.selectPicByArticleId(id);
 		Map<String, String> map = new HashMap<String, String>();
 		for(Attachment att: attachs){
-			String url = "http://"+CmsConfig.getFtpServer()+"/"+CmsConfig.getFilePath()
-			+"/"+att.getPath()+"/"+att.getNewName();
+			String url = /*"http://"+CmsConfig.getFtpServer()+"/"+CmsConfig.getFilePath()+"/"+*/
+					att.getPath()+"/"+att.getNewName();
 			map.put(Integer.toString(att.getId()), url);
 		}
 		return map;

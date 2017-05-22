@@ -15,6 +15,7 @@ function showArticle(){
 				$("#article_content").html(article.content);
 				$("#article_author").html(article.author);
 				$("#article_date").html(article.createDate);
+
 				
 				var imgs = $("#article_content").find("img");
 				for(var i=0 ;i<imgs.length;i++){
@@ -23,7 +24,7 @@ function showArticle(){
 					//如果是上传的图片
 					if(picid!=null){
 						//设置img标签的src属性
-						$(imgid).attr("src",imgUrl[picid]);
+						$(imgid).attr("src",imgServer+"/"+imgUrl[picid]);
 					}
 				}
 				

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.event.EventModel;
 import com.cnv.cms.event.EventProducer;
 import com.cnv.cms.event.EventType;
@@ -37,6 +38,7 @@ public class SaticResourcesController {
 	private ChannelService channelService;
 	@Autowired
 	private ArticleService articleService;
+	
 	
 	
 	@Autowired
@@ -93,6 +95,8 @@ public class SaticResourcesController {
     public String article(Model model,HttpServletRequest request, @PathVariable int id){    	
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("aid", id);
+    	//model.addAttribute("article", articleService.selectById(id));
+    	model.addAttribute("imgPath", "http://"+CmsConfig.getFtpServer()+"/"+CmsConfig.getFilePath());
     	
     	eventProducer.addEvent(getEvent("article",id));
     	logger.debug("访问Article : "+id);

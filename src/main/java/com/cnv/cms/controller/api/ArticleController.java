@@ -108,7 +108,7 @@ public class ArticleController {
 			a = articleService.selectById(id);
 			//articleService.addReadTimes(id, 1);
 			long pv = pvService.getPVCount("article", id);
-			a.setReadTimes((int) pv);
+			//a.setReadTimes((int) pv);
 			Map<String, String> mapUrl = attachService.selectPicUrlByArticleId(id);
 			map.put("data", a);
 			map.put("imgUrl", mapUrl);

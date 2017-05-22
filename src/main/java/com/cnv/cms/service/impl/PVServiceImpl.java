@@ -2,6 +2,7 @@ package com.cnv.cms.service.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,16 @@ public class PVServiceImpl implements PVService , InitializingBean{
 		// TODO 在线用户数，效率太低，要改进
 		long userOnline = redisTemplate.keys(RedisKeyUtil.getSessionKey("*")).size();
 		map.put("userOnline", String.valueOf(userOnline));
-		String key = RedisKeyUtil.getPVKey("index", -1);
-		map.put("index", valOps.get(key));
+		String key1 = RedisKeyUtil.getPVKey("index*", -1);
+		map.put("index", valOps.get(key1));
+		
+		String key2 = RedisKeyUtil.getPVKey("article*", -1);
+		Set<String> newskeys = redisTemplate.keys(key2);
+		long pvnews = 0;
+		for(String key: newskeys){
+			pvnews += Long.parseLong(valOps.get(key));
+		}
+		map.put("news", String.valueOf(pvnews));
 		return map;
 	}
 	

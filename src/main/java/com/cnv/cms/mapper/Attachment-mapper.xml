@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 查询文章附件-->
      <select id="selectByArticleId" parameterType="int" resultType="Attachment">
-        select * from t_attachment where aid=#{aid};
+        select id,newName,path from t_attachment where aid=#{aid};
 	</select>  
 	<!-- 查询文章附件ID 列表-->
      <select id="selectIdsByArticleId" parameterType="int" resultType="Integer">
