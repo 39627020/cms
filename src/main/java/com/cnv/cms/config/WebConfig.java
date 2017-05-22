@@ -1,23 +1,29 @@
 package com.cnv.cms.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.cnv.cms.controller.AdminResourcesController;
 import com.cnv.cms.interceptor.HostHolderInterceptor;
 import com.cnv.cms.interceptor.SessionAdminInterceptor;
 import com.cnv.cms.interceptor.SessionAuthInterceptor;
 import com.cnv.cms.interceptor.SessionUserInterceptor;
-import com.cnv.cms.interceptor.TestInterceptor;
 /*
  * springmvc配置
  * 对应于springmvc4-servlet.xml
  */
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
-	
+	private final Logger logger = LoggerFactory.getLogger(WebConfig.class);
 	@Autowired
 	private SessionAdminInterceptor adminInterceptor;
 	@Autowired
@@ -51,4 +57,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/test/*").setViewName("test/");  
     }  
 	*/
+	@Autowired
+	public void setRedisTemplate(RedisTemplate redisTemplate) {
+		
+		//redisTemplate.setKeySerializer(new StringRedisSerializer());
+	    RedisSerializer stringSerializer = new StringRedisSerializer();
+	    redisTemplate.setKeySerializer(stringSerializer);
+	    redisTemplate.setValueSerializer(stringSerializer);
+	    redisTemplate.setHashKeySerializer(stringSerializer);
+	    redisTemplate.setHashValueSerializer(stringSerializer);
+	    logger.info("redisTemplate 初始化完成");
+	}
 }

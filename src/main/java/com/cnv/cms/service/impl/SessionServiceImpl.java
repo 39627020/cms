@@ -17,22 +17,21 @@ import org.springframework.stereotype.Component;
 
 import com.cnv.cms.model.LoginSession;
 import com.cnv.cms.model.User;
+import com.cnv.cms.service.SessionService;
 import com.cnv.cms.util.JsonUtil;
 import com.cnv.cms.util.RedisKeyUtil;
 
 @Component
-public class SessionService implements InitializingBean{
+public class SessionServiceImpl implements SessionService,InitializingBean{
 
-	private final Logger logger = LoggerFactory.getLogger(SessionService.class);
+	private final Logger logger = LoggerFactory.getLogger(SessionServiceImpl.class);
 	
 	//过期时间 s
 	private final int EXPIRED_TIME = 3600;
 
     @Autowired  
-    private RedisTemplate<String,String> redisTemplate;  
+    private RedisTemplate redisTemplate;  
     
-	//@Autowired  
-    //private RedisTemplate<String,LoginSession> redisTemplate2;  
     
 	private ValueOperations<String,String> valueOps=null;
     

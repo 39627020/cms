@@ -15,10 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.cnv.cms.event.EventModel;
+import com.cnv.cms.event.EventProducer;
+import com.cnv.cms.event.EventType;
 import com.cnv.cms.interceptor.HostHolderInterceptor;
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.ChannelService;
+import com.cnv.cms.service.PVService;
 
 @Controller
 //@RequestMapping("/")
@@ -34,7 +38,15 @@ public class SaticResourcesController {
 	@Autowired
 	private ArticleService articleService;
 	
-	//----------------------------------------------------------------------
+	
+	@Autowired
+	private EventProducer eventProducer;
+
+	
+	
+	
+	
+	//---------------------/user/*.html-------------------------------------------------
 	
 	@RequestMapping(value="/user/{file}.html",method=RequestMethod.GET)
 	public String userInterceptro(@PathVariable("file") String file){
@@ -69,18 +81,22 @@ public class SaticResourcesController {
 	}
 	
 	
-	//---------------------------------------------------------------
+	//------------------------/*.html---------------------------------------
     @RequestMapping(path={"/","index","index.html"})
     public String index(Model model,HttpServletRequest request) {
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectTopRead(15));
+    	eventProducer.addEvent(getEvent("index",-1));
         return "/index";
     }
     @RequestMapping(value="/article/{id}",method=RequestMethod.GET)
     public String article(Model model,HttpServletRequest request, @PathVariable int id){    	
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("aid", id);
-    	logger.info("访问Article : "+id);
+    	
+    	eventProducer.addEvent(getEvent("article",id));
+    	logger.debug("访问Article : "+id);
+    	
     	return "/article";
     }
     @RequestMapping("/article_list/{id}")
@@ -88,6 +104,9 @@ public class SaticResourcesController {
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectByChannel(id));
     	model.addAttribute("channelname", channelService.selectById(id).getName());
+    	
+    	eventProducer.addEvent(getEvent("article_list",id));
+    	
     	return "/article_list";
     }
     @RequestMapping("/login.html")
@@ -117,12 +136,18 @@ public class SaticResourcesController {
     	model.addAttribute("userid", hostHolder.getUserId());
     	model.addAttribute("channels", channelService.selectAll());
     }
-    public Map<String, Object> getCommontInfo(HttpServletRequest request){
+    public  Map<String, Object> getCommontInfo(HttpServletRequest request){
     	Map<String, Object> map = new HashMap<String, Object>();
     	map.put("user", hostHolder.getUserName());
     	map.put("userid", hostHolder.getUserId());
     	map.put("channels", channelService.selectAll());
     	map.put("contextPath", request.getContextPath());
     	return map;
+    }
+    public EventModel getEvent(String page, int id){
+    	return new EventModel()
+    			.setEventType(EventType.PV_COUNT)
+    			.addExtData("page", page)
+    			.addExtData("id", id);
     }
 }

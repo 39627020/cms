@@ -1,4 +1,4 @@
-package com.cnv.cms.controller;
+package com.cnv.cms.controller.api;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +24,7 @@ import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.User;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.AttachmentService;
+import com.cnv.cms.service.PVService;
 
 @AuthClass
 @Controller
@@ -40,6 +41,10 @@ public class ArticleController {
 	@Autowired
 	@Qualifier("attachServiceImpl")
 	private AttachmentService attachService;
+	
+	@Autowired
+	private PVService pvService;
+	
 	
 	@AuthMethod(role="base")
 	@RequestMapping(value="/add/{clientid}",method=RequestMethod.POST)
@@ -101,7 +106,9 @@ public class ArticleController {
 		Article a=null;
 		try {
 			a = articleService.selectById(id);
-			articleService.addReadTimes(id, 1);
+			//articleService.addReadTimes(id, 1);
+			long pv = pvService.getPVCount("article", id);
+			a.setReadTimes((int) pv);
 			Map<String, String> mapUrl = attachService.selectPicUrlByArticleId(id);
 			map.put("data", a);
 			map.put("imgUrl", mapUrl);

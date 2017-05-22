@@ -1,4 +1,4 @@
-package com.cnv.cms.controller;
+package com.cnv.cms.controller.api;
 
 import java.util.HashMap;
 import java.util.List;

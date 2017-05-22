@@ -23,10 +23,10 @@ public class InitAuthority implements  ServletContextInitializer  {
 	@Override
 	public void onStartup(ServletContext arg0) throws ServletException {
 		//初始化权限信息
-		Map<String,Set<String>> auths = authUtil.initAuth("com.cnv.cms.controller");
+		Map<String,Set<String>> auths = authUtil.initAuth("com.cnv.cms.controller.api");
 		arg0.setAttribute("allAuths", auths);
 		logger.info("Authority Init : " + auths);
-		logger.info("Authority Init 权限注解初始化完成: com.cnv.cms.controller");
+		logger.info("Authority Init 权限注解初始化完成: com.cnv.cms.controller.api");
 	}
 
 }

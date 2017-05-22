@@ -11,7 +11,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.model.LoginSession;
-import com.cnv.cms.service.impl.SessionService;
+import com.cnv.cms.service.impl.SessionServiceImpl;
 
 /*
  *user目录静态资源拦截
@@ -21,7 +21,7 @@ public class SessionUserInterceptor extends HandlerInterceptorAdapter {
 	
 	private final Logger logger = LoggerFactory.getLogger(SessionUserInterceptor.class);
 	@Autowired
-	private SessionService sessionService;
+	private SessionServiceImpl sessionService;
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {

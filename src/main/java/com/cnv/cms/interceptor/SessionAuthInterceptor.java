@@ -23,7 +23,7 @@ import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.LoginSession;
 import com.cnv.cms.model.RoleType;
 import com.cnv.cms.service.UserService;
-import com.cnv.cms.service.impl.SessionService;
+import com.cnv.cms.service.impl.SessionServiceImpl;
 
 import ch.qos.logback.core.util.LocationUtil;
 
@@ -38,7 +38,7 @@ public class SessionAuthInterceptor extends HandlerInterceptorAdapter {
 
 	private final Logger logger = LoggerFactory.getLogger(SessionAuthInterceptor.class);
 	@Autowired
-	private SessionService sessionService;
+	private SessionServiceImpl sessionService;
 	
 	@Autowired
 	private HostHolder hostHolder;

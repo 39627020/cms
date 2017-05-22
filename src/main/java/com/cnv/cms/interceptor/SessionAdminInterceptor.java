@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.cnv.cms.model.LoginSession;
-import com.cnv.cms.service.impl.SessionService;
+import com.cnv.cms.service.impl.SessionServiceImpl;
 
 /*
  *Adminl目录静态资源拦截，只有管理员用户可以访问
@@ -20,7 +20,7 @@ public class SessionAdminInterceptor extends HandlerInterceptorAdapter {
 	private final Logger logger = LoggerFactory.getLogger(SessionAdminInterceptor.class);
 	
 	@Autowired
-	private SessionService sessionService;
+	private SessionServiceImpl sessionService;
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {

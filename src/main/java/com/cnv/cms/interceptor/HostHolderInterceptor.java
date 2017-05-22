@@ -1,5 +1,7 @@
 package com.cnv.cms.interceptor;
 
+import java.util.Arrays;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,9 +12,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cnv.cms.event.EventProducer;
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.LoginSession;
-import com.cnv.cms.service.impl.SessionService;
+import com.cnv.cms.service.impl.SessionServiceImpl;
 
 @Component
 public class HostHolderInterceptor implements HandlerInterceptor {
@@ -21,15 +24,18 @@ public class HostHolderInterceptor implements HandlerInterceptor {
 	@Autowired
 	private HostHolder hostHolder;
 	@Autowired
-	private SessionService sessionService;
+	private SessionServiceImpl sessionService;
+
 	//SessionRepositoryFilter t;
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		// TODO Auto-generated method stub
 		String url = request.getRequestURI();
-		logger.info("HostHolderInterceptor interceptror :"+url);
-		
+		if(logger.isDebugEnabled()){
+			logger.info("HostHolderInterceptor interceptror :"+url);
+		}
+	
 		LoginSession loginSession = sessionService.getLoginSession(request);
 		if(loginSession != null){
 			hostHolder.setLoginSession(loginSession);
@@ -42,8 +48,11 @@ public class HostHolderInterceptor implements HandlerInterceptor {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		// TODO Auto-generated method stub
-		String url = request.getRequestURI();
-		logger.info("HostHolderInterceptor interceptror post:"+url);
+		if(logger.isDebugEnabled()){
+			String url = request.getRequestURI();
+			logger.info("HostHolderInterceptor interceptror post:"+url);
+		}
+
 		hostHolder.clear();
 	}
 

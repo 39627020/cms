@@ -1,4 +1,4 @@
-package com.cnv.cms.controller;
+package com.cnv.cms.controller.api;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ import com.cnv.cms.model.Role;
 import com.cnv.cms.model.RoleType;
 import com.cnv.cms.model.User;
 import com.cnv.cms.service.UserService;
-import com.cnv.cms.service.impl.SessionService;
+import com.cnv.cms.service.impl.SessionServiceImpl;
 
 @AuthClass
 @Controller
@@ -40,7 +40,7 @@ public class AdminController {
 	private final Logger logger = LoggerFactory.getLogger(AdminController.class);
 	
 	@Autowired
-	private SessionService sessionService;
+	private SessionServiceImpl sessionService;
 	@Autowired
 	private HostHolder hostHolder;
 	@Autowired
