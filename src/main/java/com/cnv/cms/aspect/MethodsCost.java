@@ -34,6 +34,9 @@ public class MethodsCost {
 	@Around("controllerMethod() || serviceMethod() || mapperMethod()")
 	public Object methodCost(ProceedingJoinPoint jp){
 		try {
+			String url = hostHolder.getUrl();
+			if (url.startsWith("/api"))
+				return jp.proceed(jp.getArgs());
 			long tin = System.currentTimeMillis();
 			Signature sig = jp.getSignature();
 			Object retVal = jp.proceed(jp.getArgs());
@@ -44,7 +47,7 @@ public class MethodsCost {
 			//System.out.println("目标签名："+method);
 			//System.out.println("cost："+tcost);
 			eventProducer.addEvent(new EventModel(EventType.TIME_COUNT,-1)
-					.addExtData("url", hostHolder.getUrl())
+					.addExtData("url", url)
 					.addExtData("cost", tcost)
 					.addExtData("method", method));
 			return retVal;
