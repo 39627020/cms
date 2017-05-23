@@ -24,6 +24,8 @@ public class TimeCountEventHandler implements EventHandler , InitializingBean{
 	public void handle(EventModel event) {
 		
 		String url  = (String) event.getExtData("url");
+		if(url==null)
+			return;
 		if(!url.endsWith(".html")){
 			url = url.substring(0, url.lastIndexOf('/'));
 		}
