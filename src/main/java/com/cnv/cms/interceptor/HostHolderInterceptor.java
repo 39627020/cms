@@ -1,5 +1,6 @@
 package com.cnv.cms.interceptor;
 
+import java.net.URL;
 import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,15 +44,17 @@ public class HostHolderInterceptor implements HandlerInterceptor {
 		// TODO Auto-generated method stub
 		String url = request.getRequestURI();
 		if(logger.isDebugEnabled()){
-			logger.info("HostHolderInterceptor interceptror :"+url);
+			
 		}
-	
+		logger.info("HostHolderInterceptor interceptror :"+url);
 		LoginSession loginSession = sessionService.getLoginSession(request);
 		if(loginSession != null){
 			hostHolder.setLoginSession(loginSession);
 		}
-		
-		hostHolder.setUrl(url);
+		if(url.equals("") || url.equals("/"))
+			url = "/index.html";
+		if(!url.startsWith("/api"))
+			hostHolder.setUrl(url);
 		
 		return true;
 	}
@@ -59,18 +62,20 @@ public class HostHolderInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		// TODO Auto-generated method stub
+		String url = hostHolder.getUrl();
 		if(logger.isDebugEnabled()){
-			String url = request.getRequestURI();
 			logger.info("HostHolderInterceptor interceptror post:"+url);
 		}
-		
-		//统计耗费时间
-		Long tcost = System.currentTimeMillis() - tin.get();
-		eventProducer.addEvent(new EventModel(EventType.TIME_COUNT,-1)
-				.addExtData("url", hostHolder.getUrl())
-				.addExtData("cost", tcost)
-				.addExtData("method", "hostholer"));
+
+		if(url!=null){
+			//统计耗费时间
+			Long tcost = System.currentTimeMillis() - tin.get();
+			eventProducer.addEvent(new EventModel(EventType.TIME_COUNT,-1)
+					.addExtData("url", url)
+					.addExtData("cost", tcost)
+					.addExtData("method", "hostholder"));
+		}
+
 		hostHolder.clear();
 	}
 

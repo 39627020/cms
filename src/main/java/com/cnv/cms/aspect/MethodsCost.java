@@ -35,7 +35,7 @@ public class MethodsCost {
 	public Object methodCost(ProceedingJoinPoint jp){
 		try {
 			String url = hostHolder.getUrl();
-			if (url.startsWith("/api"))
+			if (url==null)
 				return jp.proceed(jp.getArgs());
 			long tin = System.currentTimeMillis();
 			Signature sig = jp.getSignature();
