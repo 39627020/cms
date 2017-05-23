@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class HostHolder {
     private static ThreadLocal<LoginSession> session = new ThreadLocal<LoginSession>();
+    private  ThreadLocal<String> url = new ThreadLocal<>();
+
 
     public LoginSession getLoginSession() {
         return session.get();
@@ -13,9 +15,17 @@ public class HostHolder {
     public void setLoginSession(LoginSession session) {
         this.session.set(session);
     }
+    
+    public String getUrl(){
+    	return url.get();
+    }
+    public void setUrl(String url){
+    	this.url.set(url);
+    }
 
     public void clear() {
     	session.remove();
+    	url.remove();
     }
 
     public String getUserName(){

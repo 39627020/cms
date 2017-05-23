@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cnv.cms.event.EventModel;
 import com.cnv.cms.event.EventProducer;
+import com.cnv.cms.event.EventType;
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.LoginSession;
 import com.cnv.cms.service.impl.SessionServiceImpl;
@@ -25,11 +27,19 @@ public class HostHolderInterceptor implements HandlerInterceptor {
 	private HostHolder hostHolder;
 	@Autowired
 	private SessionServiceImpl sessionService;
+	
+	@Autowired
+	private EventProducer eventProducer;
+	
+	private ThreadLocal<Long> tin = new ThreadLocal<>();
 
 	//SessionRepositoryFilter t;
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		
+		tin.set(System.currentTimeMillis());
+		
 		// TODO Auto-generated method stub
 		String url = request.getRequestURI();
 		if(logger.isDebugEnabled()){
@@ -40,6 +50,8 @@ public class HostHolderInterceptor implements HandlerInterceptor {
 		if(loginSession != null){
 			hostHolder.setLoginSession(loginSession);
 		}
+		
+		hostHolder.setUrl(url);
 		
 		return true;
 	}
@@ -52,7 +64,13 @@ public class HostHolderInterceptor implements HandlerInterceptor {
 			String url = request.getRequestURI();
 			logger.info("HostHolderInterceptor interceptror post:"+url);
 		}
-
+		
+		//统计耗费时间
+		Long tcost = System.currentTimeMillis() - tin.get();
+		eventProducer.addEvent(new EventModel(EventType.TIME_COUNT,-1)
+				.addExtData("url", hostHolder.getUrl())
+				.addExtData("cost", tcost)
+				.addExtData("method", "hostholer"));
 		hostHolder.clear();
 	}
 

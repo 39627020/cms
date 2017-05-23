@@ -59,7 +59,10 @@ public class EventConsumer implements InitializingBean , ApplicationContextAware
 					if(eveStr != null){
 						EventModel event = JsonUtil.readValue(eveStr,EventModel.class);
 						EventHandler handler = handlerMap.get(event.getEventType());
-						handler.handle(event);
+						if(handler != null)
+							handler.handle(event);
+						else
+							logger.error("EventHandler for "+event.getEventType()+" 为定义");
 					}
 				}
 			}

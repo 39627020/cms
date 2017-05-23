@@ -86,9 +86,17 @@ public class SaticResourcesController {
 	//------------------------/*.html---------------------------------------
     @RequestMapping(path={"/","index","index.html"})
     public String index(Model model,HttpServletRequest request) {
+    	//统计耗费时间
+    	long tin = System.currentTimeMillis();
+    	
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectTopRead(15));
     	eventProducer.addEvent(getEvent("index",-1));
+    	
+    	long tcost = System.currentTimeMillis() - tin;
+		eventProducer.addEvent(new EventModel(EventType.TIME_COUNT,-1)
+				.addExtData("url", hostHolder.getUrl())
+				.addExtData("cost", tcost));
         return "/index";
     }
     @RequestMapping(value="/article/{id}",method=RequestMethod.GET)
