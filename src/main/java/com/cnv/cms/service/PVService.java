@@ -18,4 +18,5 @@ public interface PVService {
 	 */
 	public long getPVCount(String page, int id);
 	Map<String, String> getOverall();
+	Map<String, Object> getTimeCost();
 }

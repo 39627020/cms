@@ -1,6 +1,8 @@
 package com.cnv.cms.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +32,10 @@ public class AdminResourcesController {
 	public String adminPV(Model model,HttpServletRequest request){
 		model.addAllAttributes(this.getCommontInfo(request));
 		model.addAttribute("pvdata", pvService.getOverall());
+		/*List<String[]> list1 = new ArrayList<>();
+		list1.add(new String[]{"1","3"});
+		list1.add(new String[]{"2","4"});
+		model.addAttribute("list1", list1);*/
 		return "admin/statistic";
 	}
     public  Map<String, Object> getCommontInfo(HttpServletRequest request){

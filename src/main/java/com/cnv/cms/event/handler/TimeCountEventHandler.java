@@ -26,13 +26,14 @@ public class TimeCountEventHandler implements EventHandler , InitializingBean{
 		String url  = (String) event.getExtData("url");
 		if(url==null)
 			return;
-		if(!url.endsWith(".html")){
+		/*if(!url.endsWith(".html")){
 			url = url.substring(0, url.lastIndexOf('/'));
-		}
+		}*/
 		Integer cost = (Integer) event.getExtData("cost");
 		String method =(String) event.getExtData("method");
 		String key = RedisKeyUtil.getTimeCostKey(url,method);
 		valOps.increment(key, cost);
+		valOps.increment(key+":pv",1);
 		logger.info("TimeCountEventHandler do handle :" + url+", cost: "+cost);
 	}
 

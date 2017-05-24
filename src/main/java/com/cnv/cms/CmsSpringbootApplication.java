@@ -26,8 +26,6 @@ public class CmsSpringbootApplication extends SpringBootServletInitializer{
     }
 	public static void main(String[] args) {
 		ApplicationContext app = SpringApplication.run(CmsSpringbootApplication.class, args);
-		//SpringContextUtil.setApplicationContext(app);
-		//LoginSessionUtil.init();
 		
 	}
 	

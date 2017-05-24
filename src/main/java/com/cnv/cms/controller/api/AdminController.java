@@ -1,5 +1,6 @@
 package com.cnv.cms.controller.api;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +31,7 @@ import com.cnv.cms.model.LoginSession;
 import com.cnv.cms.model.Role;
 import com.cnv.cms.model.RoleType;
 import com.cnv.cms.model.User;
+import com.cnv.cms.service.PVService;
 import com.cnv.cms.service.UserService;
 import com.cnv.cms.service.impl.SessionServiceImpl;
 
@@ -44,8 +47,9 @@ public class AdminController {
 	@Autowired
 	private HostHolder hostHolder;
 	@Autowired
-	 @Qualifier("userServiceImpl")
 	private UserService userService;
+	@Autowired
+	private PVService pvService;
 	
 	
 	@AuthMethod(role="customer")
@@ -174,7 +178,20 @@ public class AdminController {
 		return map;
 	}
 	
-	
+	@AuthMethod(role="base")
+	@RequestMapping(value="/timecost",method=RequestMethod.GET)
+	public  @ResponseBody Map<String, Object>  timecost(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.putAll(pvService.getTimeCost());
+		
+		List<String[]> list1 = new ArrayList<>();
+		list1.add(new String[]{"1","3"});
+		list1.add(new String[]{"2","4"});
+		map.put("list1", list1);
+		
+		map.put("flag", "success");
+		return map;
+	}
 	private boolean isRole(List<Role> rs,RoleType rt) {
 		for(Role r:rs) {
 			if(r.getRoleType()==rt) return true;
