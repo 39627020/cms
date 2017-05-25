@@ -7,16 +7,14 @@ function showArticle(){
 	$.get(getContextPath()+"/api/article/detail/"+aid,function(data,status){
 		if(status  == "success"){
 			if(data.flag=="success"){
-				var article = data.data;
-				var imgUrl = data.imgUrl;
 				
-				
+				/*				var article = data.data;
 				$("#artical_topic").html(article.title);
 				$("#article_content").html(article.content);
 				$("#article_author").html(article.author);
 				$("#article_date").html(article.createDate);
-
-				
+*/
+				var imgUrl = data.imgUrl;
 				var imgs = $("#article_content").find("img");
 				for(var i=0 ;i<imgs.length;i++){
 					var imgid = imgs[i];

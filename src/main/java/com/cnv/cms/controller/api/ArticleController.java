@@ -105,12 +105,12 @@ public class ArticleController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Article a=null;
 		try {
-			a = articleService.selectById(id);
+			//a = articleService.selectById(id);
 			//articleService.addReadTimes(id, 1);
 			long pv = pvService.getPVCount("article", id);
 			//a.setReadTimes((int) pv);
 			Map<String, String> mapUrl = attachService.selectPicUrlByArticleId(id);
-			map.put("data", a);
+			//map.put("data", a);
 			map.put("imgUrl", mapUrl);
 		} catch (CmsException ce) {
 			map.put("flag", ce.getMessage());

@@ -64,7 +64,7 @@ public class PVServiceImpl implements PVService , InitializingBean{
 		Map<String,Object> map = new HashMap<>();
 		Map<String,Object>  pageTimeMap = new HashMap<>();
 		Map<String,Object> methodTimemap = new HashMap<>();
-		Map<String,Object> methodAveTimemap = new HashMap<>();
+		
 		String keyregx = RedisKeyUtil.getTimeCostKey("*", "hostholder");
 		//得到所有的页面
 		Set<String> pageKeys = redisTemplate.keys(keyregx);
@@ -78,21 +78,24 @@ public class PVServiceImpl implements PVService , InitializingBean{
 			if(page.startsWith("/admin"))
 				continue;
 			
-			List<Object> mList = new ArrayList<>();
-			List<Object> mAveList = new ArrayList<>();
+			List<Object> methodx = new ArrayList<>();
+			List<Object> methody = new ArrayList<>();
 			String funregx = RedisKeyUtil.getTimeCostKey(page, "*:pv");
 			Set<String> funKeys = redisTemplate.keys(funregx);
 			//List<String> vals = valOps.multiGet(funKeys);
+			int j=0;
 			for(String fkey : funKeys){
 				String method = method = fkey.split(":")[2];
 				long mcnt = Long.parseLong(valOps.get(fkey));
 				String mtime = valOps.get(fkey.substring(0, fkey.lastIndexOf(':')));
-				mList.add(new String[]{method,mtime});
 				long mtave = Long.parseLong(mtime)/mcnt;
-				mAveList.add(new String[]{method,String.valueOf(mtave)});
+				methodx.add(new long[]{mtave,j});
+				methody.add(new String[]{String.valueOf(j++),method});
 			}
-			methodTimemap.put(page, mList);
-			methodAveTimemap.put(page, mAveList);
+			Map<String,Object> xymap = new HashMap<>();
+			xymap.put("xdata", methodx);
+			xymap.put("ydata", methody);
+			methodTimemap.put(page, xymap);
 			
 			long mcnt = Long.parseLong(valOps.get(pkey+":pv"));
 			long mtime = Long.parseLong(valOps.get(pkey));
@@ -105,7 +108,6 @@ public class PVServiceImpl implements PVService , InitializingBean{
 		pageTimeMap.put("ydata", yList);
 		map.put("pages", pageTimeMap);
 		map.put("methods", methodTimemap);
-		map.put("methodsAve", methodAveTimemap);
 		return map;
 	}
 	@Override

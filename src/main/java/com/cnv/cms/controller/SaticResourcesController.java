@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.event.EventModel;
@@ -98,7 +99,7 @@ public class SaticResourcesController {
     public String article(Model model,HttpServletRequest request, @PathVariable int id){    	
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("aid", id);
-    	//model.addAttribute("article", articleService.selectById(id));
+    	model.addAttribute("article", articleService.selectById(id));
     	model.addAttribute("imgPath", "http://"+CmsConfig.getFtpServer()+"/"+CmsConfig.getFilePath());
     	
     	eventProducer.addEvent(getEvent("article",id));
@@ -106,12 +107,12 @@ public class SaticResourcesController {
     	
     	return "/article";
     }
-    @RequestMapping("/article_list/{id}")
-    public String articlelist(Model model,HttpServletRequest request, @PathVariable int id){    	
+    @RequestMapping(path={"/article_list/{id}"})
+    public String articlelist(Model model,HttpServletRequest request, @PathVariable int id,@RequestParam(defaultValue="1") int page){    	
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectByChannel(id));
     	model.addAttribute("channelname", channelService.selectById(id).getName());
-    	
+    	model.addAttribute("pageid", page);
     	eventProducer.addEvent(getEvent("article_list",id));
     	
     	return "/article_list";

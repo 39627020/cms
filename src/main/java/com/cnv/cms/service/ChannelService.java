@@ -5,6 +5,7 @@ package com.cnv.cms.service;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnv.cms.model.Channel;
@@ -28,6 +29,7 @@ public interface ChannelService extends BaseService<Channel>{
 	/*
 	 * 栏目列表
 	 */
+	
 	public List<Channel> selectAll();
 	/*
 	 * 顶层栏目列表

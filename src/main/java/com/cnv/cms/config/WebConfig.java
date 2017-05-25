@@ -17,6 +17,7 @@ import com.cnv.cms.interceptor.HostHolderInterceptor;
 import com.cnv.cms.interceptor.SessionAdminInterceptor;
 import com.cnv.cms.interceptor.SessionAuthInterceptor;
 import com.cnv.cms.interceptor.SessionUserInterceptor;
+import com.cnv.cms.util.CustomRedisSerializer;
 /*
  * springmvc配置
  * 对应于springmvc4-servlet.xml
@@ -62,10 +63,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		
 		//redisTemplate.setKeySerializer(new StringRedisSerializer());
 	    RedisSerializer stringSerializer = new StringRedisSerializer();
-	    redisTemplate.setKeySerializer(stringSerializer);
-	    redisTemplate.setValueSerializer(stringSerializer);
+	    RedisSerializer mySerializer = new CustomRedisSerializer();
+	    redisTemplate.setKeySerializer(mySerializer);
+	    redisTemplate.setValueSerializer(mySerializer);
 	    redisTemplate.setHashKeySerializer(stringSerializer);
-	    redisTemplate.setHashValueSerializer(stringSerializer);
+	    redisTemplate.setHashValueSerializer(mySerializer);
 	    logger.info("redisTemplate 初始化完成");
 	}
 }

@@ -3,6 +3,8 @@ package com.cnv.cms.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -105,6 +107,7 @@ public class ChannelServiceImpl implements ChannelService {
 	 * @param channel
 	 * @return 
 	 */
+	@CacheEvict(value="channelsCache",key="'selectById'+#channel.id")
 	public boolean update(Channel channel) {
 		try{
 			channelMapper.update(channel);
@@ -115,6 +118,7 @@ public class ChannelServiceImpl implements ChannelService {
 		return false;
 	}
 
+	@Cacheable(value="channelsCache",key="#root.methodName")
 	public List<Channel> selectAll() {
 		return channelMapper.selectAll();
 	}
@@ -131,6 +135,7 @@ public class ChannelServiceImpl implements ChannelService {
 	 * 获取Channel信息
 	 * @param id
 	 */
+	@Cacheable(value="channelsCache",key="#root.methodName+#id")
 	public Channel selectById(int id) {
 		return channelMapper.selectById(id);
 	}

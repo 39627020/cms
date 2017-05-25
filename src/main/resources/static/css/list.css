@@ -1,4 +1,4 @@
-/* 列表头部样式 */
+/* 鍒楄〃澶撮儴鏍峰紡 */
 .list-header {
 	padding-bottom: 15px;
 }
@@ -9,7 +9,7 @@
 .list-header  a.header {
 	font-size: 22px;
 }
-/* 列表头部标签 */
+/* 鍒楄〃澶撮儴鏍囩 */
 .list-header .head-tag{
 	margin: 10px 0px;
 	padding: 10px 10px;
@@ -22,7 +22,7 @@
 	background: #FFF;
 	display:inline-block;
 }
-/* 列表项 */
+/* 鍒楄〃椤� */
 .list-item {
 	padding-left: 5;
 	padding-right: 10;
@@ -60,6 +60,6 @@
 }
 
 .page-number{
-	width: 240px;
+	width: 280px;
 	margin:0 auto;
 }

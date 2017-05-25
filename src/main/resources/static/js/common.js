@@ -80,7 +80,7 @@ function loadChannel(){
 	        
 			str += '<li class="dropdown topcol" >\
 				<a columnid="'+pchannel.id+'" \
-				href="'+getContextPath()+'/article_list.html?cid='+pchannel.id+'" \
+				href="'+getContextPath()+'/article_list/'+pchannel.id+'" \
 					class="dropdown-toggle" data-toggle="dropdown">\
 				<b>'+pchannel.name+'</b>';
 				if(substr != ""){

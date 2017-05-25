@@ -6,10 +6,16 @@ function updateBar(){
 			var methods = data.methods;
 
 			showBar("pages", pages.xdata,pages.ydata);
+			var dindex = methods["/index.html"];
+			var dlist = methods["/article_list"];
+			var dart = methods["/article"];
+			showBar("index", dindex.xdata,dindex.ydata);
+			showBar("article_list", dlist.xdata,dlist.ydata);
+			showBar("article", dart.xdata,dart.ydata);
 		}
  	});
 }
-function showBar(latbel,xdata,ydata){
+function showBar(id,xdata,ydata){
 	var barOptions = {
 			series: {
 				bars: {
@@ -25,10 +31,10 @@ function showBar(latbel,xdata,ydata){
 			}
 	    };
     var barData = {
-            label: latbel,
+            //label: latbel,
             data: xdata
         };
-	$.plot($("#flot-bar-pages"), [barData],barOptions);
+	$.plot($("#flot-bar-"+id), [barData],barOptions);
 };
 
 

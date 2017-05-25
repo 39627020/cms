@@ -1,5 +1,6 @@
 package com.cnv.cms.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class Article {
+public class Article implements Serializable{
 	/*
 	 * 文章id
 	 */

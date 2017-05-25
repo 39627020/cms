@@ -42,6 +42,12 @@ public class HostHolderInterceptor implements HandlerInterceptor , InitializingB
 	private ThreadLocal<Long> tin = new ThreadLocal<>();
 
 	//SessionRepositoryFilter t;
+	/*LoginSession loginSession = new LoginSession();
+	HostHolderInterceptor(){
+		loginSession.setUsername("test1");
+		loginSession.setUserid(26);
+		loginSession.setAdmin(true);
+	}*/
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {

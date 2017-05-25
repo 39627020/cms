@@ -36,22 +36,24 @@
 	  <!-- 页面左侧内容区 -->
 	  <div class="page-div col-md-7 col-md-offset-1">
 		<div class="article-header">
-			<h3  id="artical_topic" >正在加载...</h3>
+			<h3  id="artical_topic" th:text="${article.title}">正在加载...</h3>
 			<div class="article-info">
 				<p>
-                <span class="ss01" id="article_date" >2017年01月22日 22:36</span><br/>   
+                <span class="ss01" id="article_date" th:text="${article.createDate}">2017年01月22日 22:36</span><br/>   
                 <span class="ss02">来源：</span>
 					<span id="publisher">
 						<span it="name" class="ss03">
-							<a href="void(0)"  target="_blank">CNV-CMS</a>
+							<a href="javascript:void(0)"  target="_blank">CNV-CMS</a>
 						</span>
 					</span>                
-					<span it="author" class="ss04">作者：<span  id="article_author" itemprop="name">Admin</span></span>
+					<span it="author" class="ss04">
+					作者：<span  id="article_author" itemprop="name" th:text="${article.author}">Admin</span>
+					</span>
             </p>			
 			</div>
 		
 		</div>	
-		<div class="article-content" id="article_content">
+		<div class="article-content" id="article_content" th:utext="${article.content}">
 		   <!--mainContent begin-->
 		   	<p>正在加载...</p>
 		  <!--mainContent end-->		

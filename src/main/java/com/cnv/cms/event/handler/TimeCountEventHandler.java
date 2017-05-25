@@ -34,7 +34,7 @@ public class TimeCountEventHandler implements EventHandler , InitializingBean{
 		String key = RedisKeyUtil.getTimeCostKey(url,method);
 		valOps.increment(key, cost);
 		valOps.increment(key+":pv",1);
-		logger.info("TimeCountEventHandler do handle :" + url+", cost: "+cost);
+		//logger.info("TimeCountEventHandler do handle :" + url+":"+method+", cost: "+cost);
 	}
 
 	@Override
