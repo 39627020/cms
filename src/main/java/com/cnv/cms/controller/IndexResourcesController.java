@@ -49,7 +49,11 @@ public class IndexResourcesController {
 	
 	
 	//------------------------/*.html---------------------------------------
-    @RequestMapping(path={"/","index","index.html"})
+    @RequestMapping(path={"/"})
+    public String indexDefalut() {
+        return "redirect:/index.html";
+    }
+    @RequestMapping(path={"index","index.html"})
     public String index(Model model,HttpServletRequest request) {
     	
     	model.addAllAttributes(this.getCommontInfo(request));
@@ -90,7 +94,14 @@ public class IndexResourcesController {
     	return "/login";
     }
 
+//------------------------------------------------
+    @RequestMapping(value="/test.html",method=RequestMethod.GET)
+    public String test(Model model,HttpServletRequest request){  
 
+    	model.addAttribute("article", articleService.selectById(14));
+    	
+    	return "/test";
+    }
     //*********************************************************************
 
     public  Map<String, Object> getCommontInfo(HttpServletRequest request){

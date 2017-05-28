@@ -38,9 +38,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	//Spring Boot 默认配置的/**映射到/static（或/public ，/resources，/META-INF/resources）
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/*.html")
+		
+ /*       registry.addResourceHandler("/*.html")
  				.addResourceLocations("classpath:/static/html/");
-
+*/
         super.addResourceHandlers(registry);
     }	
 	

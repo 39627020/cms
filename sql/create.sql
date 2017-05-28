@@ -81,6 +81,17 @@ create table t_channel(
 	orders int
 );
 
+CREATE TABLE `t_message` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_id` int(11) DEFAULT NULL,
+  `to_id` int(11) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `conversation_id` varchar(30),
+  `content` text,
+  `status` int(1) DEFAULT '1',
+  PRIMARY KEY (`Id`),
+  KEY `userid` (`from_id`,`conversation_id`)
+ ); 
 #################################################################
 
 #测试数据

@@ -41,13 +41,6 @@ public class HostHolderInterceptor implements HandlerInterceptor , InitializingB
 	
 	private ThreadLocal<Long> tin = new ThreadLocal<>();
 
-	//SessionRepositoryFilter t;
-	/*LoginSession loginSession = new LoginSession();
-	HostHolderInterceptor(){
-		loginSession.setUsername("test1");
-		loginSession.setUserid(26);
-		loginSession.setAdmin(true);
-	}*/
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -59,22 +52,18 @@ public class HostHolderInterceptor implements HandlerInterceptor , InitializingB
 		if(logger.isDebugEnabled()){
 			
 		}
-		logger.info("HostHolderInterceptor interceptror :"+url);
+		//logger.info("HostHolderInterceptor interceptror :"+url);
 		LoginSession loginSession = sessionService.getLoginSession(request);
 		if(loginSession != null){
 			hostHolder.setLoginSession(loginSession);
 		}
 		if(url.equals("") || url.equals("/"))
 			url = "/index.html";
-
-		if(!url.startsWith("/api")){
-			
-			if(!url.endsWith(".html")){
-				url = url.substring(0, url.lastIndexOf('/'));
-			}
+		
+		
+		if(url.endsWith(".html")){
 			hostHolder.setUrl(url);
-		}
-			
+		}			
 		
 		return true;
 	}
@@ -95,10 +84,6 @@ public class HostHolderInterceptor implements HandlerInterceptor , InitializingB
 					.addExtData("url", url)
 					.addExtData("cost", tcost)
 					.addExtData("method", "hostholder"));
-
-			/*String key = RedisKeyUtil.getTimeCostKey(url,"hostholder");
-			valOps.increment(key, tcost);
-			valOps.increment(key+":pv",1);*/
 		}
 
 		hostHolder.clear();

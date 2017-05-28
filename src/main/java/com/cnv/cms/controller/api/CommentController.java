@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cnv.cms.authority.AuthClass;
 import com.cnv.cms.authority.AuthMethod;
+import com.cnv.cms.model.Article;
 import com.cnv.cms.model.Comment;
 import com.cnv.cms.model.EntityType;
 import com.cnv.cms.model.HostHolder;
+import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.CommentService;
 import com.cnv.cms.service.UserService;
 
@@ -37,6 +39,7 @@ public class CommentController {
     private CommentService commentService; 
     @Autowired
     private UserService userService;
+    
 
 	@AuthMethod(role="base")
 	@RequestMapping(value="/add",method=RequestMethod.POST)
@@ -69,4 +72,5 @@ public class CommentController {
 		map.put("data", datalist);
 		return map;
 	}
+	
 }

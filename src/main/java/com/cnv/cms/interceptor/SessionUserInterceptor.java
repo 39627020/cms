@@ -27,7 +27,7 @@ public class SessionUserInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response, Object handler) throws Exception {
 		
 		String url = request.getRequestURI();
-		if(CmsConfig.isDebug()){
+		if(logger.isDebugEnabled()){
 			logger.info("User Home Interceptor: "+url);
 		}
 		//session中是否保存了登录信息
