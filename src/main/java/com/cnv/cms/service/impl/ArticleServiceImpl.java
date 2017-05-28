@@ -182,7 +182,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	public List<Article> selectPage(int page, int n) {
-		return articleMapper.selectFromTo(page*(n-1), n);
+		return articleMapper.selectFromTo(n*(page-1), n);
 	}
 	@Override
 	public List<Article> selectByUserId(int id) {
@@ -229,6 +229,11 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<Article> selectTopFellow(int n) {
 		// TODO Auto-generated method stub
 		return articleMapper.selectTopFellow(n);
+	}
+	@Override
+	public List<Article> selectPage(int page, int n, int channelId) {
+		// TODO Auto-generated method stub
+		return  articleMapper.selectFromToInChannel(n*(page-1), n,channelId);
 	}
 
 

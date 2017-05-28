@@ -8,7 +8,7 @@ import com.cnv.cms.model.Article;
 @Transactional
 public interface ArticleService extends BaseService<Article> {
 	@Transactional
-	public boolean add(Article t, String client);
+	boolean add(Article t, String client);
 	/*
 	 * 删除栏目下全部文章
 	 */
@@ -37,6 +37,7 @@ public interface ArticleService extends BaseService<Article> {
 	 * n：每页数量
 	 */
 	List<Article> selectPage(int page, int n);	
+	List<Article> selectPage(int page, int n, int channelId);
 	/*
 	 * 通过用户id检索
 	 */

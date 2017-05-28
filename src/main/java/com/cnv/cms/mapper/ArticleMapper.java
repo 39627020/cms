@@ -33,7 +33,9 @@ public interface ArticleMapper extends BaseMapper<Article> {
 	/*
 	 * 检索offset+1开始往后n个记录
 	 */
-	List<Article> selectFromTo(int offset, int n);	
+	List<Article> selectFromTo(int offset, int n);
+	@Select("select * from t_article where channelId=#{channelId} order by id  limit #{offset},#{n};")
+	List<Article> selectFromToInChannel(@Param("offset")int offset,@Param("n") int n, @Param("channelId")int channelId);
 	/*
 	 * 通过用户id检索
 	 */

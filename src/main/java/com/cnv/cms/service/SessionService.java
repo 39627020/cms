@@ -23,14 +23,14 @@ import com.cnv.cms.util.RedisKeyUtil;
 public interface SessionService {
 
    
-	public  String getSessionId(HttpServletRequest request);
-	public  LoginSession getLoginSession(HttpServletRequest request);
-	public  LoginSession getLoginSession(String sessionid);
+	String getSessionId(HttpServletRequest request);
+	LoginSession getLoginSession(HttpServletRequest request);
+	LoginSession getLoginSession(String sessionid);
 
-	public  void removeLoginCookies(HttpServletRequest request,HttpServletResponse response);
-	public void addLoginSession(String sessionid, User user, boolean isAdmin);
+	void removeLoginCookies(HttpServletRequest request,HttpServletResponse response);
+	void addLoginSession(String sessionid, User user, boolean isAdmin);
 	
-	public void removeLoginSession(String sessionid);
+	void removeLoginSession(String sessionid);
 	
 
 }

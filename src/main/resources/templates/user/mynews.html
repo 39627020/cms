@@ -64,9 +64,7 @@
 	
 	<!--   <div class="page-div col-md-12"> col-md-offset-2-->
 		<div class="col-md-10 ">
-			<div class="label-public-title t-30">
-		   
-			</div>
+			<div th:replace="user/sidebar::welcome"> </div> 
 			<!-- <div class="label-div t-15 border-all" style="padding: 0;"> -->
 				<!-- <div class="label-main"> -->
 					<!-- <div class="clearfix label-public pt-25"> -->
@@ -88,7 +86,7 @@
                                   <tr th:each="art:${articles}">
                                     <th th:text="${art.id}">1</th>
                                    <td ><a th:text="${art.title}" th:href="@{/article.html?id=}+${art.id}"></a></td>
-                                   <td th:text="${art.createDate}">2017-5-1</td>
+                                   <td th:text="${#dates.format(art.createDate, 'yyyy-MM-dd hh:mm:ss')}">2017-5-1</td>
                                    <td >编辑 | 删除</td>
                                   </tr>                                
                                   <tr>

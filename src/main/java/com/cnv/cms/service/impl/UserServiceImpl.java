@@ -237,7 +237,7 @@ public class UserServiceImpl implements UserService {
 	public User selectById(int id) {
 		User user = userMapper.selectUserByID(id);
 		if(user==null){
-			throw new CmsException("用户不存在");
+			return null;
 		}
 		user.setRoleIDs(this.listUserRoleIds(user.getId()));
 		user.setGroupIDs(this.listUserGroupIds(user.getId()));

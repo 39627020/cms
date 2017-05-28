@@ -28,9 +28,9 @@ import com.cnv.cms.service.PVService;
 
 @Controller
 //@RequestMapping("/")
-public class SaticResourcesController {
+public class IndexResourcesController {
 	
-	private final Logger logger = LoggerFactory.getLogger(SaticResourcesController.class);
+	private final Logger logger = LoggerFactory.getLogger(IndexResourcesController.class);
 	
 	
 	@Autowired
@@ -48,42 +48,6 @@ public class SaticResourcesController {
 	
 	
 	
-	
-	//---------------------/user/*.html-------------------------------------------------
-	
-	@RequestMapping(value="/user/{file}.html",method=RequestMethod.GET)
-	public String userInterceptro(@PathVariable("file") String file){
-		return "user/"+file;
-		
-	}
-	@RequestMapping(value="/user/home.html",method=RequestMethod.GET)
-	public String userhome(Model model,HttpServletRequest request){
-		model.addAllAttributes(this.getCommontInfo(request));
-		return "user/home";
-	}
-	
-	@RequestMapping(value="/user/article_add.html",method=RequestMethod.GET)
-	public String userArticlAdd(Model model,HttpServletRequest request){
-		model.addAllAttributes(this.getCommontInfo(request));
-		model.addAttribute("topChannels", channelService.selectTopChannels());
-		return "user/article_add";
-	}
-	@RequestMapping(value="/user/mynews.html",method=RequestMethod.GET)
-	public String usernews(Model model,HttpServletRequest request){
-		model.addAllAttributes(this.getCommontInfo(request));
-		model.addAttribute("articles", articleService.selectByUserId(hostHolder.getUserId()));
-		return "user/mynews";
-	}
-	
-	//-----------------------------------------------------------------
-	
-	@RequestMapping(value="/admin/{file}.html",method=RequestMethod.GET)
-	public String adminInterceptro(@PathVariable("file") String file){
-		return "admin/"+file;
-		
-	}
-	
-	
 	//------------------------/*.html---------------------------------------
     @RequestMapping(path={"/","index","index.html"})
     public String index(Model model,HttpServletRequest request) {
@@ -95,8 +59,9 @@ public class SaticResourcesController {
 
         return "/index";
     }
-    @RequestMapping(value="/article/{id}",method=RequestMethod.GET)
-    public String article(Model model,HttpServletRequest request, @PathVariable int id){    	
+    @RequestMapping(value="/article.html",method=RequestMethod.GET)
+    public String article(Model model,HttpServletRequest request, @RequestParam Integer id){  
+    	if(id==null) return "redirect:/index.html";
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("aid", id);
     	model.addAttribute("article", articleService.selectById(id));
@@ -107,10 +72,11 @@ public class SaticResourcesController {
     	
     	return "/article";
     }
-    @RequestMapping(path={"/article_list/{id}"})
-    public String articlelist(Model model,HttpServletRequest request, @PathVariable int id,@RequestParam(defaultValue="1") int page){    	
+    @RequestMapping(path={"/article_list.html"})
+    public String articlelist(Model model,HttpServletRequest request,  @RequestParam Integer id,@RequestParam(defaultValue="1") int page){    	
+    	if(id==null) return "redirect:/index.html";
     	model.addAllAttributes(this.getCommontInfo(request));
-    	model.addAttribute("articles", articleService.selectByChannel(id));
+    	model.addAttribute("articles", articleService.selectPage(page, 10, id));
     	model.addAttribute("channelname", channelService.selectById(id).getName());
     	model.addAttribute("pageid", page);
     	eventProducer.addEvent(getEvent("article_list",id));
@@ -123,27 +89,10 @@ public class SaticResourcesController {
     	
     	return "/login";
     }
-    @RequestMapping("/test")
-    public String test(Model model,HttpServletRequest request){
-/*    	String p1 = request.getContextPath();
-    	System.out.println(p1);
-    	
-    	this.setChannelAndUser(model);*/
-    	
-    	model.addAllAttributes(this.getCommontInfo(request));
-    	
-    	model.addAttribute("test", "test str");
-    	return "/test";
-    }
+
 
     //*********************************************************************
-    public void setChannelAndUser(Model model){
-    	logger.info("hostHolder username: "+hostHolder.getUserName());
-    	logger.info("hostHolder userid: "+hostHolder.getUserId());
-    	model.addAttribute("user", hostHolder.getUserName());
-    	model.addAttribute("userid", hostHolder.getUserId());
-    	model.addAttribute("channels", channelService.selectAll());
-    }
+
     public  Map<String, Object> getCommontInfo(HttpServletRequest request){
     	Map<String, Object> map = new HashMap<String, Object>();
     	map.put("user", hostHolder.getUserName());

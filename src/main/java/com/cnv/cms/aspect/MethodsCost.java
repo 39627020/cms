@@ -29,7 +29,7 @@ public class MethodsCost implements InitializingBean {
 	private RedisTemplate redisTemplate; 
 	private ValueOperations<String,String> valOps=null;
 	
-	@Pointcut("execution(* com.cnv.cms.controller.SaticResourcesController.*(..))")
+	@Pointcut("execution(* com.cnv.cms.controller.IndexResourcesController.*(..))")
 	public void controllerMethod(){}
 	@Pointcut("execution(* com.cnv.cms.service.*.*(..))")
 	public void serviceMethod(){}

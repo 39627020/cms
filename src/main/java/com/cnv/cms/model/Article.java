@@ -131,7 +131,7 @@ public class Article implements Serializable{
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	@JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+	@JsonFormat(pattern="yyyy-MM-dd  HH:MM:SS",timezone = "GMT+8")
 	public Date getCreateDate() {
 		return createDate;
 	}

@@ -35,6 +35,7 @@ public class TimeCountEventHandler implements EventHandler , InitializingBean{
 		valOps.increment(key, cost);
 		valOps.increment(key+":pv",1);
 		//logger.info("TimeCountEventHandler do handle :" + url+":"+method+", cost: "+cost);
+		
 	}
 
 	@Override

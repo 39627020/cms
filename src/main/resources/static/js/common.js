@@ -73,14 +73,14 @@ function loadChannel(){
 	        	for(j in subChannels){
 	        		var sc = subChannels[j];
 		        	substr += '<li><a columnid="'+sc.id+'" \
-		        	href="'+getContextPath()+'/article_list/'+sc.id+'">'+sc.name+'</a></li>';
+		        	href="'+getContextPath()+'/article_list.html?id='+sc.id+'">'+sc.name+'</a></li>';
 		        }
 	        	substr += '</ul>';
 	        }
 	        
 			str += '<li class="dropdown topcol" >\
 				<a columnid="'+pchannel.id+'" \
-				href="'+getContextPath()+'/article_list/'+pchannel.id+'" \
+				href="'+getContextPath()+'/article_list.html?id='+pchannel.id+'" \
 					class="dropdown-toggle" data-toggle="dropdown">\
 				<b>'+pchannel.name+'</b>';
 				if(substr != ""){

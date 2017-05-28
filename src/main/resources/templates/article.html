@@ -58,44 +58,43 @@
 		   	<p>正在加载...</p>
 		  <!--mainContent end-->		
 		</div>
-		<div class="article-commend">
+		<div class="article-comment">
 			<h3  style="font-weight:bold;">最新评论</h3>
-			<div class="comment-item">
-				<p class="c-username">
-					<a href="void(0)" target="_blank">会飞的瘦猪</a> 
-				</p>
-							  
-				<p class="p-comment">水能载舟，亦能覆舟，习主席能如此亲民，就一定能更站在人民的角度为人民谋福利，这真是我们国家的荣幸，我们的国家定能更强大！</p>
-				<div class="c-bottomBar">
-					<span class="reply">
-					<a href="#"><span>推荐</span><em>250</em></a>
-					<em>/</em> 
-					<a href="#">回复</a>
-					<em>/</em>
-					<a href="#">举报</a>
-					</span>
-					<span class="commentTime">2017-01-23 10:19</span>
-				</div>
+			<div id="comment-list">
+				<div class="comment-item">
+					<p class="c-username">
+						<a href="javascript:void(0)" target="_blank">会飞的瘦猪</a> 
+					</p>
+								  
+					<p class="p-comment">水能载舟，亦能覆舟，习主席能如此亲民，就一定能更站在人民的角度为人民谋福利，这真是我们国家的荣幸，我们的国家定能更强大！</p>
+					<div class="c-bottomBar">
+						<span class="reply">
+						<a href="#"><span>推荐</span><em>250</em></a>
+						<em>/</em> 
+						<a href="#">回复</a>
+						<em>/</em>
+						<a href="#">举报</a>
+						</span>
+						<span class="commentTime">2017-01-23 10:19</span>
+					</div>
+				</div>			
 			</div>
-			<div class="comment-item">
-				<p class="c-username">
-					<a href="void(0)" target="_blank">会飞的瘦猪</a> 
-				</p>
-							  
-				<p class="p-comment">水能载舟，亦能覆舟，习主席能如此亲民，就一定能更站在人民的角度为人民谋福利，这真是我们国家的荣幸，我们的国家定能更强大！</p>
-				<div class="c-bottomBar">
-					<span class="reply">
-					<a href="#"><span>推荐</span><em>250</em></a>
-					<em>/</em> 
-					<a href="#">回复</a>
-					<em>/</em>
-					<a href="#">举报</a>
-					</span>
-					<span class="commentTime">2017-01-23 10:19</span>
-				</div>
-			</div>
+
+
 		
 		</div>
+			<div class="comment-item">
+				<p class="c-username">
+					发表评论
+				</p>
+				<textarea id="comment-text"   rows="3" style="width: 100%">	</textarea>			  
+				<div class="c-bottomBar">
+					<span class="reply">
+					<button id="comment-submit" class="btn btn-primary">回复</button>
+					</span>
+					<!-- <span class="commentTime">2017-01-23 10:19</span> -->
+				</div>
+			</div>		
 	  </div> <!-- /.col-md-9 -->	
 	  
 		<!-- 页面右侧导航区 -->	
@@ -136,7 +135,7 @@
 </div>
 <!-- /.container -->
 
-
+<div class="col-lg-12" style="margin-top:30px"></div>
 <!-- Page Footer -->
 <div th:replace="footer::footer"></div>
 </body>
