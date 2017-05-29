@@ -13,8 +13,11 @@ public class Message {
     private int toId;
     private String conversationId;
     private String content;
-    private Date createdDate;
-    private int status;
+    private Date createdDate = new Date();
+    private int status=1;
+    private int hasRead;
+    private int count;
+
 
     public int getId() {
         return id;
@@ -72,4 +75,23 @@ public class Message {
     public void setStatus(int status) {
         this.status = status;
     }
+
+	public int getHasRead() {
+		return hasRead;
+	}
+
+	public void setHasRead(int hasRead) {
+		this.hasRead = hasRead;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+    
+    
 }

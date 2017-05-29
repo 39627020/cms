@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.cnv.cms.CmsSpringbootApplication;
 import com.cnv.cms.event.EventModel;
 import com.cnv.cms.model.Channel;
 import com.cnv.cms.service.ArticleService;

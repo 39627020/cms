@@ -106,41 +106,28 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <ul class="chat">
-                        <li class="left clearfix">
+                    <ul class="chat" th:remove="all-but-first">
+                        <li class="left clearfix" th:each="item:${messages}">
                             <span class="chat-img pull-left">
                                 <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
                             </span>
                             <div class="chat-body clearfix">
                                 <div class="header">
-                                    <strong class="primary-font">Jack Sparrow</strong>
-                                    <small class="pull-right text-muted">
-                                        <i class="fa fa-clock-o fa-fw"></i> 12 mins ago
+                                    <strong class="primary-font" th:text="${item.username}">Jack Sparrow</strong>
+                                    
+                                    <small class="pull-right text-muted" >
+                                        <i class="fa fa-clock-o fa-fw" ></i>
+                                        <font th:text="${#dates.format(item.message.createdDate, 'MM-dd hh:mm:ss')}"></font>                                       
+                                       <p><i class='fa fa-bell-o fa-fw' ></i>&nbsp;<big th:text="${item.message.count}+' 条未读'"></big> </p>
                                     </small>
                                 </div>
-                                
+                                <p ><a th:href="@{'/user/msgdetail.html?conversation='+${item.message.conversationId}}" th:text="${item.message.content}+'...'"></a></p>
                                <!--  <p>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
                                 </p> -->
                             </div>
                         </li>
-                        
-                     <!--    <li class="right clearfix">
-                            <span class="chat-img pull-right">
-                                <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                            </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <small class=" text-muted">
-                                        <i class="fa fa-clock-o fa-fw"></i> 13 mins ago</small>
-                                    <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                </div>
-                                <p style='text-align:right'>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                </p>
-                            </div>
-                        </li>
-                        --> 
+
                         <li class="left clearfix">
                             <span class="chat-img pull-left">
                                 <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
@@ -156,35 +143,19 @@
                                 </p>
                             </div>
                         </li>
-                  <!--      
-                        <li class="right clearfix">
-                            <span class="chat-img pull-right">
-                                <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                            </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <small class=" text-muted">
-                                        <i class="fa fa-clock-o fa-fw"></i> 15 mins ago</small>
-                                    <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                </div>
-                                <p style='text-align:right'>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
-                     -->
+
                     </ul>
                 </div>
                 <!-- /.panel-body -->
                 <div class="panel-footer">
-                    <div class="input-group">
+  <!--                   <div class="input-group">
                         <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
                         <span class="input-group-btn">
                             <button class="btn btn-warning btn-sm" id="btn-chat">
                                 Send
                             </button>
                         </span>
-                    </div>
+                    </div> -->
                 </div>
                 <!-- /.panel-footer -->
             </div>

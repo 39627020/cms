@@ -12,21 +12,24 @@ import com.cnv.cms.model.Message;
 
 public interface MessageMapper {
 	String TABLE_NAME = "t_message";
-    String INSERT_FIELDS = " from_id, to_id, create_date, conversation_id, content,  status ";
-    String SELECT_FIELDS = " id, from_id as fromId, to_id as toId, create_date as createdDate,  conversation_id as conversationId, content, status ";
+    String INSERT_FIELDS = " from_id, to_id, create_date, conversation_id, content,  status, has_read ";
+    String SELECT_FIELDS = " id, from_id as fromId, to_id as toId, create_date as createdDate,  conversation_id as conversationId, content, status, has_read as hasRead ";
 	 
 	@Insert({"insert into ",TABLE_NAME,"(",INSERT_FIELDS,") "
-			+ "values(#{fromId},#{toId},#{createdDate},#{conversationId},#{content},#{status});"})
+			+ "values(#{fromId},#{toId},#{createdDate},#{conversationId},#{content},#{status},#{hasRead});"})
 	public int add(Message message);
 	
 	@Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," where id=#{id}"})
 	public Message getById(int id);
 	
+	@Select({"select count(*) from ",TABLE_NAME," where has_read=0"})
+	public int getUnReadCount();
+	
 	@Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," where conversation_id=#{id} order by create_date;"})
 	public List<Message>  listByConversation(String id);
 	
 
-	@Select({"select ",SELECT_FIELDS," from ","(select ",SELECT_FIELDS," from ",TABLE_NAME," where from_id=#{id} order by create_date) as tc group by conversation_id;"})
+	@Select({"select ",SELECT_FIELDS,", count(if(has_read=0,true,null)) as count from ","(select * from ",TABLE_NAME," where from_id=#{id} order by create_date desc) as tc group by conversation_id;"})
 	public List<Message>  listConversationsByUserId(int id);
 	
 

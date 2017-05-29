@@ -36,22 +36,22 @@ public class RedisWriteReadSpeedTest {
 		
 		long t10 = System.currentTimeMillis();
 		String key  = "testqueue";
-		for(int i=0; i<100000; i++){
+		for(int i=0; i<10000; i++){
 			listOps.rightPush(key, JsonUtil.toJSon(event));
 		}
 		long t11 = System.currentTimeMillis() - t10;
 		System.out.println("cost: "+t11 +" ms");
-		
+		stringRedisTemplate.delete(key);
 		long t20 = System.currentTimeMillis();
 		String key1 = "test";
-		for(int i=0; i<100000; i++){
+		for(int i=0; i<10000; i++){
 			valueOps.increment(key1, 1);
 		}
 		long t21 = System.currentTimeMillis() - t20;
 		
-		System.out.println("cost: "+t11 +" ms");
-		Object pv =  valueOps.get(key1);
-		System.out.println("test="+pv);
-		stringRedisTemplate.getConnectionFactory().getConnection().flushDb();
+		System.out.println("cost: "+t21 +" ms");
+		//Object pv =  valueOps.get(key1);
+		//System.out.println("test="+pv);
+		//stringRedisTemplate.getConnectionFactory().getConnection().flushDb();
 	}
 }
