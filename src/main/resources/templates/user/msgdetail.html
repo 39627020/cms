@@ -33,6 +33,7 @@
 	<script src="../js/common.js"></script>
 	<!-- <script src="../js/user_home_common.js"></script> -->
 	<script src="../js/user_home.js"></script>
+	<script src="../js/msgdetail.js"></script>
 
 
 
@@ -41,7 +42,13 @@
 
 
 <body>
-   
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    var toId = [[${toId}]];
+
+/*]]>*/
+</script>   
  <!--头部代码开始-->
 
 	<!-- Navigation -->
@@ -63,7 +70,7 @@
 	
 	
 	<!--   <div class="page-div col-md-12"> col-md-offset-2-->
-		<div class="col-md-10 ">
+		<div class="col-md-8">
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">欢迎来到用户中心</h1>
@@ -73,7 +80,7 @@
             <!-- /.panel -->
             <div class="chat-panel panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-comments fa-fw"></i> Chat
+                    <i class="fa fa-comments fa-fw"></i> <font th:text="'我和 '+${username}+' 的对话'"></font>
                     <div class="btn-group pull-right">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-chevron-down"></i>
@@ -110,74 +117,50 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <ul class="chat">
-                        <li class="left clearfix">
+                    <ul class="chat" th:remove="all-but-first">
+                    	<div th:each="message:${messages}">
+                         <li th:if="${message.toId}==${userid}" class="left clearfix" >
                             <span class="chat-img pull-left">
                                 <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
                             </span>
                             <div class="chat-body clearfix">
                                 <div class="header">
-                                    <strong class="primary-font">Jack Sparrow</strong>
-                                    <small class="pull-right text-muted">
-                                        <i class="fa fa-clock-o fa-fw"></i> 12 mins ago
+                                    <strong class="primary-font" th:text="${username}">Jack Sparrow</strong>
+                                    <small class="pull-right text-muted" >
+                                        <i class="fa fa-clock-o fa-fw" ></i>
+                                        <font th:text="${#dates.format(message.createdDate, 'MM-dd hh:mm:ss')}"></font>                                       
                                     </small>
                                 </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                </p>
+                                <p th:text="${message.content}"></p>
+
                             </div>
                         </li>
-                        <li class="right clearfix">
+                        
+                        <li th:if="${message.fromId}==${userid}" class="right clearfix">
                             <span class="chat-img pull-right">
                                 <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
                             </span>
                             <div class="chat-body clearfix">
                                 <div class="header">
                                     <small class=" text-muted">
-                                        <i class="fa fa-clock-o fa-fw"></i> 13 mins ago</small>
-                                    <strong class="pull-right primary-font">Bhaumik Patel</strong>
+                                        <i class="fa fa-clock-o fa-fw" ></i>
+                                        <font th:text="${#dates.format(message.createdDate, 'MM-dd hh:mm:ss')}"></font>
+                                    </small>
+                                    <strong class="pull-right primary-font">我</strong>
                                 </div>
-                                <p style='text-align:right'>
+                                <p style='text-align:right' th:text="${message.content}">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                 </p>
                             </div>
-                        </li>
-                        <li class="left clearfix">
-                            <span class="chat-img pull-left">
-                                <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
-                            </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="primary-font">Jack Sparrow</strong>
-                                    <small class="pull-right text-muted">
-                                        <i class="fa fa-clock-o fa-fw"></i> 14 mins ago</small>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
-                        <li class="right clearfix">
-                            <span class="chat-img pull-right">
-                                <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                            </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <small class=" text-muted">
-                                        <i class="fa fa-clock-o fa-fw"></i> 15 mins ago</small>
-                                    <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                </div>
-                                <p style='text-align:right'>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
+                        </li>                        
+						</div>
+          
                     </ul>
                 </div>
                 <!-- /.panel-body -->
                 <div class="panel-footer">
                     <div class="input-group">
-                        <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                        <input name="message" id="chat-input" type="text" class="form-control input-sm" placeholder="在此输入回复信息..." />
                         <span class="input-group-btn">
                             <button class="btn btn-warning btn-sm" id="btn-chat">
                                 Send

@@ -14,12 +14,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.Message;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.ChannelService;
 import com.cnv.cms.service.MessageService;
+import com.cnv.cms.service.UserService;
 
 @Controller
 @RequestMapping("/user")
@@ -34,6 +36,8 @@ public class UserResourcesController {
 	private ArticleService articleService;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+	private UserService userService;
 	
 	
 	@RequestMapping(value="/{file}.html",method=RequestMethod.GET)
@@ -67,10 +71,23 @@ public class UserResourcesController {
 		return "user/innermsg";
 	}
 	@RequestMapping(value="/msgdetail.html",method=RequestMethod.GET)
-	public String msgdetail(Model model,HttpServletRequest request){
+	public String msgdetail(Model model,HttpServletRequest request,@RequestParam("userid") Integer userId){
+		
+		if(userId==null) return "redirect:/user/home.html";
+		
 		model.addAllAttributes(this.getCommontInfo(request));
-		//List<Object> messages = messageService.listConversationsByUserId(hostHolder.getUserId());
-		//model.addAttribute("messages", messages);
+		String conversationId=null;
+		int hostId = hostHolder.getUserId();
+		if(hostId<userId){
+			conversationId =  hostId+"_"+userId;
+		}else{
+			conversationId =  userId+"_"+hostId;
+		}
+		
+		List<Message> messages = messageService.listByConversation(conversationId);
+		model.addAttribute("messages", messages);
+		model.addAttribute("toId", userId);
+		model.addAttribute("username", userService.selectById(userId).getUsername());
 		return "user/msgdetail";
 	}
     public  Map<String, Object> getCommontInfo(HttpServletRequest request){

@@ -121,7 +121,7 @@
                                        <p><i class='fa fa-bell-o fa-fw' ></i>&nbsp;<big th:text="${item.message.count}+' 条未读'"></big> </p>
                                     </small>
                                 </div>
-                                <p ><a th:href="@{'/user/msgdetail.html?conversation='+${item.message.conversationId}}" th:text="${item.message.content}+'...'"></a></p>
+                                <p ><a th:href="@{'/user/msgdetail.html?userid='+${item.userid}}" th:text="${item.message.content}+'...'"></a></p>
                                <!--  <p>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
                                 </p> -->

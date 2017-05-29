@@ -37,9 +37,9 @@ public class MessageMapperTest {
 		
 		Message c1= messageMapper.getById(2);
 		System.out.println("get: "+c1.getContent());
-		List<Message> cs = messageMapper.listConversationsByUserId(1);
-		System.out.println("get 0: "+cs.get(0).getCount());
-		System.out.println("get 1: "+cs.get(1).getToId());
+		List<Message> cs = messageMapper.listConversationsByUserId(26);
+		System.out.println("get 0: "+cs.get(0));
+		System.out.println("get 1: "+cs.get(1));
 		
 		int count = messageMapper.getUnReadCount();
 		System.out.println("un read: "+count);

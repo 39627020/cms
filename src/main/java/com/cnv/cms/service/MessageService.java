@@ -2,12 +2,8 @@ package com.cnv.cms.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
-import com.cnv.cms.model.Article;
-import com.cnv.cms.model.Comment;
 import com.cnv.cms.model.Message;
 
 public interface MessageService extends BaseService<Message>{

@@ -92,6 +92,13 @@ public class Message {
 		this.count = count;
 	}
 
+	@Override
+	public String toString() {
+		return "Message [id=" + id + ", fromId=" + fromId + ", toId=" + toId + ", conversationId=" + conversationId
+				+ ", content=" + content + ", createdDate=" + createdDate + ", status=" + status + ", hasRead="
+				+ hasRead + ", count=" + count + "]";
+	}
+
     
     
 }
