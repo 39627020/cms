@@ -48,13 +48,8 @@ public class MessageController {
 		message.setFromId(hostId);
 		message.setToId(userId);
 		message.setContent(content);
-		String conversationId=null;
+		String conversationId=MessageService.getConversationId(hostId, userId);
 		
-		if(hostId<userId){
-			conversationId =  hostId+"_"+userId;
-		}else{
-			conversationId =  userId+"_"+hostId;
-		}
 		message.setConversationId(conversationId);
 		messageService.add(message);
 	

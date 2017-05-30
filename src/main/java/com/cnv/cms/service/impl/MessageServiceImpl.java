@@ -69,7 +69,7 @@ public class MessageServiceImpl implements MessageService {
 			}else{
 				userId = m.getToId();
 			}
-			oneMsg.put("username", userService.selectById(userId).getUsername());
+			oneMsg.put("username", userService.selectById(userId).getNickname());
 			oneMsg.put("userid",userId);
 			list.add(oneMsg);
 		}

@@ -29,11 +29,9 @@ public interface MessageMapper {
 	public List<Message>  listByConversation(String id);
 	
 
-	@Select({"select id, from_id as fromId, to_id as toId, tm.create_date as createdDate,  tm.conversation_id as conversationId, content, status, has_read as hasRead ",
-		", cvs.count from ",TABLE_NAME," tm, ",
-			"(select conversation_id,max(create_date) as create_date,count(id) as count from ",TABLE_NAME,
-			" where from_id=#{id} or to_id=#{id} group by conversation_id) as cvs ",
-			"where  tm.conversation_id=cvs.conversation_id and tm.create_date=cvs.create_date;"})
+	@Select({"select ",SELECT_FIELDS,", count(id) as count from ",
+		"(select * from ",TABLE_NAME," where from_id=#{id} or to_id=#{id} order by create_date desc) as tt ",
+		"group by tt.conversation_id;"})
 	public List<Message>  listConversationsByUserId(int id);
 	
 

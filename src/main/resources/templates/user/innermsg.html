@@ -67,7 +67,7 @@
 		<div th:replace="user/sidebar::welcome"> </div> 
 
             <!-- /.panel -->
-            <div class="chat-panel panel panel-default">
+            <div class="panel panel-default" style="min-height:400px">
                 <div class="panel-heading">
                     <i class="fa fa-comments fa-fw"></i>我的站内信
                     <div class="btn-group pull-right">
@@ -118,45 +118,31 @@
                                     <small class="pull-right text-muted" >
                                         <i class="fa fa-clock-o fa-fw" ></i>
                                         <font th:text="${#dates.format(item.message.createdDate, 'MM-dd hh:mm:ss')}"></font>                                       
-                                       <p><i class='fa fa-bell-o fa-fw' ></i>&nbsp;<big th:text="${item.message.count}+' 条未读'"></big> </p>
+                                       <p><i class='fa fa-bell-o fa-fw' ></i>&nbsp;<big th:text="${item.message.count}+' 条对话'"></big> </p>
                                     </small>
                                 </div>
-                                <p ><a th:href="@{'/user/msgdetail.html?userid='+${item.userid}}" th:text="${item.message.content}+'...'"></a></p>
+                                <p ><a th:href="@{'/user/msgdetail.html?userid='+${item.userid}}" th:utext="${item.message.content}+'...'"></a></p>
                                <!--  <p>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
                                 </p> -->
                             </div>
                         </li>
 
-                        <li class="left clearfix">
-                            <span class="chat-img pull-left">
-                                <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
-                            </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="primary-font">Jack Sparrow</strong>
-                                    <small class="pull-right text-muted">
-                                        <i class="fa fa-clock-o fa-fw"></i> 14 mins ago</small>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
+
 
                     </ul>
                 </div>
                 <!-- /.panel-body -->
-                <div class="panel-footer">
-  <!--                   <div class="input-group">
+<!--                 <div class="panel-footer">
+                    <div class="input-group">
                         <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
                         <span class="input-group-btn">
                             <button class="btn btn-warning btn-sm" id="btn-chat">
                                 Send
                             </button>
                         </span>
-                    </div> -->
-                </div>
+                    </div>
+                </div> -->
                 <!-- /.panel-footer -->
             </div>
             <!-- /.panel .chat-panel -->

@@ -72,7 +72,7 @@ public class SessionAuthInterceptor extends HandlerInterceptorAdapter {
 			
 			if(loginSession==null || loginSession.getExpired().before(new Date())) {
 				
-				response.sendError(403, "无权访问");
+				response.sendError(403, "您还没有登录!");
 				return false;
 			} else {
 				//设置线程独立的loginSession对象

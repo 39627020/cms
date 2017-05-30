@@ -59,7 +59,7 @@ public class Message {
     public void setContent(String content) {
         this.content = content;
     }
-    @JsonFormat(pattern="yyyy-MM-dd HH:MM:SS",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     public Date getCreatedDate() {
         return createdDate;
     }

@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cnv.cms.authority.AuthClass;
 import com.cnv.cms.authority.AuthMethod;
+import com.cnv.cms.event.EventModel;
+import com.cnv.cms.event.EventProducer;
+import com.cnv.cms.event.EventType;
 import com.cnv.cms.model.Article;
 import com.cnv.cms.model.Comment;
 import com.cnv.cms.model.EntityType;
 import com.cnv.cms.model.HostHolder;
+import com.cnv.cms.model.SystemUser;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.CommentService;
 import com.cnv.cms.service.UserService;
@@ -39,7 +43,9 @@ public class CommentController {
     private CommentService commentService; 
     @Autowired
     private UserService userService;
-    
+	
+	@Autowired
+	private EventProducer eventProducer;
 
 	@AuthMethod(role="base")
 	@RequestMapping(value="/add",method=RequestMethod.POST)
@@ -53,9 +59,15 @@ public class CommentController {
 		omment.setStatus(1);
 		
 		commentService.add(omment);
+		
+		eventProducer.addEvent(new EventModel()
+    			.setEventType(EventType.COMMENT)
+    			.setOwnerId(hostHolder.getUserId())
+    			.addExtData("articleId", articleId)
+    			);
 		//return null;
 	}
-	@AuthMethod(role="base")
+	@AuthMethod(role="customer")
 	@RequestMapping(value="/comments/{aid}",method=RequestMethod.GET)
 	public   @ResponseBody Map<String, Object>  listComment(@PathVariable int aid){
 		

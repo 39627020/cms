@@ -1,12 +1,16 @@
 package com.cnv.cms.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cnv.cms.mapper.CommentMapper;
 import com.cnv.cms.model.Comment;
+import com.cnv.cms.model.EntityType;
 import com.cnv.cms.service.CommentService;
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -36,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public List<Comment> listByEntity(int entityId, int entityType) {
+	public List<Comment> listByEntity(int entityId, int entityType) {	
 		return commentMapper.listByEntity(entityId, entityType);
 	}
 

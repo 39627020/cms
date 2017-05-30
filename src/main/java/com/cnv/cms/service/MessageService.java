@@ -17,4 +17,15 @@ public interface MessageService extends BaseService<Message>{
 
 	
 	public int updateStatus(@Param("id")int id, @Param("status")int status);
+
+	static String getConversationId(int fromId, int toId) {
+		String conversationId=null;
+		
+		if(fromId<toId){
+			conversationId =  fromId+"_"+toId;
+		}else{
+			conversationId =  toId+"_"+fromId;
+		}
+		return conversationId;
+	}
 }

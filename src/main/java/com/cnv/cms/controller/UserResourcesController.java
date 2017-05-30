@@ -87,7 +87,7 @@ public class UserResourcesController {
 		List<Message> messages = messageService.listByConversation(conversationId);
 		model.addAttribute("messages", messages);
 		model.addAttribute("toId", userId);
-		model.addAttribute("username", userService.selectById(userId).getUsername());
+		model.addAttribute("username", userService.selectById(userId).getNickname());
 		return "user/msgdetail";
 	}
     public  Map<String, Object> getCommontInfo(HttpServletRequest request){

@@ -38,7 +38,12 @@ function showArticle(){
 }
 
 function addComment(){
-	$.post(getContextPath()+"/api/comment/add/",{articleId:aid,content:$("#comment-text").val()},function(data,status){
+	if(userid<0 || userid==null){
+		alert("您还没有登录");
+		return;
+	}
+		
+	$.post(getContextPath()+"/api/comment/add/",{articleId:aid,content:$("#comment-text").val()},function(date,status){
 		if(status  == "success"){
 			showComment();
 		}else{

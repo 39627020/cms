@@ -7,7 +7,8 @@ public enum EventType {
 	MESSAGE(3),
 	DELETE_ART(4),
 	PV_COUNT(5),
-	TIME_COUNT(6);
+	TIME_COUNT(6),
+	COMMENT(7);
 	
 	private int value;
 	EventType(int value){ this.value = value;}

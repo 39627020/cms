@@ -131,7 +131,7 @@
                                         <font th:text="${#dates.format(message.createdDate, 'MM-dd hh:mm:ss')}"></font>                                       
                                     </small>
                                 </div>
-                                <p th:text="${message.content}"></p>
+                                <p th:utext="${message.content}"></p>
 
                             </div>
                         </li>
@@ -148,7 +148,7 @@
                                     </small>
                                     <strong class="pull-right primary-font">我</strong>
                                 </div>
-                                <p style='text-align:right' th:text="${message.content}">
+                                <p style='text-align:right' th:utext="${message.content}">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                 </p>
                             </div>
