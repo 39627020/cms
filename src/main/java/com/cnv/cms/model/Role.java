@@ -1,4 +1,7 @@
 package com.cnv.cms.model;
+
+import com.cnv.cms.model.type.RoleType;
+
 /*
  * 角色对象，可以访问的功能，
  */

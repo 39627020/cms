@@ -1,4 +1,4 @@
-package com.cnv.cms.model;
+package com.cnv.cms.model.type;
 
 /**
  * Created by nowcoder on 2016/7/9.

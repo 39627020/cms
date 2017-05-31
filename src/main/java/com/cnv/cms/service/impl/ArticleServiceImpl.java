@@ -1,10 +1,12 @@
 package com.cnv.cms.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,7 @@ import com.cnv.cms.mapper.UserMapper;
 import com.cnv.cms.model.Article;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.AttachmentService;
+import com.cnv.cms.util.RedisKeyUtil;
 
 @Service("articleServiceImpl")  
 public class ArticleServiceImpl implements ArticleService {
@@ -24,6 +27,8 @@ public class ArticleServiceImpl implements ArticleService {
 	private AttachmentMapper attachMapper;
 	@Autowired
 	private UserMapper userMapper;
+    @Autowired  
+    private RedisTemplate<String,String> redisTemplate;  
 	
 	@Autowired
 	@Qualifier("attachServiceImpl")
@@ -218,12 +223,39 @@ public class ArticleServiceImpl implements ArticleService {
 	@Cacheable(value="articlesCache",key="#root.methodName+#root.args")
 	public List<Article> selectTopRead(int n) {
 		// TODO Auto-generated method stub
-		return articleMapper.selectTopRead(n);
+
+		List<Article> list = articleMapper.selectTopRead(n);;
+		List<String> keys = new ArrayList<>();
+		for(Article a : list){
+			int id = a.getId();
+			String key = RedisKeyUtil.getPVKey("article", id);
+			keys.add(key);
+			
+		}
+		List<String> values = redisTemplate.opsForValue().multiGet(keys);
+		for(int i=0; i<list.size(); i++){
+			int pv = values.get(i)== null? 0 : Integer.parseInt(values.get(i));
+			list.get(i).setReadTimes(pv);
+		}
+		return list;
 	}
 
 	public List<Article> selectTopRead(int n, int channelId) {
 		// TODO Auto-generated method stub
-		return articleMapper.selectTopReadInChannel(n, channelId);
+		List<Article> list = articleMapper.selectTopReadInChannel(n, channelId);
+		List<String> keys = new ArrayList<>();
+		for(Article a : list){
+			int id = a.getId();
+			String key = RedisKeyUtil.getPVKey("article", id);
+			keys.add(key);
+			
+		}
+		List<String> values = redisTemplate.opsForValue().multiGet(keys);
+		for(int i=0; i<list.size(); i++){
+			int pv = values.get(i)== null? 0 : Integer.parseInt(values.get(i));
+			list.get(i).setReadTimes(pv);
+		}
+		return list;
 	}
 
 	public List<Article> selectTopFellow(int n) {
@@ -233,7 +265,20 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<Article> selectPage(int page, int n, int channelId) {
 		// TODO Auto-generated method stub
-		return  articleMapper.selectFromToInChannel(n*(page-1), n,channelId);
+		List<Article> list = articleMapper.selectFromToInChannel(n*(page-1), n,channelId);
+		List<String> keys = new ArrayList<>();
+		for(Article a : list){
+			int id = a.getId();
+			String key = RedisKeyUtil.getPVKey("article", id);
+			keys.add(key);
+			
+		}
+		List<String> values = redisTemplate.opsForValue().multiGet(keys);
+		for(int i=0; i<list.size(); i++){
+			int pv = values.get(i)== null? 0 : Integer.parseInt(values.get(i));
+			list.get(i).setReadTimes(pv);
+		}
+		return  list;
 	}
 
 

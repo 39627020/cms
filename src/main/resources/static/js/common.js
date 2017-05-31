@@ -57,7 +57,10 @@ function loadChannel(){
             return value.parentId < 0;//筛选父id为-1的
         });
 
-		str = '<li class="topcol"><a columnid="index" href="'+getContextPath()+'/index.html"><b>首页</b></a></li>';
+		str = '<li><a columnid="index" href="'+getContextPath()+'/index.html"><b>首页</b></a></li>';
+		if(userid >0){
+			str += '<li><a columnid="index" href="'+getContextPath()+'/mynews.html"><b>我的关注</b></a></li>';
+		}
 		for(i in topChannels){
 			var pchannel = topChannels[i];
 			//筛选出子栏目
@@ -77,16 +80,23 @@ function loadChannel(){
 		        }
 	        	substr += '</ul>';
 	        }
-	        
-			str += '<li class="dropdown topcol" >\
-				<a columnid="'+pchannel.id+'" \
-				href="'+getContextPath()+'/article_list.html?id='+pchannel.id+'" \
-					class="dropdown-toggle" data-toggle="dropdown">\
-				<b>'+pchannel.name+'</b>';
-				if(substr != ""){
-					str += '<b class="caret"></b>';
-				}
-			str += '</a>'+substr+'</li>';
+	        if(substr!=""){
+				str += '<li class="dropdown topcol" >\
+					<a columnid="'+pchannel.id+'" \
+					href="'+getContextPath()+'/article_list.html?id='+pchannel.id+'" \
+						class="dropdown-toggle" data-toggle="dropdown">\
+					<b>'+pchannel.name+'</b>';
+					if(substr != ""){
+						str += '<b class="caret"></b>';
+					}
+				str += '</a>'+substr+'</li>';
+	        }else{
+	        	str+= '<li>\
+	        		<a columnid="'+pchannel.id+'" href="'+getContextPath()+'/article_list.html?id='+pchannel.id+'">\
+	        		<b>'+pchannel.name+'</b></a>\
+	        		</li>';
+	        }
+
 		}
 		 var navmenu = $("#top-navbar");
 		 navmenu.empty();

@@ -21,7 +21,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.LoginSession;
-import com.cnv.cms.model.RoleType;
+import com.cnv.cms.model.type.RoleType;
 import com.cnv.cms.service.UserService;
 import com.cnv.cms.service.impl.SessionServiceImpl;
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.cnv.cms.mapper.CommentMapper;
 import com.cnv.cms.model.Comment;
-import com.cnv.cms.model.EntityType;
+import com.cnv.cms.model.type.EntityType;
 import com.cnv.cms.service.CommentService;
 @Service
 public class CommentServiceImpl implements CommentService {

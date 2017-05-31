@@ -54,10 +54,11 @@ public class IndexResourcesController {
         return "redirect:/index.html";
     }
     @RequestMapping(path={"index","index.html"})
-    public String index(Model model,HttpServletRequest request) {
+    public String index(Model model,HttpServletRequest request,@RequestParam(defaultValue="1") int page) {
     	
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectTopRead(15));
+    	model.addAttribute("pageid", page);
     	eventProducer.addEvent(getEvent("index",-1));
     	
 
@@ -79,9 +80,11 @@ public class IndexResourcesController {
     @RequestMapping(path={"/article_list.html"})
     public String articlelist(Model model,HttpServletRequest request,  @RequestParam Integer id,@RequestParam(defaultValue="1") int page){    	
     	if(id==null) return "redirect:/index.html";
+    	if (id<1) id=1;
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectPage(page, 10, id));
     	model.addAttribute("channelname", channelService.selectById(id).getName());
+    	model.addAttribute("channelid", id);
     	model.addAttribute("pageid", page);
     	eventProducer.addEvent(getEvent("article_list",id));
     	

@@ -29,8 +29,8 @@ import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.LoginSession;
 import com.cnv.cms.model.Role;
-import com.cnv.cms.model.RoleType;
 import com.cnv.cms.model.User;
+import com.cnv.cms.model.type.RoleType;
 import com.cnv.cms.service.PVService;
 import com.cnv.cms.service.UserService;
 import com.cnv.cms.service.impl.SessionServiceImpl;
@@ -56,10 +56,11 @@ public class AdminController {
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public  @ResponseBody Map<String, Object>  loginIn(@RequestBody User  userForm,
 			HttpServletRequest request,HttpServletResponse response){
-		if(CmsConfig.isDebug){
+		/*if(CmsConfig.isDebug){
 			System.out.println("received userform:");
 			System.out.println(userForm);
-		}
+		}*/
+		logger.info("received userform:"+userForm);
 		HttpSession httpSession = request.getSession();
 		
 		Map<String, Object> map = new HashMap<String, Object>();

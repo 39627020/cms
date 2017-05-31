@@ -2,6 +2,8 @@ package com.cnv.cms.model;
 
 import java.io.Serializable;
 
+import com.cnv.cms.model.type.ChannelType;
+
 public class Channel implements Serializable{
 	/**
 	 * 

@@ -21,7 +21,7 @@ public class PVEventHandler implements EventHandler {
 		String page  = (String) event.getExtData("page");
 		int id = page.equals("index")? -1 : (int) event.getExtData("id");
 		pvService.addPVCount(page, id);
-		logger.info("PVEventHandler do handle :" + page);
+		//logger.info("PVEventHandler do handle :" + page);
 	}
 
 	@Override

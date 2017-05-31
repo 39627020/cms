@@ -61,11 +61,11 @@
 		<div th:each="art : ${articles}" class="list-item">	
 		
 			<!-- 左侧图片 -->
-			<div class="col-sm-4 col-lg-3">
+			<div class="col-sm-3 col-lg-2">
 				<a href="javascript:;" th:title="${art.title}"><img  class="img-responsive" alt="标题标题" th:src="${contextPath}+'/images/list_item.jpg'"/></a>					
 			</div>
 			<!-- 右侧内容 -->
-			<div class="col-sm-8 col-lg-9">
+			<div class="col-sm-9 col-lg-10">
 				<!-- 头部信息：标题作者等 -->
 				<div class="item-head">
 					<h4 class="head">
@@ -75,19 +75,19 @@
 					<div class="pull-left">	
 				   
 						<i class="info"><a href="javascript:;" target="_blank" th:text="${art.author}">作者</a></i>  
-						<i class="info"><a href="javascript:;" target="_blank">分类</a></i>   
+						<!-- <i class="info"><a href="javascript:;" target="_blank">分类</a></i> -->   
 						<i class="info">2013/03/02</i>
 					</div>	
 					<div class="pull-right">
-						<span class="glyphicon glyphicon-heart  " href="void(0);" th:title="${art.fellows}+'人关注'" th:text="${art.fellows}">3人</span>	
-						<span class="glyphicon glyphicon-eye-open" href="void(0);" th:title="${art.readTimes}+'次查看'" th:text="${art.readTimes}">100次</span>							
+						<span  href="void(0);"  th:text="${art.fellows}+' 条评论'"></span>
+						&nbsp;&nbsp;<span class="glyphicon glyphicon-eye-open" href="void(0);" th:title="${art.readTimes}+'次查看'" th:text="${art.readTimes}">100次</span>							
 					</div>
 				</div>
 				<!-- 文章描述 -->
-				<div class="item-body">
+				<!-- <div class="item-body">
 					<p th:text="${art.summary}">描述描述描述描述描述描述描述描述描述描述描述描述描述
 					描述描述描述描述描述描述描述描述描述描述描述描述描述</p>
-				</div>
+				</div> -->
 			</div>
 		</div>
 
@@ -95,8 +95,8 @@
 		
 		</div>	
 		<div class="page-number">
-			<ul class="pagination">
-				<li><a th:href="@{'?page='+${channelid}}">&laquo;上一页</a></li>
+			<ul class="pagination" th:with="prePage=${pageid-1},nextPage=${pageid+1}">
+				<li><a th:href="@{'?id='+${channelid}+'&amp;page='+${prePage}}">&laquo;上一页</a></li>
 				<li><a href="javascript:void(0)">&nbsp;</a></li>
 				<li class="active"><a href="#">1</a></li>
 				<li><a href="javascript:void(0)">&nbsp;</a></li>
@@ -104,7 +104,7 @@
 				<li><a href="#">3</a></li>
 				<li><a href="#">4</a></li>
 				<li><a href="#">5</a></li> -->
-				<li><a th:href="@{'?page='+${channelid}}">下一页&raquo;</a></li>
+				<li><a th:href="@{'?id='+${channelid}+'&amp;page='+${nextPage}}">下一页&raquo;</a></li>
 			</ul>	
 		</div>
 	  </div> <!-- /.col-md-9 -->	

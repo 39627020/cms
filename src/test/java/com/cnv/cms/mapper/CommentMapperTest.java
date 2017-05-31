@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cnv.cms.CmsSpringbootApplication;
 import com.cnv.cms.model.Comment;
-import com.cnv.cms.model.EntityType;
+import com.cnv.cms.model.type.EntityType;
 
 
 @RunWith(SpringRunner.class)

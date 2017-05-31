@@ -33,12 +33,13 @@
 	display: inline-block;
 	width:100%;
 }
-.list-item .item-pic a{display:block;}
-.list-item .item-pic a img{height:auto;max-width: 100%;}
+/* .list-item  a{display:block;} */
+.list-item  a img{height:auto;max-width: 120px;}
 .list-item .item-body, .list-item  .item-head{
-	/* padding: 0px 3px; */
+	padding: 10px 3px;
 	width: 100%;
 	display: inline-block;
+	/* margin: auto 0px; */
 }
 
 .list-item .item-head  .head>a{
