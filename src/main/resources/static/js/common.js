@@ -59,7 +59,7 @@ function loadChannel(){
 
 		str = '<li><a columnid="index" href="'+getContextPath()+'/index.html"><b>首页</b></a></li>';
 		if(userid >0){
-			str += '<li><a columnid="index" href="'+getContextPath()+'/mynews.html"><b>我的关注</b></a></li>';
+			str += '<li><a columnid="index" href="'+getContextPath()+'/mysubscribe.html"><b>我的关注</b></a></li>';
 		}
 		for(i in topChannels){
 			var pchannel = topChannels[i];

@@ -2,16 +2,15 @@ package com.cnv.cms.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,11 +19,10 @@ import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.event.EventModel;
 import com.cnv.cms.event.EventProducer;
 import com.cnv.cms.event.EventType;
-import com.cnv.cms.interceptor.HostHolderInterceptor;
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.ChannelService;
-import com.cnv.cms.service.PVService;
+import com.cnv.cms.service.UserService;
 
 @Controller
 //@RequestMapping("/")
@@ -39,7 +37,8 @@ public class IndexResourcesController {
 	private ChannelService channelService;
 	@Autowired
 	private ArticleService articleService;
-	
+	@Autowired
+	private UserService userService;
 	
 	
 	@Autowired
@@ -55,7 +54,7 @@ public class IndexResourcesController {
     }
     @RequestMapping(path={"index","index.html"})
     public String index(Model model,HttpServletRequest request,@RequestParam(defaultValue="1") int page) {
-    	
+    	//System.out.println("page:"+page);
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectTopRead(15));
     	model.addAttribute("pageid", page);
@@ -63,6 +62,30 @@ public class IndexResourcesController {
     	
 
         return "/index";
+    }
+    @RequestMapping(path={"mysubscribe.html"})
+    public String mySubscribe(Model model,HttpServletRequest request,@RequestParam(defaultValue="1") int page) {
+    	
+    	model.addAllAttributes(this.getCommontInfo(request));
+    	Set<String> userIds = userService.getFollows(hostHolder.getUserId());
+    	model.addAttribute("articles", articleService.selectFromUserList(userIds, 0, 15));
+    	model.addAttribute("pageid", page);
+    	eventProducer.addEvent(getEvent("mysubscribe",-1));
+    	
+        return "/mysubscribe";
+    }
+    @RequestMapping(path={"userdetail.html"})
+    public String userDetail(Model model,HttpServletRequest request,@RequestParam(defaultValue="0") Integer userid) {
+    	if(userid==null || userid==0) return "redirect:/index.html";
+    	model.addAllAttributes(this.getCommontInfo(request));
+    	model.addAttribute("articles", articleService.selectByUserId(userid));
+    	model.addAttribute("fansNum", userService.getFollowNum(userid));
+    	model.addAttribute("hasFollow", userService.isFollowedBy(userid, hostHolder.getUserId()));
+    	model.addAttribute("userToFollow", userid);
+    	//model.addAttribute("pageid", page);
+    	eventProducer.addEvent(getEvent("userdetail",-1));
+    	
+        return "/userdetail";
     }
     @RequestMapping(value="/article.html",method=RequestMethod.GET)
     public String article(Model model,HttpServletRequest request, @RequestParam Integer id){  

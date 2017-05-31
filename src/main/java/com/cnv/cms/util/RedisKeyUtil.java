@@ -6,6 +6,8 @@ public class RedisKeyUtil {
 	private static String KEY_EVENT_QUEUE = "EVENT_QUEUE";
 	private static String KEY_PV = "PV_COUNT";
 	private static String KEY_TIME = "TIMECOST";
+	private static String KEY_USER_FOLLOW = "USER_FOLLOW";
+	private static String KEY_USER_FANS = "USER_FANS";
 	public static String getSessionKey(String sessionid){
 		return KEY_SESSION + SPLIT + sessionid;
 	}
@@ -20,5 +22,11 @@ public class RedisKeyUtil {
 	}
 	public static String getTimeCostKey(String url, String method){
 		return KEY_TIME + SPLIT + url + SPLIT + method;
+	}
+	public static String getUserFollowKey(int id){
+		return KEY_USER_FOLLOW + SPLIT + id;
+	}
+	public static String getUserFansKey(int id){
+		return KEY_USER_FANS + SPLIT + id;
 	}
 }

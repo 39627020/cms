@@ -12,7 +12,7 @@ public class Feed {
     private int userId;
     private int type;
     private String content;
-    private Date createdDate;
+    private Date createDate;
     private int status;
 
     public int getId() {
@@ -48,12 +48,12 @@ public class Feed {
         this.content = content;
     }
     @JsonFormat(pattern="yyyy-MM-dd HH:MM:SS",timezone = "GMT+8")
-    public Date getCreatedDate() {
-        return createdDate;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public int getStatus() {

@@ -3,8 +3,11 @@ package com.cnv.cms.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,7 @@ import com.cnv.cms.model.UserGroup;
 import com.cnv.cms.model.UserRole;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.UserService;
+import com.cnv.cms.util.RedisKeyUtil;
 
 //@Component
 @Service  
@@ -45,6 +49,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	//@Qualifier("articleServiceImpl")
 	private ArticleService articleService;
+	
+	@Autowired  
+	private RedisTemplate<String,String> redisTemplate; 
 	
 	
 	@Transactional
@@ -304,6 +311,62 @@ public class UserServiceImpl implements UserService {
 		}
 		return user;
 	}
+	@Override
+	public void addFollow(int userId, int followId) {
+		// TODO Auto-generated method stub
+		SetOperations<String, String> opsSet = redisTemplate.opsForSet();
+		String key1 = RedisKeyUtil.getUserFollowKey(userId);
+		String key2 = RedisKeyUtil.getUserFansKey(followId);
+		opsSet.add(key1, String.valueOf(followId));
+		opsSet.add(key2, String.valueOf(userId));
+		
+	}
+	@Override
+	public void removeFollow(int userId, int followId) {
+		// TODO Auto-generated method stub
+		SetOperations<String, String> opsSet = redisTemplate.opsForSet();
+		String key1 = RedisKeyUtil.getUserFollowKey(userId);
+		String key2 = RedisKeyUtil.getUserFansKey(followId);
 
+		opsSet.remove(key1, String.valueOf(followId));
+		opsSet.remove(key2, String.valueOf(userId));
+		
+	}
+	@Override
+	public long getFollowNum(int userId) {
+		// TODO Auto-generated method stub
+		SetOperations<String, String> opsSet = redisTemplate.opsForSet();
 
+		String key1 = RedisKeyUtil.getUserFansKey(userId);
+		Long size = opsSet.size(key1);
+		return size==null ? 0 : size;
+		
+	}
+	@Override
+	public Set<String> getFollows(int userId) {
+		// TODO Auto-generated method stub
+		SetOperations<String, String> opsSet = redisTemplate.opsForSet();
+
+		String key1 = RedisKeyUtil.getUserFollowKey(userId);
+		return opsSet.members(key1);
+		
+	}
+	@Override
+	public Set<String> getFans(int userId) {
+		// TODO Auto-generated method stub
+		SetOperations<String, String> opsSet = redisTemplate.opsForSet();
+
+		String key1 = RedisKeyUtil.getUserFansKey(userId);
+		return opsSet.members(key1);
+		
+	}
+	@Override
+	public boolean isFollowedBy(int followedId, int userId) {
+		// TODO Auto-generated method stub
+		SetOperations<String, String> opsSet = redisTemplate.opsForSet();
+
+		String key1 = RedisKeyUtil.getUserFansKey(followedId);
+		return opsSet.isMember(key1, String.valueOf(userId));
+		
+	}
 }

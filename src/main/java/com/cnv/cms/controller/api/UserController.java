@@ -5,25 +5,31 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.cnv.cms.authority.AuthClass;
 import com.cnv.cms.exception.CmsException;
+import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.User;
 import com.cnv.cms.service.UserService;
 
-@Controller
+@AuthClass
+@RestController
 @RequestMapping("/api/user")
 public class UserController {
 
 	@Autowired
 	 //@Qualifier("userServiceImpl")
 	private UserService userService;
+	
+	@Autowired
+	private HostHolder hostHolder;
 	
 	
 	@RequestMapping(value="/users",method=RequestMethod.GET)
@@ -64,7 +70,14 @@ public class UserController {
 		
 		return map;
 	}
-	
+	@RequestMapping(value="/follow/{id}",method=RequestMethod.GET)
+	public  void fellow(@PathVariable(value="id") Integer id){
+		userService.addFollow(hostHolder.getUserId(), id);
+	}
+	@RequestMapping(value="/unfollow/{id}",method=RequestMethod.GET)
+	public  void unfellow(@PathVariable(value="id") Integer id){
+		userService.removeFollow(hostHolder.getUserId(), id);
+	}
 	@RequestMapping(value="/delete/{id}",method=RequestMethod.GET)
 	public  @ResponseBody Map<String, Object>  delete(@PathVariable(value="id") Integer id){
 		System.out.println("----users delete---");

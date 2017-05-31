@@ -1,6 +1,8 @@
 package com.cnv.cms.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,4 +70,6 @@ public interface ArticleService extends BaseService<Article> {
 	 * 检索关注次数最多的文章
 	 */	
 	List<Article> selectTopFellow(int n);
+	
+	List<Article> selectFromUserList(Set<String> userIds, int offset, int num);
 }

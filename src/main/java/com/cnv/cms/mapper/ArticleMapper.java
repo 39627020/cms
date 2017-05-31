@@ -1,6 +1,7 @@
 package com.cnv.cms.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
@@ -39,7 +40,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
 	/*
 	 * 通过用户id检索
 	 */
-	@Select("select id,title,readTimes,createDate from t_article where userId = #{userId}")
+	@Select("select id,title,readTimes,createDate from t_article where userId = #{userId} order by createDate desc")
 	List<Article> selectByUserId(@Param("userId")int userId);
 	/*
 	 * 通过标题检索
@@ -67,6 +68,8 @@ public interface ArticleMapper extends BaseMapper<Article> {
 	 * 检索关注次数最多的文章
 	 */	
 	List<Article> selectTopFellow(int n);
+	
+	List<Article> selectFromUserList(Map<String,Object> params);
 	
 	
 }

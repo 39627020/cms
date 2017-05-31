@@ -1,7 +1,10 @@
 package com.cnv.cms.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -279,6 +282,17 @@ public class ArticleServiceImpl implements ArticleService {
 			list.get(i).setReadTimes(pv);
 		}
 		return  list;
+	}
+	@Override
+	public List<Article> selectFromUserList(Set<String> userIds, int offset, int num) {
+		// TODO Auto-generated method stub
+		List<String> userList = new ArrayList(userIds);
+		 Map<String, Object> params = new HashMap<String, Object>(2);
+		 params.put("users", userList);
+		 params.put("offset", offset);
+		 params.put("num", num);
+		articleMapper.selectFromUserList(params);
+		return null;
 	}
 
 

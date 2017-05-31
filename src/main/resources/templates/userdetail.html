@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">  
+<head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>CNV CMS系统</title>
+	<!--  JQuery -->
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<!-- Boostrap  -->
+	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"/>	
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	
+	 <!-- MetisMenu CSS -->
+    <link href="vendor/metisMenu/metisMenu.min.css" rel="stylesheet"/>
+    <script src="vendor/metisMenu/metisMenu.min.js"></script>
+    
+    <!-- sb-admin -->
+    <link href="dist/css/sb-admin-2.css" rel="stylesheet"/>
+    <script src="dist/js/sb-admin-2.js"></script>
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+     
+	
+
+	
+	<!-- 自定义模板css -->
+	<link rel="stylesheet" href="css/basic.css"/>
+	<link rel="stylesheet" href="css/list.css"/>
+
+	
+	<!-- 自定义js -->
+	<script src="js/common.js"></script>
+	<script src="js/userdetail.js"></script>
+	<!-- <script src="../js/user_home_common.js"></script> -->
+	<!-- <script src="../js/user_home.js"></script> -->
+
+
+
+
+</head>
+
+
+<body>
+  <script th:inline="javascript">
+/*<![CDATA[*/
+
+    var userToFollow = [[${userToFollow}]];
+
+/*]]>*/
+</script> 
+ <!--头部代码开始-->
+
+	<!-- Navigation -->
+  <div id="navigation-div" th:include="navigation::navigation"> </div>
+	
+<!--头部代码结束-->
+
+	<div class="hr tp-div-nexthr" style="margin-top: 0;margin-bottom: 0;padding: 0;"></div>
+	<div class="container">
+	
+	
+	<!-- Example row of columns -->
+
+	
+	
+	<!--   <div class="page-div col-md-12"> col-md-offset-2-->
+		<div class="col-md-10 ">
+      <div class="row">
+         <div class="col-lg-12">
+             <h4 class="page-header">用户主页</h4>
+         </div>
+         <!-- /.col-lg-12 -->
+     </div>
+     <!-- 用户信息	 -->	
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div>
+				 <div class="col-sm-1 col-lg-1">
+				     <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+				 </div>
+				 <div class=" col-sm-11 col-lg-11">
+				     <div display="block">
+				         <strong class="primary-font"><big>Jack Sparrow</big></strong>
+				         <div class="pull-right">
+				             <button th:text="${hasFollow}? '取消关注':'关注'" id="btn-follow" type="button" class="btn btn-default btn-sm">关注</button>
+				         </div>
+				     </div>
+				     <p></p>
+				     <p th:text="'粉丝 '+${fansNum}+' 人'">粉丝  100 人</p>
+				     <p th:text="'共发布 '+${#lists.size(articles)}+' 篇文章'">共发布 5  篇文章</p>
+				 </div>			
+			</div>
+
+  	
+		</div>
+	</div>
+    <div class="panel panel-default" style="min-height:400px">
+        <div class="panel-heading">
+            <i class="fa fa-comments fa-fw"></i>用户动态
+
+        </div>
+                <!-- /.panel-heading -->
+          <div class="panel-body">
+			<div th:remove="all-but-first" id="article-list-div">
+				<div th:each="art : ${articles}" class="list-item">	
+				
+					<!-- 左侧图片 -->
+					<div class="col-sm-3 col-lg-2">
+						<a href="javascript:;" th:title="${art.title}"><img  class="img-responsive" alt="标题标题" src="images/list_item.jpg"/></a>					
+					</div>
+					<!-- 右侧内容 -->
+					<div class="col-sm-9 col-lg-10">
+						<!-- 头部信息：标题作者等 -->
+						<div class="item-head">
+							<h4 class="head">
+								<a th:title="${art.title}" th:text="${art.title}" th:href="@{'article.html?id='+${art.id}}">标题标题标题标题标题标题标题标题标题</a>
+							</h4>
+							
+							<div class="pull-left">	
+						   
+								<i class="info"><a href="javascript:;" target="_blank" th:text="${art.author}">作者</a></i>  
+								<i class="info"><a href="javascript:;" target="_blank">分类</a></i>   
+								<i class="info" th:text="${#dates.format(art.createDate, 'yyyy-MM-dd hh:mm:ss')}">2013/03/02</i>
+							</div>	
+							<div class="pull-right">
+								<span  href="void(0);"  th:text="${art.fellows}+' 条评论'"></span>	
+								&nbsp;&nbsp;<span class="glyphicon glyphicon-eye-open" href="void(0);" th:title="${art.readTimes}+'次查看'" th:text="${art.readTimes}">100次</span>							
+							</div>
+						</div>
+
+					</div>
+				</div>		
+			</div>
+          </div>
+            <!-- /.panel-body -->
+	</div>
+	  <!-- /.panel -->
+	</div>
+</div>
+
+<!-- /container -->
+
+
+<!-- Page Footer -->
+<div th:replace="footer::footer"></div>
+     
+</body>
+</html>

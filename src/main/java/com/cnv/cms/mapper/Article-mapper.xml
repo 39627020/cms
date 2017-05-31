@@ -92,5 +92,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 检索关注次数最多的文章 -->
     <select id="selectTopFellow" parameterType="int" resultType="Article">
         select * from t_article order by fellows desc limit #{n};
-    </select>	
+    </select>
+    
+    
+    <select id="selectFromUserList" resultType="Article">  
+	     select  *
+	    <!--  <include refid="Base_Column_List" />   -->
+	     from t_article where 
+	     userId in  
+	     <foreach item="item" index="index" collection="users" open="(" separator="," close=")">  
+	      #{item}  
+	     </foreach>  
+	     order by createDate desc limit #{offset},#{num};
+	</select>	
 </mapper>
