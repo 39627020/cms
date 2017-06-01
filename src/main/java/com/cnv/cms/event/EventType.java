@@ -8,9 +8,10 @@ public enum EventType {
 	DELETE_ART(4),
 	PV_COUNT(5),
 	TIME_COUNT(6),
-	COMMENT(7);
+	COMMENT(7),
+	NEWS_PUBLISH(8);
 	
 	private int value;
 	EventType(int value){ this.value = value;}
-	int getValue(){ return this.value;}
+	public int getValue(){ return this.value;}
 }

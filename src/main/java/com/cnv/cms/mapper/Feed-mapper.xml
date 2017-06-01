@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    
+<mapper namespace="com.cnv.cms.mapper.FeedMapper">
+
+    
+    <select id="selectFromUserList" parameterType="java.util.Map" resultType="Feed">  
+	     select  *
+	    <!--  <include refid="Base_Column_List" />   -->
+	     from t_feed  where 
+	     userId in  
+	     <foreach item="item" index="index" collection="users" open="(" separator="," close=")">  
+	      #{item}  
+	     </foreach>  
+	     order by createDate desc limit #{offset},#{num};
+	</select>	
+</mapper>

@@ -2,6 +2,7 @@ package com.cnv.cms.model;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -13,7 +14,8 @@ public class Feed {
     private int type;
     private String content;
     private Date createDate;
-    private int status;
+    private int status=1;
+    private JSONObject dataJSON = null;
 
     public int getId() {
         return id;
@@ -46,6 +48,11 @@ public class Feed {
 
     public void setContent(String content) {
         this.content = content;
+        dataJSON = JSONObject.parseObject(content);
+    }
+    
+    public String get(String key) {
+        return dataJSON == null ? null : dataJSON.getString(key);
     }
     @JsonFormat(pattern="yyyy-MM-dd HH:MM:SS",timezone = "GMT+8")
     public Date getCreateDate() {

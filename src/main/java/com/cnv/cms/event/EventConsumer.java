@@ -1,6 +1,8 @@
 package com.cnv.cms.event;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +31,7 @@ public class EventConsumer implements InitializingBean , ApplicationContextAware
     
     private ListOperations<String,String> listOps=null;
     
-    private Map<EventType,EventHandler> handlerMap = new HashMap<>();
+    private Map<EventType,List<EventHandler>> handlerMap = new HashMap<>();
     
     private ApplicationContext applicationContext;
 
@@ -44,7 +46,10 @@ public class EventConsumer implements InitializingBean , ApplicationContextAware
 		for(Entry<String, EventHandler> hdEntry :  handlers.entrySet()){
 			EventHandler handler = hdEntry.getValue();
 			for(EventType type :handler.getSupposortEventTypes()){
-				this.handlerMap.put(type, handler);
+				if(!handlerMap.containsKey(type)){
+					handlerMap.put(type, new ArrayList<EventHandler>());
+				}
+				this.handlerMap.get(type).add(handler);
 			}
 		}
 		
@@ -58,11 +63,15 @@ public class EventConsumer implements InitializingBean , ApplicationContextAware
 					
 					if(eveStr != null){
 						EventModel event = JsonUtil.readValue(eveStr,EventModel.class);
-						EventHandler handler = handlerMap.get(event.getEventType());
-						if(handler != null)
-							handler.handle(event);
-						else
-							logger.error("EventHandler for "+event.getEventType()+" 为定义");
+						List<EventHandler> handlers = handlerMap.get(event.getEventType());
+						if(handlers != null){
+							for( EventHandler handler : handlers){
+								handler.handle(event);
+							}
+						}
+						else{
+							logger.error("EventHandler for "+event.getEventType()+" 未定义");
+						}
 					}
 				}
 			}

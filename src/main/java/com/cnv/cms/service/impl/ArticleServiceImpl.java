@@ -13,6 +13,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cnv.cms.event.EventModel;
+import com.cnv.cms.event.EventProducer;
+import com.cnv.cms.event.EventType;
 import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.mapper.ArticleMapper;
 import com.cnv.cms.mapper.AttachmentMapper;
@@ -32,6 +35,8 @@ public class ArticleServiceImpl implements ArticleService {
 	private UserMapper userMapper;
     @Autowired  
     private RedisTemplate<String,String> redisTemplate;  
+    @Autowired
+    private EventProducer eventProducer;
 	
 	@Autowired
 	@Qualifier("attachServiceImpl")
@@ -94,6 +99,16 @@ public class ArticleServiceImpl implements ArticleService {
 			e.printStackTrace();
 		}
 		attachService.removeTempAttachs(client);
+		
+		//发布文章事件，相应的事件监听器进行处理
+		EventModel event = new EventModel();
+		
+		event.setOwnerId(t.getUserId())
+			.setEventType(EventType.NEWS_PUBLISH)
+			.addExtData("articleId", t.getId())
+			.addExtData("articleTitle", t.getTitle());
+		eventProducer.addEvent(event);
+		
 		return true;
 	}
 	@Transactional

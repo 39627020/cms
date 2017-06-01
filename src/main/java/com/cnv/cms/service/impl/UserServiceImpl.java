@@ -11,6 +11,9 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cnv.cms.event.EventModel;
+import com.cnv.cms.event.EventProducer;
+import com.cnv.cms.event.EventType;
 import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.mapper.GroupMapper;
 import com.cnv.cms.mapper.LoginSessionMapper;
@@ -42,6 +45,9 @@ public class UserServiceImpl implements UserService {
 	private RoleMapper roleMapper;
 	@Autowired
 	private GroupMapper groupMapper;
+	
+	@Autowired
+	private EventProducer eventProducer;
 	
 	@Autowired
 	private  LoginSessionMapper loginMapper;
@@ -319,7 +325,12 @@ public class UserServiceImpl implements UserService {
 		String key2 = RedisKeyUtil.getUserFansKey(followId);
 		opsSet.add(key1, String.valueOf(followId));
 		opsSet.add(key2, String.valueOf(userId));
-		
+		//发出关注事件
+		EventModel event = new EventModel();
+		event.setOwnerId(userId)
+			.setEventType(EventType.FOLLOW)
+			.addExtData("userId", followId);
+		eventProducer.addEvent(event);
 	}
 	@Override
 	public void removeFollow(int userId, int followId) {
@@ -331,6 +342,12 @@ public class UserServiceImpl implements UserService {
 		opsSet.remove(key1, String.valueOf(followId));
 		opsSet.remove(key2, String.valueOf(userId));
 		
+		//发出取消关注事件
+		EventModel event = new EventModel();
+		event.setOwnerId(userId)
+			.setEventType(EventType.UNFOLLOW)
+			.addExtData("userId", followId);
+		eventProducer.addEvent(event);
 	}
 	@Override
 	public long getFollowNum(int userId) {
