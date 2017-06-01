@@ -286,13 +286,25 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<Article> selectFromUserList(Set<String> userIds, int offset, int num) {
 		// TODO Auto-generated method stub
-		List<String> userList = new ArrayList(userIds);
-		 Map<String, Object> params = new HashMap<String, Object>(2);
-		 params.put("users", userList);
-		 params.put("offset", offset);
-		 params.put("num", num);
-		articleMapper.selectFromUserList(params);
-		return null;
+		List<String> userList = new ArrayList<>(userIds);
+		Map<String, Object> params = new HashMap<String, Object>(2);
+		params.put("users", userList);
+		params.put("offset", offset);
+		params.put("num", num);
+		List<Article> list = articleMapper.selectFromUserList(params);
+		List<String> keys = new ArrayList<>();
+		for(Article a : list){
+			int id = a.getId();
+			String key = RedisKeyUtil.getPVKey("article", id);
+			keys.add(key);
+			
+		}
+		List<String> values = redisTemplate.opsForValue().multiGet(keys);
+		for(int i=0; i<list.size(); i++){
+			int pv = values.get(i)== null? 0 : Integer.parseInt(values.get(i));
+			list.get(i).setReadTimes(pv);
+		}
+		return list;
 	}
 
 

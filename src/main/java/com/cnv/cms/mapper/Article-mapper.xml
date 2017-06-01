@@ -95,14 +95,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     
-    <select id="selectFromUserList" resultType="Article">  
-	     select  *
+    <select id="selectFromUserList" parameterType="java.util.Map" resultType="Article">  
+	     select  ta.*,tu.username as author
 	    <!--  <include refid="Base_Column_List" />   -->
-	     from t_article where 
-	     userId in  
+	     from t_article ta, t_user tu where 
+	     ta.userId in  
 	     <foreach item="item" index="index" collection="users" open="(" separator="," close=")">  
 	      #{item}  
 	     </foreach>  
+	     and ta.userId = tu.id
 	     order by createDate desc limit #{offset},#{num};
 	</select>	
 </mapper>

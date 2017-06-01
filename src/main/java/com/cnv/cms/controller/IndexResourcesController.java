@@ -65,9 +65,11 @@ public class IndexResourcesController {
     }
     @RequestMapping(path={"mysubscribe.html"})
     public String mySubscribe(Model model,HttpServletRequest request,@RequestParam(defaultValue="1") int page) {
-    	
+    	int hostId = hostHolder.getUserId();
+    	if(hostId<0) 
+    		 return "redirect:/index.html";
     	model.addAllAttributes(this.getCommontInfo(request));
-    	Set<String> userIds = userService.getFollows(hostHolder.getUserId());
+    	Set<String> userIds = userService.getFollows(hostId);
     	model.addAttribute("articles", articleService.selectFromUserList(userIds, 0, 15));
     	model.addAttribute("pageid", page);
     	eventProducer.addEvent(getEvent("mysubscribe",-1));
