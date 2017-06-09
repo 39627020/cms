@@ -22,6 +22,7 @@ import com.cnv.cms.event.EventType;
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.ChannelService;
+import com.cnv.cms.service.FeedService;
 import com.cnv.cms.service.UserService;
 
 @Controller
@@ -39,6 +40,8 @@ public class IndexResourcesController {
 	private ArticleService articleService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private FeedService feedService;
 	
 	
 	@Autowired
@@ -53,8 +56,11 @@ public class IndexResourcesController {
         return "redirect:/index.html";
     }
     @RequestMapping(path={"index","index.html"})
-    public String index(Model model,HttpServletRequest request,@RequestParam(defaultValue="1") int page) {
+    public String index(Model model,HttpServletRequest request,@RequestParam(defaultValue="1") Integer page) {
     	//System.out.println("page:"+page);
+    	if(page==null) page=1;
+    	if(page<1)
+    		 return "redirect:/index.html";
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectTopRead(15));
     	model.addAttribute("pageid", page);
@@ -68,6 +74,8 @@ public class IndexResourcesController {
     	int hostId = hostHolder.getUserId();
     	if(hostId<0) 
     		 return "redirect:/index.html";
+    	if(page<1)
+    		return "redirect:/mysubscribe.html";
     	model.addAllAttributes(this.getCommontInfo(request));
     	Set<String> userIds = userService.getFollows(hostId);
     	model.addAttribute("articles", articleService.selectFromUserList(userIds, 0, 15));
@@ -76,11 +84,27 @@ public class IndexResourcesController {
     	
         return "/mysubscribe";
     }
+    @RequestMapping(path={"myfeeds.html"})
+    public String myfeeds(Model model,HttpServletRequest request,@RequestParam(defaultValue="1") int page) {
+    	int hostId = hostHolder.getUserId();
+    	if(hostId<0) 
+    		 return "redirect:/index.html";
+    	if(page<1)
+    		return "redirect:/myfeeds.html";
+    	model.addAllAttributes(this.getCommontInfo(request));
+    	Set<String> userIds = userService.getFollows(hostId);
+    	model.addAttribute("feeds", feedService.selectFromUserList(userIds, 10*(page-1), 10));
+    	model.addAttribute("pageid", page);
+    	eventProducer.addEvent(getEvent("mysubscribe",-1));
+    	
+        return "/myfeeds";
+    }
     @RequestMapping(path={"userdetail.html"})
     public String userDetail(Model model,HttpServletRequest request,@RequestParam(defaultValue="0") Integer userid) {
     	if(userid==null || userid==0) return "redirect:/index.html";
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectByUserId(userid));
+    	model.addAttribute("username", userService.selectById(userid).getUsername());
     	model.addAttribute("fansNum", userService.getFollowNum(userid));
     	model.addAttribute("hasFollow", userService.isFollowedBy(userid, hostHolder.getUserId()));
     	model.addAttribute("userToFollow", userid);
@@ -105,7 +129,8 @@ public class IndexResourcesController {
     @RequestMapping(path={"/article_list.html"})
     public String articlelist(Model model,HttpServletRequest request,  @RequestParam Integer id,@RequestParam(defaultValue="1") int page){    	
     	if(id==null) return "redirect:/index.html";
-    	if (id<1) id=1;
+    	if (id<1) return "redirect:/article_list.html";
+    	
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectPage(page, 10, id));
     	model.addAttribute("channelname", channelService.selectById(id).getName());

@@ -24,16 +24,16 @@ public class CommentServiceImpl implements CommentService {
 		int rs = commentMapper.add(t);
 		
 		
-		System.out.println("commentMapper Add return : "+rs);
+		//System.out.println("commentMapper Add return : "+rs);
 		
-	
+/*	
 		EventModel event = new EventModel();
 		event.setOwnerId(t.getUserId())
 			.setEventType(EventType.COMMENT)
 			.addExtData("articleId", t.getEntityId())
 			.addExtData("entityType", t.getEntityType())
 			.addExtData("entityId", t.getEntityId());
-		eventProducer.addEvent(event);
+		eventProducer.addEvent(event);*/
 		return  true;
 	}
 

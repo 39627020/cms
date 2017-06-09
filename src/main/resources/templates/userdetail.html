@@ -81,7 +81,7 @@
 				 </div>
 				 <div class=" col-sm-11 col-lg-11">
 				     <div display="block">
-				         <strong class="primary-font"><big>Jack Sparrow</big></strong>
+				         <strong class="primary-font"><big th:text="${username}">Jack Sparrow</big></strong>
 				         <div class="pull-right">
 				             <button th:text="${hasFollow}? '取消关注':'关注'" id="btn-follow" type="button" class="btn btn-default btn-sm">关注</button>
 				         </div>
@@ -106,11 +106,12 @@
 				<div th:each="art : ${articles}" class="list-item">	
 				
 					<!-- 左侧图片 -->
-					<div class="col-sm-3 col-lg-2">
-						<a href="javascript:;" th:title="${art.title}"><img  class="img-responsive" alt="标题标题" src="images/list_item.jpg"/></a>					
+					<div class="col-sm-1 col-lg-1">
+					 <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+						<!-- <a href="javascript:;" th:title="${art.title}"><img  class="img-responsive" alt="标题标题" src="images/list_item.jpg"/></a> -->					
 					</div>
 					<!-- 右侧内容 -->
-					<div class="col-sm-9 col-lg-10">
+					<div class="col-sm-11 col-lg-11">
 						<!-- 头部信息：标题作者等 -->
 						<div class="item-head">
 							<h4 class="head">
@@ -119,8 +120,8 @@
 							
 							<div class="pull-left">	
 						   
-								<i class="info"><a href="javascript:;" target="_blank" th:text="${art.author}">作者</a></i>  
-								<i class="info"><a href="javascript:;" target="_blank">分类</a></i>   
+								<!-- <i class="info"><a href="javascript:;" target="_blank" th:text="${art.author}">作者</a></i>  --> 
+								<i class="info"><a th:href="@{'article_list.html?id='+${art.channelId}}" th:text="${art.get('channel')}">分类</a></i>
 								<i class="info" th:text="${#dates.format(art.createDate, 'yyyy-MM-dd hh:mm:ss')}">2013/03/02</i>
 							</div>	
 							<div class="pull-right">

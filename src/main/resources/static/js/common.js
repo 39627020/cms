@@ -60,6 +60,7 @@ function loadChannel(){
 		str = '<li><a columnid="index" href="'+getContextPath()+'/index.html"><b>首页</b></a></li>';
 		if(userid >0){
 			str += '<li><a columnid="index" href="'+getContextPath()+'/mysubscribe.html"><b>我的关注</b></a></li>';
+			str += '<li><a columnid="index" href="'+getContextPath()+'/myfeeds.html"><b>我的动态</b></a></li>';
 		}
 		for(i in topChannels){
 			var pchannel = topChannels[i];
@@ -116,9 +117,11 @@ function loginOut(){
 	$.get(getContextPath()+'/api/admin/login.out',function(data,status){
 		if(status == "success" && data.flag == "success"){
 			var loginUser = getCookie("loginUser");
+			
 		}
+		window.location.reload();
 	});
-	return false;
+	return true;
 }
 
 /*
@@ -202,5 +205,11 @@ var subChannelMap = new Object();
 $(document).ready(function () {
 	
 	loadNavigation();	
+	
+/*	$("#btn-login-out").on("click", function(event){
+		//取消事件行为，非常重要！否则add中的post请求会被取消
+		event.preventDefault();
+		loginOut();
 
+	}); */
 });	

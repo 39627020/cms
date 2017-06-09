@@ -55,11 +55,11 @@
 		<div th:each="art : ${articles}" class="list-item">	
 		
 			<!-- 左侧图片 -->
-			<div class="col-sm-3 col-lg-2">
-				<a href="javascript:;" th:title="${art.title}"><img  class="img-responsive" alt="标题标题" src="images/list_item.jpg"/></a>					
+			<div class="col-sm-1 col-xs-2">
+				<img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
 			</div>
 			<!-- 右侧内容 -->
-			<div class="col-sm-9 col-lg-10">
+			<div class="col-sm-11 col-xs-10">
 				<!-- 头部信息：标题作者等 -->
 				<div class="item-head">
 					<h4 class="head">
@@ -68,8 +68,8 @@
 					
 					<div class="pull-left">	
 				   
-						<i class="info"><a href="javascript:;" target="_blank" th:text="${art.author}">作者</a></i>  
-						<i class="info"><a href="javascript:;" target="_blank">分类</a></i>   
+						<i class="info"><a th:href="@{'userdetail.html?userid='+${art.userId}}" target="_blank" th:text="${art.author}">作者</a></i>  
+						<i class="info"><a th:href="@{'article_list.html?id='+${art.channelId}}" th:text="${art.get('channel')}">分类</a></i>  
 						<i class="info" th:text="${#dates.format(art.createDate, 'yyyy-MM-dd hh:mm:ss')}">2013/03/02</i>
 					</div>	
 					<div class="pull-right">

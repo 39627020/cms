@@ -70,6 +70,13 @@ public class UserResourcesController {
 		model.addAttribute("messages", messages);
 		return "user/innermsg";
 	}
+	@RequestMapping(value="/myfeeds.html",method=RequestMethod.GET)
+	public String myfeeds(Model model,HttpServletRequest request){
+		model.addAllAttributes(this.getCommontInfo(request));
+		List<Object> messages = messageService.listConversationsByUserId(hostHolder.getUserId());
+		model.addAttribute("messages", messages);
+		return "user/myfeeds";
+	}
 	@RequestMapping(value="/msgdetail.html",method=RequestMethod.GET)
 	public String msgdetail(Model model,HttpServletRequest request,@RequestParam("userid") Integer userId){
 		

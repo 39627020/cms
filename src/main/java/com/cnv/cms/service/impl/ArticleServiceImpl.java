@@ -21,8 +21,12 @@ import com.cnv.cms.mapper.ArticleMapper;
 import com.cnv.cms.mapper.AttachmentMapper;
 import com.cnv.cms.mapper.UserMapper;
 import com.cnv.cms.model.Article;
+import com.cnv.cms.model.Channel;
+import com.cnv.cms.model.User;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.AttachmentService;
+import com.cnv.cms.service.ChannelService;
+import com.cnv.cms.service.UserService;
 import com.cnv.cms.util.RedisKeyUtil;
 
 @Service("articleServiceImpl")  
@@ -33,6 +37,10 @@ public class ArticleServiceImpl implements ArticleService {
 	private AttachmentMapper attachMapper;
 	@Autowired
 	private UserMapper userMapper;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private ChannelService channelService;
     @Autowired  
     private RedisTemplate<String,String> redisTemplate;  
     @Autowired
@@ -210,7 +218,9 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<Article> selectByUserId(int id) {
 		// TODO Auto-generated method stub
-		return articleMapper.selectByUserId(id);
+		List<Article> list = articleMapper.selectByUserId(id);
+		this.fillArticleList(list);
+		return list;
 	}
 
 	public List<Article> selectByTitle(String title) {
@@ -242,7 +252,7 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<Article> selectTopRead(int n) {
 		// TODO Auto-generated method stub
 
-		List<Article> list = articleMapper.selectTopRead(n);;
+		List<Article> list = articleMapper.selectTopRead(n);
 		List<String> keys = new ArrayList<>();
 		for(Article a : list){
 			int id = a.getId();
@@ -255,6 +265,7 @@ public class ArticleServiceImpl implements ArticleService {
 			int pv = values.get(i)== null? 0 : Integer.parseInt(values.get(i));
 			list.get(i).setReadTimes(pv);
 		}
+		this.fillArticleList(list);
 		return list;
 	}
 
@@ -273,6 +284,7 @@ public class ArticleServiceImpl implements ArticleService {
 			int pv = values.get(i)== null? 0 : Integer.parseInt(values.get(i));
 			list.get(i).setReadTimes(pv);
 		}
+		this.fillArticleList(list);
 		return list;
 	}
 
@@ -296,17 +308,22 @@ public class ArticleServiceImpl implements ArticleService {
 			int pv = values.get(i)== null? 0 : Integer.parseInt(values.get(i));
 			list.get(i).setReadTimes(pv);
 		}
+		this.fillArticleList(list);
 		return  list;
 	}
 	@Override
 	public List<Article> selectFromUserList(Set<String> userIds, int offset, int num) {
 		// TODO Auto-generated method stub
+		if(userIds == null || userIds.size()==0)
+			return null;
 		List<String> userList = new ArrayList<>(userIds);
 		Map<String, Object> params = new HashMap<String, Object>(2);
 		params.put("users", userList);
 		params.put("offset", offset);
 		params.put("num", num);
 		List<Article> list = articleMapper.selectFromUserList(params);
+		if(list==null || list.size()==0)
+			return null;
 		List<String> keys = new ArrayList<>();
 		for(Article a : list){
 			int id = a.getId();
@@ -319,9 +336,18 @@ public class ArticleServiceImpl implements ArticleService {
 			int pv = values.get(i)== null? 0 : Integer.parseInt(values.get(i));
 			list.get(i).setReadTimes(pv);
 		}
+		this.fillArticleList(list);
 		return list;
 	}
 
-
+	public void fillArticleList(List<Article> list){
+		for(Article a : list){
+			User user = userService.selectById(a.getUserId());
+			a.setAuthor(user.getUsername());
+			Channel c = channelService.selectById(a.getChannelId());
+			a.addData("channel", c.getName());
+		}
+		
+	}
 
 }

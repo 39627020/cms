@@ -35,10 +35,11 @@ public class CommentMapperTest {
 		c.setStatus(1);
 		
 		commentMapper.add(c);
-		
-		Comment c1= commentMapper.getById(6);
-		List<Comment> cs =commentMapper.listByEntity(123, EntityType.ENTITY_NEWS);
-		System.out.println("get: "+cs.get(0).getUserId());
+		System.out.println("ID:"+c.getId());
+		commentMapper.deleteById(c.getId());
+		//Comment c1= commentMapper.getById(6);
+		//List<Comment> cs =commentMapper.listByEntity(123, EntityType.ENTITY_NEWS);
+		//System.out.println("get: "+cs.get(0).getUserId());
 		//redisTemplate.delete("k1");
 	}
 	

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cnv.cms.authority.AuthClass;
+import com.cnv.cms.authority.AuthMethod;
 import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.User;
@@ -70,10 +71,14 @@ public class UserController {
 		
 		return map;
 	}
+	
+	@AuthMethod(role="base")
 	@RequestMapping(value="/follow/{id}",method=RequestMethod.GET)
 	public  void fellow(@PathVariable(value="id") Integer id){
 		userService.addFollow(hostHolder.getUserId(), id);
 	}
+	
+	@AuthMethod(role="base")
 	@RequestMapping(value="/unfollow/{id}",method=RequestMethod.GET)
 	public  void unfellow(@PathVariable(value="id") Integer id){
 		userService.removeFollow(hostHolder.getUserId(), id);

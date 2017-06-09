@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">  
+<head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>CNV CMS系统</title>
+	<!--  JQuery -->
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<!-- Boostrap  -->
+	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"/>	
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	
+	 <!-- MetisMenu CSS -->
+    <link href="vendor/metisMenu/metisMenu.min.css" rel="stylesheet"/>
+    <script src="vendor/metisMenu/metisMenu.min.js"></script>
+    
+    <!-- sb-admin -->
+    <link href="dist/css/sb-admin-2.css" rel="stylesheet"/>
+    <script src="dist/js/sb-admin-2.js"></script>
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+     
+	
+
+	
+	<!-- 自定义模板css -->
+	<link rel="stylesheet" href="css/basic.css"/>
+	<link rel="stylesheet" href="css/list.css"/>
+
+	
+	<!-- 自定义js -->
+	<script src="js/common.js"></script>
+	<script src="js/userdetail.js"></script>
+	<!-- <script src="../js/user_home_common.js"></script> -->
+	<!-- <script src="../js/user_home.js"></script> -->
+
+
+
+
+</head>
+
+
+<body>
+  <script th:inline="javascript">
+/*<![CDATA[*/
+
+    var userToFollow = [[${userToFollow}]];
+
+/*]]>*/
+</script> 
+ <!--头部代码开始-->
+
+	<!-- Navigation -->
+  <div id="navigation-div" th:include="navigation::navigation"> </div>
+	
+<!--头部代码结束-->
+
+	<div class="hr tp-div-nexthr" style="margin-top: 0;margin-bottom: 0;padding: 0;"></div>
+	<div class="container">
+	
+	
+	<!-- Example row of columns -->
+
+	
+	
+	<!--   <div class="page-div col-md-12"> col-md-offset-2-->
+		
+      <div class="row">
+         <div class="col-lg-12">
+             <h4 class="page-header">我的动态</h4>
+         </div>
+         <!-- /.col-lg-12 -->
+         <div class="page-div col-md-10 ">
+     
+
+
+
+			<div th:remove="all-but-first" id="article-list-div">
+				<div th:each="feed : ${feeds}" class="list-item">	
+				
+					<!-- 左侧图片 -->
+					<div class="col-sm-1 col-xs-2">
+					 	<img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />										
+					</div>
+					<!-- 右侧内容 -->
+					<div class="col-sm-11 col-xs-10">
+						<!-- 头部信息：标题作者等 -->
+						<div class="item-head">
+							<div class="pull-right text-muted">
+		                        <i class="fa fa-clock-o fa-fw" ></i>
+                              	<font th:text="${#dates.format(feed.createDate, 'MM-dd hh:mm:ss')}"></font> 					
+								
+							</div>						
+							<strong class="primary-font" >
+								<a  th:text="${feed.map.actroUserName}" th:href="@{'userdetail.html?userid='+${feed.userId}}"></a>
+							</strong>
+							
+							<!-- <div th:if="${feed.type}==8"> -->
+								<p th:if="${feed.type}==1"  >关注了用户
+									<strong th:text="${feed.get('receiverUserName')}"></strong>
+								</p>
+								<p th:if="${feed.type}==7">评论了文章</p>
+								<p th:if="${feed.type}==8">发表了文章</p>
+								<!-- <p>发表了文章</p> -->
+								<!-- <p  th:text="${feed.map.get('articleTitle')}"></p> -->
+								<blockquote th:if="${feed.get('articleTitle')}">
+									<strong class="head">
+										<a  th:text="${feed.map.articleTitle}" th:href="@{'article.html?id='+${feed.get('articleId')}}">标题标题标题标题标题标题标题标题标题</a>
+									</strong>
+								</blockquote>
+								<p  th:text="${feed.map.get('comment')}"></p>							
+							<!-- </div> -->
+
+							
+
+
+						</div>
+
+					</div>
+				</div>		
+			</div>
+			
+<!-- 			<div  class="list-item">	
+                        <li class="left clearfix" >
+                            <span class="chat-img pull-left">
+                                <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+                            </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font" >Jack Sparrow</strong>
+                                    
+                                    <small class="pull-right text-muted" >
+                                        <i class="fa fa-clock-o fa-fw" ></i>2011-11-11
+                                        <font th:text="${#dates.format(item.message.createdDate, 'MM-dd hh:mm:ss')}"></font>                                       
+                                       <p><i class='fa fa-bell-o fa-fw' ></i>&nbsp;<big th:text="${item.message.count}+' 条对话'"></big> </p>
+                                    </small>
+                                </div>
+                                <p >用户发表了。。。</p>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                                </p>
+                            </div>
+                        </li>	
+             </div>	 -->
+             	
+		</div><!-- ./ page-div-->
+
+	</div>
+</div>
+
+<!-- /container -->
+
+
+<!-- Page Footer -->
+<div th:replace="footer::footer"></div>
+     
+</body>
+</html>

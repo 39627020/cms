@@ -9,9 +9,10 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cnv.cms.event.EventType;
 import com.cnv.cms.mapper.FeedMapper;
-import com.cnv.cms.model.Article;
 import com.cnv.cms.model.Feed;
+import com.cnv.cms.service.CommentService;
 import com.cnv.cms.service.FeedService;
 
 @Service
@@ -19,6 +20,8 @@ public class FeedServiceImpl implements FeedService{
 
 	@Autowired
 	private FeedMapper feedMapper;
+	@Autowired
+	private CommentService commentService;
 	@Override
 	public boolean add(Feed feed) {
 		// TODO Auto-generated method stub
@@ -58,6 +61,13 @@ public class FeedServiceImpl implements FeedService{
 		params.put("offset", offset);
 		params.put("num", num);
 		List<Feed> list = feedMapper.selectFromUserList(params);
+		for(Feed feed : list){
+			if(feed.getType()== EventType.COMMENT.getValue()){
+				Integer id = (Integer) feed.get("commentId");
+				if(id!=null)
+					feed.addContent("comment", commentService.selectById(id).getContent());
+			}
+		}
 		return list;
 	}
 

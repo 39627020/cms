@@ -14,13 +14,11 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cnv.cms.authority.AuthClass;
 import com.cnv.cms.authority.AuthMethod;
@@ -36,7 +34,7 @@ import com.cnv.cms.service.UserService;
 import com.cnv.cms.service.impl.SessionServiceImpl;
 
 @AuthClass
-@Controller
+@RestController
 @RequestMapping("/api/admin")
 public class AdminController {
 	
@@ -162,7 +160,7 @@ public class AdminController {
 	
 	@AuthMethod()
 	@RequestMapping(value="/login.out",method=RequestMethod.GET)
-	public   @ResponseBody Map<String, Object>   loginOut(HttpServletRequest request,HttpServletResponse response){
+	public   void   loginOut(HttpServletRequest request,HttpServletResponse response){
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("flag", "false");
 
@@ -176,7 +174,7 @@ public class AdminController {
 			System.out.println("login out");
 		}
 		map.put("flag", "success");
-		return map;
+		//return map;
 	}
 	
 	@AuthMethod(role="base")

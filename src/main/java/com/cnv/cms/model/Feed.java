@@ -1,6 +1,8 @@
 package com.cnv.cms.model;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -15,7 +17,8 @@ public class Feed {
     private String content;
     private Date createDate;
     private int status=1;
-    private JSONObject dataJSON = null;
+    //private JSONObject dataJSON = null;
+    private Map<String,Object> map = null;
 
     public int getId() {
         return id;
@@ -46,14 +49,29 @@ public class Feed {
         return content;
     }
 
-    public void setContent(String content) {
+	public Map<String,Object> getMap() {
+        return map;
+    }
+    @SuppressWarnings("unchecked")
+	public void setContent(String content) {
         this.content = content;
-        dataJSON = JSONObject.parseObject(content);
+        //dataJSON = JSONObject.parseObject(content);
+        if(map==null)
+        	map = JSONObject.parseObject(content, Map.class);
+        else
+        	map.putAll(JSONObject.parseObject(content, Map.class));
+       
     }
-    
-    public String get(String key) {
-        return dataJSON == null ? null : dataJSON.getString(key);
+    public void addContent(String key, Object val) {
+    	if(map==null)
+    		map = new HashMap<>();
+    	map.put(key, val);
+       
     }
+    public Object get(String key) {
+        return map == null ? null : map.get(key);
+    }
+
     @JsonFormat(pattern="yyyy-MM-dd HH:MM:SS",timezone = "GMT+8")
     public Date getCreateDate() {
         return createDate;

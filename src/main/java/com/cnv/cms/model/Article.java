@@ -2,7 +2,9 @@ package com.cnv.cms.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
@@ -75,6 +77,8 @@ public class Article implements Serializable{
 	 */
 	private int fellows;
 	
+	
+	private Map<String,Object> data=null;
 	
 	//getters and setters
 	public int getId() {
@@ -173,6 +177,14 @@ public class Article implements Serializable{
 	}
 	public void setPicPath(String picPath) {
 		this.picPath = picPath;
+	}
+	public void addData(String key, Object val){
+		if(data==null)
+			data = new HashMap<>();
+		data.put(key, val);
+	}
+	public Object get(String key){
+		return data==null? null : data.get(key);
 	}
 	@Override
 	public String toString() {

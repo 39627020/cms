@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -18,7 +19,8 @@ public interface FeedMapper {
     String SELECT_FIELDS = " id," + INSERT_FIELDS;
 	 
 	@Insert({"insert into ",TABLE_NAME,"(",INSERT_FIELDS,") "
-			+ "values(#{uesrId},#{type},#{content},#{createDate},#{status});"})
+			+ "values(#{userId},#{type},#{content},#{createDate},#{status});"})
+	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int add(Feed feed);
 	
 	@Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," where id=#{id}"})

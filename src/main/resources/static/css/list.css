@@ -36,7 +36,7 @@
 /* .list-item  a{display:block;} */
 .list-item  a img{height:auto;max-width: 120px;}
 .list-item .item-body, .list-item  .item-head{
-	padding: 10px 3px;
+	/* padding: 10px 3px; */
 	width: 100%;
 	display: inline-block;
 	/* margin: auto 0px; */
@@ -51,6 +51,11 @@
     font-weight: bold;
     color: #979797;
 	margin: 0 5px;
+    font-style: normal;	
+}
+.list-item .item-head  p{
+    /* font-weight: bold; */
+	margin: 8px 0px;
     font-style: normal;	
 }
 .list-item .item-head  i.info a:hover{color: #2a6496;}

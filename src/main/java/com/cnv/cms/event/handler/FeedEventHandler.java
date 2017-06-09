@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.cnv.cms.event.EventModel;
 import com.cnv.cms.event.EventType;
 import com.cnv.cms.model.Article;
@@ -71,15 +71,17 @@ public class FeedEventHandler implements EventHandler {
 			map.put("receiverId", receiverId);
 			map.put("receiverUserName", receiverUserName);
 		}else if(type==EventType.COMMENT){
-			int commentType = (int) event.getExtData("entityType");
+			//System.out.println(event);
+			int commentType = (int)event.getExtData("commentType");
 			if(commentType == EntityType.ENTITY_NEWS){
 				int aid = (int) event.getExtData("articleId");
 				Article art = articleService.selectById(aid);
 				map.put("articleId", aid);
 				map.put("articleTitle", art.getTitle());
+				map.put("commentId", event.getExtData("commentId"));
 			}
 		}
-		String content  = JSONObject.toJSONString(map);
+		String content  = JSON.toJSONString(map);
 		return content;
 	}
 }

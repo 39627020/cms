@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -17,6 +18,7 @@ public interface MessageMapper {
 	 
 	@Insert({"insert into ",TABLE_NAME,"(",INSERT_FIELDS,") "
 			+ "values(#{fromId},#{toId},#{createdDate},#{conversationId},#{content},#{status},#{hasRead});"})
+	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int add(Message message);
 	
 	@Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," where id=#{id}"})

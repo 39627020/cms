@@ -50,20 +50,22 @@ public class CommentController {
 	@AuthMethod(role="base")
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public   void  addComment(int articleId, String content){
-		Comment omment = new Comment();
-		omment.setUserId(hostHolder.getUserId());
-		omment.setCreatedDate(new Date());
-		omment.setEntityId(articleId);
-		omment.setEntityType(EntityType.ENTITY_NEWS);
-		omment.setContent(content);
-		omment.setStatus(1);
+		Comment comment = new Comment();
+		comment.setUserId(hostHolder.getUserId());
+		comment.setCreatedDate(new Date());
+		comment.setEntityId(articleId);
+		comment.setEntityType(EntityType.ENTITY_NEWS);
+		comment.setContent(content);
+		comment.setStatus(1);
 		
-		commentService.add(omment);
+		commentService.add(comment);
 		
 		eventProducer.addEvent(new EventModel()
     			.setEventType(EventType.COMMENT)
     			.setOwnerId(hostHolder.getUserId())
     			.addExtData("articleId", articleId)
+    			.addExtData("commentId", comment.getId())
+    			.addExtData("commentType", comment.getEntityType())
     			);
 		//return null;
 	}

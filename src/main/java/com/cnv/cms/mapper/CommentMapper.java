@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -16,6 +17,7 @@ public interface CommentMapper {
 	 
 	@Insert({"insert into ",TABLE_NAME,"(",INSERT_FIELDS,") "
 			+ "values(#{userId},#{createdDate},#{entityId},#{entityType},#{content},#{status});"})
+	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int add(Comment comment);
 	
 	@Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," where id=#{id}"})
