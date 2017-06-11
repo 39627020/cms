@@ -23,6 +23,7 @@ import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.ChannelService;
 import com.cnv.cms.service.FeedService;
+import com.cnv.cms.service.FollowService;
 import com.cnv.cms.service.UserService;
 
 @Controller
@@ -42,7 +43,8 @@ public class IndexResourcesController {
 	private UserService userService;
 	@Autowired
 	private FeedService feedService;
-	
+	@Autowired
+	private FollowService followService;
 	
 	@Autowired
 	private EventProducer eventProducer;
@@ -77,7 +79,7 @@ public class IndexResourcesController {
     	if(page<1)
     		return "redirect:/mysubscribe.html";
     	model.addAllAttributes(this.getCommontInfo(request));
-    	Set<String> userIds = userService.getFollows(hostId);
+    	Set<String> userIds = followService.getFollows(hostId);
     	model.addAttribute("articles", articleService.selectFromUserList(userIds, 0, 15));
     	model.addAttribute("pageid", page);
     	eventProducer.addEvent(getEvent("mysubscribe",-1));
@@ -92,7 +94,22 @@ public class IndexResourcesController {
     	if(page<1)
     		return "redirect:/myfeeds.html";
     	model.addAllAttributes(this.getCommontInfo(request));
-    	Set<String> userIds = userService.getFollows(hostId);
+    	//Set<String> userIds = followService.getFollows(hostId);
+    	model.addAttribute("feeds", feedService.getFeeds(hostId, 10*(page-1), 10));
+    	model.addAttribute("pageid", page);
+    	eventProducer.addEvent(getEvent("mysubscribe",-1));
+    	
+        return "/myfeeds";
+    }
+    @RequestMapping(path={"pollfeeds.html"})
+    public String pollMfeeds(Model model,HttpServletRequest request,@RequestParam(defaultValue="1") int page) {
+    	int hostId = hostHolder.getUserId();
+    	if(hostId<0) 
+    		 return "redirect:/index.html";
+    	if(page<1)
+    		return "redirect:/pollfeeds.html";
+    	model.addAllAttributes(this.getCommontInfo(request));
+    	Set<String> userIds = followService.getFollows(hostId);
     	model.addAttribute("feeds", feedService.selectFromUserList(userIds, 10*(page-1), 10));
     	model.addAttribute("pageid", page);
     	eventProducer.addEvent(getEvent("mysubscribe",-1));
@@ -105,8 +122,8 @@ public class IndexResourcesController {
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectByUserId(userid));
     	model.addAttribute("username", userService.selectById(userid).getUsername());
-    	model.addAttribute("fansNum", userService.getFollowNum(userid));
-    	model.addAttribute("hasFollow", userService.isFollowedBy(userid, hostHolder.getUserId()));
+    	model.addAttribute("fansNum", followService.getFollowNum(userid));
+    	model.addAttribute("hasFollow", followService.isFollowedBy(userid, hostHolder.getUserId()));
     	model.addAttribute("userToFollow", userid);
     	//model.addAttribute("pageid", page);
     	eventProducer.addEvent(getEvent("userdetail",-1));

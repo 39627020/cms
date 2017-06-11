@@ -1,5 +1,6 @@
 package com.cnv.cms.mapper;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,9 @@ public interface FeedMapper {
 	@Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," where uesrId=#{userId} order by create_date desc limit #{offset},#{num};"})
 	public List<Feed>  listByUserId(@Param("userId")int userId,@Param("offset")int offset,@Param("num")int num);
 		
-
+	@Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," where uesrId=#{userId} and createDate>=#{minDate} order by create_date desc limit #{offset},#{num};"})
+	public List<Feed>  listByUserIdAfter(@Param("userId")int userId,@Param("minDate")Date date,@Param("offset")int offset,@Param("num")int num);
+	
 	@Delete({"delete from ",TABLE_NAME," where id=#{id}"})
 	public int deleteById(int id);
 	

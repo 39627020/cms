@@ -8,6 +8,10 @@ public class RedisKeyUtil {
 	private static String KEY_TIME = "TIMECOST";
 	private static String KEY_USER_FOLLOW = "USER_FOLLOW";
 	private static String KEY_USER_FANS = "USER_FANS";
+	private static String KEY_FEED_QUEUE = "USER_FEED_QUEUE";
+	private static String KEY_FEED_POLL_QUEUE = "USER_FEED_POLL_QUEUE";
+	private static String KEY_TIMELINE_UPDATE_TIME = "TIMELINE_UPDATE_TIME";
+	private static String KEY_CACHE = "DB_CACHE";
 	public static String getSessionKey(String sessionid){
 		return KEY_SESSION + SPLIT + sessionid;
 	}
@@ -28,5 +32,17 @@ public class RedisKeyUtil {
 	}
 	public static String getUserFansKey(int id){
 		return KEY_USER_FANS + SPLIT + id;
+	}
+	public static String getUserFeedsQueueKey(int id){
+		return KEY_FEED_QUEUE + SPLIT + id;
+	}
+	public static String getUserFeedsPollKey(int id){
+		return KEY_FEED_POLL_QUEUE + SPLIT + id;
+	}
+	public static String getFeedUpdateTimeKey(int id){
+		return KEY_TIMELINE_UPDATE_TIME + SPLIT + id;
+	}
+	public static String getCacheKey(String cacheValue, String key){
+		return KEY_CACHE + SPLIT + cacheValue + SPLIT + key;
 	}
 }

@@ -1,5 +1,6 @@
 package com.cnv.cms.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,4 +27,27 @@ public interface FeedService {
 
 
 	List<Feed> selectFromUserList(Set<String> userIds, int offset, int num);
+
+	void pushFeed(Feed feed);
+
+	List<Feed> listByUserId(int userId, Date date, int offset, int num);
+
+	void saveAndPushFeed(Feed feed);
+
+	List<Feed> getFeeds(int userId, int offset, int len);
+
+	void retainFeedsInTimeline(int userId, int len);
+
+	void setFeedUpdateTime(int userId, String targetUserId, Date date);
+
+	void updateTimeline(int userId);
+
+	List<Feed> listByIds(Set<String> ids);
+
+	List<Feed> pollFeeds(int userId, int offset, int num);
+
+	int getTimelineSize(int userId);
+
+
+	
 }

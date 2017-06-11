@@ -31,7 +31,9 @@ public class CmsConfig {
 	 */
 	static String ftpUser = "ftptest";
 
+	static int pushBound = 20;
 	
+	static int timelineLen = 100;
 
 	
 	public static boolean getDebug() {
@@ -67,6 +69,19 @@ public class CmsConfig {
 	public static void setFtpUser(String ftpUser) {
 		CmsConfig.ftpUser = ftpUser;
 	}
+	public static int getPushBound() {
+		return pushBound;
+	}
+	public static void setPushBound(int pushBound) {
+		CmsConfig.pushBound = pushBound;
+	}
+	public static int getTimelineLen() {
+		return timelineLen;
+	}
+	public static void setTimelineLen(int timelineLen) {
+		CmsConfig.timelineLen = timelineLen;
+	}
+
 
 
 

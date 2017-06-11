@@ -18,6 +18,7 @@ import com.cnv.cms.authority.AuthMethod;
 import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.User;
+import com.cnv.cms.service.FollowService;
 import com.cnv.cms.service.UserService;
 
 @AuthClass
@@ -26,12 +27,12 @@ import com.cnv.cms.service.UserService;
 public class UserController {
 
 	@Autowired
-	 //@Qualifier("userServiceImpl")
 	private UserService userService;
 	
 	@Autowired
 	private HostHolder hostHolder;
-	
+	@Autowired
+	private FollowService followService;
 	
 	@RequestMapping(value="/users",method=RequestMethod.GET)
 	public  @ResponseBody Map<String, Object>  users(){
@@ -75,13 +76,13 @@ public class UserController {
 	@AuthMethod(role="base")
 	@RequestMapping(value="/follow/{id}",method=RequestMethod.GET)
 	public  void fellow(@PathVariable(value="id") Integer id){
-		userService.addFollow(hostHolder.getUserId(), id);
+		followService.addFollow(hostHolder.getUserId(), id);
 	}
 	
 	@AuthMethod(role="base")
 	@RequestMapping(value="/unfollow/{id}",method=RequestMethod.GET)
 	public  void unfellow(@PathVariable(value="id") Integer id){
-		userService.removeFollow(hostHolder.getUserId(), id);
+		followService.removeFollow(hostHolder.getUserId(), id);
 	}
 	@RequestMapping(value="/delete/{id}",method=RequestMethod.GET)
 	public  @ResponseBody Map<String, Object>  delete(@PathVariable(value="id") Integer id){

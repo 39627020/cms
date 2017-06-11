@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +24,7 @@ import com.cnv.cms.model.Channel;
 import com.cnv.cms.model.User;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.AttachmentService;
+import com.cnv.cms.service.CacheService;
 import com.cnv.cms.service.ChannelService;
 import com.cnv.cms.service.UserService;
 import com.cnv.cms.util.RedisKeyUtil;
@@ -45,6 +45,9 @@ public class ArticleServiceImpl implements ArticleService {
     private RedisTemplate<String,String> redisTemplate;  
     @Autowired
     private EventProducer eventProducer;
+    
+    @Autowired
+    private CacheService cacheService;
 	
 	@Autowired
 	@Qualifier("attachServiceImpl")
@@ -131,6 +134,7 @@ public class ArticleServiceImpl implements ArticleService {
 		} catch (Exception e) {
 			return false;
 		}
+		cacheService.removeCache("articlesCache", "selectById"+id);
 		return true;
 	}
 	@Transactional
@@ -159,16 +163,24 @@ public class ArticleServiceImpl implements ArticleService {
 		} catch (Exception e) {
 			return false;
 		}
+		cacheService.removeCache("articlesCache", "selectById"+t.getId());
 		return true;
 	}
-	@Cacheable(value="articlesCache",key="#root.methodName+#id")
+	//@Cacheable(value="articlesCache",key="#root.methodName+#id")
 	public Article selectById(int id) {
-		Article at = articleMapper.selectById(id);
+		//缓存
+		Article at = cacheService.getCache("articlesCache", "selectById"+id, Article.class);
+		if(at != null)
+			return at;
+		
+		at = articleMapper.selectById(id);
 		if(at == null) throw new CmsException("文章不存在");
 		
 		//  查询附件
 		at.setAttachs(attachMapper.selectIdsByArticleId(id));
 		at.setAuthor(userMapper.selectUserByID(at.getUserId()).getUsername());
+		
+		cacheService.addCache("articlesCache", "selectById"+id, 600, at);
 		return at;
 	}
 	@Transactional
@@ -248,7 +260,7 @@ public class ArticleServiceImpl implements ArticleService {
 		// TODO Auto-generated method stub
 		return articleMapper.selectRecommendsInChannel(channelId);
 	}
-	@Cacheable(value="articlesCache",key="#root.methodName+#root.args")
+	//@Cacheable(value="articlesCache",key="#root.methodName+#root.args")
 	public List<Article> selectTopRead(int n) {
 		// TODO Auto-generated method stub
 

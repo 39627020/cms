@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * Created by nowcoder on 2016/7/24.
  */
-public class Feed {
+public class Feed implements Comparable<Feed>{
     private int id;
     private int userId;
     private int type;
@@ -87,5 +87,9 @@ public class Feed {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+    @Override
+    public int compareTo(Feed feed){
+    	return this.createDate.compareTo(feed.getCreateDate());
     }
 }
