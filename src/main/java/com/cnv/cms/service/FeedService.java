@@ -48,6 +48,17 @@ public interface FeedService {
 
 	int getTimelineSize(int userId);
 
+	void pushFeedToUsers(Feed feed, Set<String> folloIds);
+
+	void pushFeedsToUser(List<Feed> feeds, int targetUserId);
+
+	void pushFromUserToUser(int fromId, int toId);
+
+
+	List<Feed> listByTimelineMsg(Set<String> usersAndIds);
+
+	void pushToFans(int userId, int fanNum);
+
 
 	
 }

@@ -121,7 +121,8 @@ public class IndexResourcesController {
     	if(userid==null || userid==0) return "redirect:/index.html";
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectByUserId(userid));
-    	model.addAttribute("username", userService.selectById(userid).getUsername());
+    	model.addAttribute("targetUser", userService.selectById(userid).getUsername());
+    	model.addAttribute("targetId", userid);
     	model.addAttribute("fansNum", followService.getFollowNum(userid));
     	model.addAttribute("hasFollow", followService.isFollowedBy(userid, hostHolder.getUserId()));
     	model.addAttribute("userToFollow", userid);

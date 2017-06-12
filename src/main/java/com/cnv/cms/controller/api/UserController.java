@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cnv.cms.authority.AuthClass;
 import com.cnv.cms.authority.AuthMethod;
+import com.cnv.cms.event.EventModel;
+import com.cnv.cms.event.EventProducer;
+import com.cnv.cms.event.EventType;
 import com.cnv.cms.exception.CmsException;
 import com.cnv.cms.model.HostHolder;
 import com.cnv.cms.model.User;
@@ -33,6 +36,8 @@ public class UserController {
 	private HostHolder hostHolder;
 	@Autowired
 	private FollowService followService;
+	@Autowired
+	private EventProducer eventProducer;
 	
 	@RequestMapping(value="/users",method=RequestMethod.GET)
 	public  @ResponseBody Map<String, Object>  users(){
@@ -77,12 +82,14 @@ public class UserController {
 	@RequestMapping(value="/follow/{id}",method=RequestMethod.GET)
 	public  void fellow(@PathVariable(value="id") Integer id){
 		followService.addFollow(hostHolder.getUserId(), id);
+
 	}
 	
 	@AuthMethod(role="base")
 	@RequestMapping(value="/unfollow/{id}",method=RequestMethod.GET)
 	public  void unfellow(@PathVariable(value="id") Integer id){
 		followService.removeFollow(hostHolder.getUserId(), id);
+
 	}
 	@RequestMapping(value="/delete/{id}",method=RequestMethod.GET)
 	public  @ResponseBody Map<String, Object>  delete(@PathVariable(value="id") Integer id){

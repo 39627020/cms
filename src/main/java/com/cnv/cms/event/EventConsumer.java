@@ -67,6 +67,7 @@ public class EventConsumer implements InitializingBean , ApplicationContextAware
 						if(handlers != null){
 							for( EventHandler handler : handlers){
 								handler.handle(event);
+								//logger.info("event handle---"+event);
 							}
 						}
 						else{

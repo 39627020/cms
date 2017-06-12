@@ -77,11 +77,11 @@
 		<div class="panel-body">
 			<div>
 				 <div class="col-sm-1 col-lg-1">
-				     <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+				     <img th:src="'http://oqr1n6rjk.bkt.clouddn.com/user/head/B0'+${targetId}+'.jpg?imageView2/1/w/60/h/60/format/jpg/q/75|imageslim'" alt="User Avatar" class="img-circle" />
 				 </div>
 				 <div class=" col-sm-11 col-lg-11">
 				     <div display="block">
-				         <strong class="primary-font"><big th:text="${username}">Jack Sparrow</big></strong>
+				         <strong class="primary-font"><big th:text="${targetUser}">Jack Sparrow</big></strong>
 				         <div class="pull-right">
 				             <button th:text="${hasFollow}? '取消关注':'关注'" id="btn-follow" type="button" class="btn btn-default btn-sm">关注</button>
 				         </div>
@@ -107,7 +107,7 @@
 				
 					<!-- 左侧图片 -->
 					<div class="col-sm-1 col-lg-1">
-					 <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+					 <img th:src="'http://oqr1n6rjk.bkt.clouddn.com/user/head/B0'+${art.userId}+'.jpg?imageView2/1/w/30/h/30/format/jpg/q/75|imageslim'" alt="User Avatar" class="img-circle" />
 						<!-- <a href="javascript:;" th:title="${art.title}"><img  class="img-responsive" alt="标题标题" src="images/list_item.jpg"/></a> -->					
 					</div>
 					<!-- 右侧内容 -->

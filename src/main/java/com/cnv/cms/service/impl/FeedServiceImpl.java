@@ -2,9 +2,9 @@ package com.cnv.cms.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,11 +13,12 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.expression.Ids;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.cnv.cms.config.CmsConfig;
 import com.cnv.cms.event.EventType;
 import com.cnv.cms.mapper.FeedMapper;
@@ -26,7 +27,6 @@ import com.cnv.cms.service.CacheService;
 import com.cnv.cms.service.CommentService;
 import com.cnv.cms.service.FeedService;
 import com.cnv.cms.service.FollowService;
-import com.cnv.cms.service.UserService;
 import com.cnv.cms.util.RedisKeyUtil;
 
 @Service
@@ -45,6 +45,7 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 	
 	ZSetOperations<String,String> zsetOps = null;
 	HashOperations<String,String,Long> hashOps=null;
+	SetOperations<String, String> setOps = null;
 	
 	@Autowired
 	private FollowService followService;
@@ -97,9 +98,25 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 		// TODO Auto-generated method stub
 		return feedMapper.updateStatus(id, status)>0;
 	}
+	
+	@Override
+	public List<Feed> listByTimelineMsg(Set<String> usersAndIds) {
+		if(usersAndIds==null)
+			return null;
+		Set<String> ids = new HashSet<>();
+		for(String msg : usersAndIds){
+			JSONObject feedSet = JSON.parseObject(msg);
+			//feedSet.getInteger("feed");
+			ids.add(feedSet.getString("feed"));
+		}
+		return this.listByIds(ids);
+	}
 	@Override
 	public List<Feed> listByIds(Set<String> ids) {
 		// TODO Auto-generated method stub
+		if(ids==null)
+			return null;
+		
 		List<Feed> feeds = new ArrayList<>();
 		//查询feed
 		for(String id : ids){
@@ -124,38 +141,56 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 	@Override
 	public List<Feed> selectFromUserList(Set<String> userIds, int offset, int num) {
 		// TODO Auto-generated method stub
+		if(userIds==null || userIds.isEmpty())
+			return null;
+		
 		List<String> userList = new ArrayList<>(userIds);
 		Map<String, Object> params = new HashMap<String, Object>(2);
 		params.put("users", userList);
 		params.put("offset", offset);
 		params.put("num", num);
 		List<Feed> list = feedMapper.selectFromUserList(params);
-		for(Feed feed : list){
-			if(feed.getType()== EventType.COMMENT.getValue()){
-				Integer id = (Integer) feed.get("commentId");
-				if(id!=null)
-					feed.addContent("comment", commentService.selectById(id).getContent());
+		if(list!=null){
+			for(Feed feed : list){
+				if(feed.getType()== EventType.COMMENT.getValue()){
+					Integer id = (Integer) feed.get("commentId");
+					if(id!=null)
+						feed.addContent("comment", commentService.selectById(id).getContent());
+				}
 			}
 		}
+
 		return list;
 	}
 	@Override
 	public void updateTimeline(int userId) {
-		Set<String> followIds = followService.getFollows(userId);
+		
+		
+		String followKey = RedisKeyUtil.getUserFollowKey(userId);
+
+		
+		Set<String> followIds = setOps.members(followKey);
+		
+
 		//遍历每个关注的账号
-		for(String folloId : followIds){
-			Set<String> fanIds = followService.getFans(Integer.valueOf(folloId));
-			//关注的人如果是大号,查询更新时间表，poll出最新的feed
-			if(fanIds.size()>=CmsConfig.getPushBound()){
-				//根据更新时间表，poll最新的feed
-				Date date = this.getFeedUpdatetime(String.valueOf(userId), folloId);
-				List<Feed> pollFeeds = this.listByUserId(Integer.valueOf(folloId), date, 0, CmsConfig.getTimelineLen());
-				//push到自己的timeline
-				this.pushFeedsToUser(pollFeeds, userId);
-				//设置timeline更新时间
-				this.setFeedUpdateTime(userId, folloId, date);
+		if(followIds!=null){
+			for(String folloId : followIds){
+				Set<String> fanIds = followService.getFans(Integer.valueOf(folloId));
+				//关注的人如果是大号,查询更新时间表，poll出最新的feed
+				if(fanIds.size()>=CmsConfig.getPushBound()){
+					//根据更新时间表，poll最新的feed
+					Date date = this.getFeedUpdatetime(String.valueOf(userId), folloId);
+					List<Feed> pollFeeds = this.listByUserId(Integer.valueOf(folloId), date, 0, CmsConfig.getTimelineLen());
+					//push到自己的timeline
+					this.pushFeedsToUser(pollFeeds, userId);
+					//设置timeline更新时间
+					this.setFeedUpdateTime(userId, folloId, date);
+				}
 			}
 		}
+
+		//List<Object> rs = redisTemplate.exec();
+
 		//删除多余的feed，timeline中只保留100个
 		this.retainFeedsInTimeline(userId, CmsConfig.getTimelineLen());
 	}
@@ -169,27 +204,19 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 		
 		//从timeline中查询feed流
 		String key  = RedisKeyUtil.getUserFeedsQueueKey(userId);
-		
-		Set<String> ids = zsetOps.reverseRange(key, offset, offset+len-1);
+		Set<String> usersAndIds = zsetOps.reverseRange(key, offset, offset+len-1);
 		//如果timeline中没有足够的数据
-		if(ids==null || ids.size()<len){
+		if(usersAndIds==null || usersAndIds.size()<len){
 			feeds = this.pollFeeds(userId, offset, len);
 			//poll到的数据存到timeline
 			//超出timeline范围的，暂时缓存到timeline，下次刷新时在updateTimeline中删除
 			this.pushFeedsToUser(feeds, userId);
 		}else{
 			//根据feed流读取feed
-			feeds = this.listByIds(ids);
+			
+			feeds = this.listByTimelineMsg(usersAndIds);
 		}
 		
-/*		//如果数据在timeline中
-		if(offset+len <= CmsConfig.getTimelineLen()){
-
-		}else{
-			//否则从数据库poll数据
-			feeds = this.pollFeeds(userId, offset, len);
-			this.pushFeedsToUser(feeds, userId);
-		}*/
 
 		return feeds;
 	}
@@ -228,9 +255,14 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 		//ZSetOperations<String,String> zsetOps=redisTemplate.opsForZSet();
 		String key  = RedisKeyUtil.getUserFeedsQueueKey(userId);
 		Long timeLineLen = zsetOps.size(key);
-		if(timeLineLen != null && timeLineLen>len){
-			zsetOps.removeRange(key, 0, timeLineLen-len-1);
+		Set<String> feeds = zsetOps.reverseRange(key, len, timeLineLen);
+		if(feeds!=null){
+			//采用逐个删除的key的方式，如果以索引来删除多线程下会有问题
+			for(String feed : feeds){
+				zsetOps.remove(key, feed);
+			}
 		}
+
 	}
 	@Override
 	public int getTimelineSize(int userId) {
@@ -239,26 +271,65 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 		Long timeLineLen = zsetOps.size(key);
 		return timeLineLen.intValue();
 	}
-	private void pushFeedToUsers(Feed feed,Set<String> folloIds){
+	@Override
+	public void pushFeedToUsers(Feed feed, Set<String> folloIds){
+		if(folloIds==null)
+			return;
 		//ZSetOperations<String,String> zsetOps=redisTemplate.opsForZSet();
 		//存储到zset, 以feedId为key， 时间戳为score
 		 for(String userId : folloIds){
 			String key  = RedisKeyUtil.getUserFeedsQueueKey(Integer.valueOf(userId));
-			zsetOps.add(key, String.valueOf(feed.getId()), feed.getCreateDate().getTime());
+			Map<String,Object> timelineMsg = new HashMap<>();
+			timelineMsg.put("user", feed.getUserId());
+			timelineMsg.put("feed", feed.getId());
+			String val = JSON.toJSONString(timelineMsg);
+			zsetOps.add(key, val, feed.getCreateDate().getTime());
 	
 		 }
 		 
 	}
-	private void pushFeedsToUser(List<Feed> feeds, int targetUserId){
+	@Override
+	public void pushFeedsToUser(List<Feed> feeds, int targetUserId){
+		if(feeds==null) return;
 		//ZSetOperations<String,String> zsetOps=redisTemplate.opsForZSet();
 		String key  = RedisKeyUtil.getUserFeedsQueueKey(targetUserId);
 		//存储到zset, 以feedId为key， 时间戳为score
 		for(Feed feed : feeds){
-			zsetOps.add(key, String.valueOf(feed.getId()), feed.getCreateDate().getTime());
+			Map<String,Object> timelineMsg = new HashMap<>();
+			timelineMsg.put("user", feed.getUserId());
+			timelineMsg.put("feed", feed.getId());
+			String val = JSON.toJSONString(timelineMsg);
+			zsetOps.add(key, val, feed.getCreateDate().getTime());
 		}
 		
 		 
-	}	
+	}
+	@Override
+	public void pushFromUserToUser(int fromId, int toId){
+
+		int len = this.getTimelineSize(toId);
+		List<Feed> feeds = this.listByUserId(fromId, 0, CmsConfig.getTimelineLen()-len);
+		this.pushFeedsToUser(feeds, toId);
+	}
+	@Override
+	public void pushToFans(int userId, int fanNum){
+		List<Feed> feeds = this.listByUserId(userId, 0, CmsConfig.getTimelineLen());
+		if(feeds!=null && feeds.size()>0){
+			Date date = feeds.get(0).getCreateDate();
+			Set<String> fanIds = followService.getFans(userId);
+			if(fanIds!=null){
+				for(String fanId : fanIds){
+					this.pushFeedsToUser(feeds, Integer.valueOf(fanId));
+					if(fanNum >= CmsConfig.getPushBound()){
+						this.setFeedUpdateTime(Integer.valueOf(fanId), String.valueOf(userId), date);
+					}
+					
+				}
+			}
+
+		}
+
+	}
 	private Date getFeedUpdatetime(String userId, String targetUserId){
 		//HashOperations<String,String,Long> hashOps=redisTemplate.opsForHash();
 		String  key = RedisKeyUtil.getFeedUpdateTimeKey(Integer.valueOf(userId));
@@ -280,5 +351,6 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 		// TODO Auto-generated method stub
 		zsetOps = redisTemplate.opsForZSet();
 		hashOps = redisTemplate.opsForHash();
+		setOps = redisTemplate.opsForSet();
 	}
 }

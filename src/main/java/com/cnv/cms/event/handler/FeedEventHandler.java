@@ -40,7 +40,7 @@ public class FeedEventHandler implements EventHandler {
 		feed.setContent(this.buildFeedContent(event));
 		feed.setType(type.getValue());
 		feed.setStatus(1);
-		feedService.add(feed);
+		feedService.saveAndPushFeed(feed);
 	}
 
 	@Override

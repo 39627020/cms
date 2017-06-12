@@ -81,7 +81,7 @@
 				
 					<!-- 左侧图片 -->
 					<div class="col-sm-1 col-xs-2">
-					 	<img th:src="'http://oqr1n6rjk.bkt.clouddn.com/user/head/B0'+${feed.userId}+'.jpg?imageView2/1/w/35/h/35/format/jpg/q/75|imageslim'" alt="User Avatar" class="img-circle" />										
+					 	<img th:src="'http://oqr1n6rjk.bkt.clouddn.com/user/head/B0'+${feed.userId}+'.jpg?imageView2/1/w/30/h/30/format/jpg/q/75|imageslim'" alt="User Avatar" class="img-circle" />										
 					</div>
 					<!-- 右侧内容 -->
 					<div class="col-sm-11 col-xs-10">
@@ -98,6 +98,9 @@
 							
 							<!-- <div th:if="${feed.type}==8"> -->
 								<p th:if="${feed.type}==1"  >关注了用户
+									<strong th:text="${feed.get('receiverUserName')}"></strong>
+								</p>
+								<p th:if="${feed.type}==2"  >取消了关注用户
 									<strong th:text="${feed.get('receiverUserName')}"></strong>
 								</p>
 								<p th:if="${feed.type}==7">评论了文章</p>
@@ -143,6 +146,22 @@
                             </div>
                         </li>	
              </div>	 -->
+             
+ 		<div class="page-number">
+			<ul class="pagination" th:with="prePage=${pageid-1},nextPage=${pageid+1}">
+				<li><a th:href="@{'?page='+${prePage}}">&laquo;上一页</a></li>
+				<li><a href="javascript:void(0)">&nbsp;</a></li>
+				<li class="active"><a href="#">1</a></li>
+				<li><a href="javascript:void(0)">&nbsp;</a></li>
+
+				<li><a th:href="@{'?page='+${nextPage}}">下一页&raquo;</a></li>
+			</ul>		
+		</div>            
+             
+             
+             
+             
+             
              	
 		</div><!-- ./ page-div-->
 
