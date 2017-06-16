@@ -92,11 +92,11 @@ public class UserServiceImpl implements UserService {
 			throw new CmsException("该用户已经存在");
 		}
 		try {
-			Integer id = userMapper.maxId();
+			/*Integer id = userMapper.maxId();
 			if(id==null) id=0;
-			user.setId(id+1);
+			user.setId(id+1);*/
 			
-			userMapper.add(user);
+			userMapper.addUser(user);
 		}catch(Exception e){
 			throw new CmsException("用户添加失败");
 		}
@@ -256,7 +256,11 @@ public class UserServiceImpl implements UserService {
 		user.setGroupIDs(this.listUserGroupIds(user.getId()));
 		return user;
 	}
-
+	@Override
+	public User selectByIdWithoutRoleGroup(int id) {
+		User user = userMapper.selectUserByID(id);
+		return user;
+	}
 	public List<Role> listUserRoles(int id) {
 		List<Role> roles = userRoleMapper.selectRolesByUserID(id);
 		return roles;

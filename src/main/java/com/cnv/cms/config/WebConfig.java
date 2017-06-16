@@ -1,18 +1,22 @@
 package com.cnv.cms.config;
 
+import java.io.IOException;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.cnv.cms.controller.AdminResourcesController;
 import com.cnv.cms.interceptor.HostHolderInterceptor;
 import com.cnv.cms.interceptor.SessionAdminInterceptor;
 import com.cnv.cms.interceptor.SessionAuthInterceptor;
@@ -71,4 +75,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	    redisTemplate.setHashValueSerializer(mySerializer);
 	    logger.info("redisTemplate 初始化完成");
 	}
+	
+/*	@Autowired
+	public void setMapperLocations(SqlSessionFactory sqlSessionFactoryBean) throws IOException {
+		SqlSessionFactoryBean sqlSessionFactory = (SqlSessionFactoryBean)sqlSessionFactoryBean;
+		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+		Resource[] resources= resolver.getResources("classpath*:com/cnv/cms/mapper/*-mapper.xml");
+		sqlSessionFactory.setMapperLocations(resources);
+	}*/
 }

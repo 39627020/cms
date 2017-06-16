@@ -104,6 +104,8 @@ public interface UserService extends BaseService<User>{
 	public List<User> listUsersByGroupID(int id);
 	
 	public User login(String username,String password);
+
+	User selectByIdWithoutRoleGroup(int id);
 	
 
 }

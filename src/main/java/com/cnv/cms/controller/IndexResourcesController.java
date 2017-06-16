@@ -20,6 +20,7 @@ import com.cnv.cms.event.EventModel;
 import com.cnv.cms.event.EventProducer;
 import com.cnv.cms.event.EventType;
 import com.cnv.cms.model.HostHolder;
+import com.cnv.cms.model.User;
 import com.cnv.cms.service.ArticleService;
 import com.cnv.cms.service.ChannelService;
 import com.cnv.cms.service.FeedService;
@@ -118,10 +119,14 @@ public class IndexResourcesController {
     }
     @RequestMapping(path={"userdetail.html"})
     public String userDetail(Model model,HttpServletRequest request,@RequestParam(defaultValue="0") Integer userid) {
-    	if(userid==null || userid==0) return "redirect:/index.html";
+    	if(userid==null || userid==0) 
+    		return "redirect:/index.html";
+    	User user = userService.selectById(userid);
+    	if(user==null) 
+    		return "redirect:/index.html";
     	model.addAllAttributes(this.getCommontInfo(request));
     	model.addAttribute("articles", articleService.selectByUserId(userid));
-    	model.addAttribute("targetUser", userService.selectById(userid).getUsername());
+    	model.addAttribute("targetUser", user.getUsername());
     	model.addAttribute("targetId", userid);
     	model.addAttribute("fansNum", followService.getFollowNum(userid));
     	model.addAttribute("hasFollow", followService.isFollowedBy(userid, hostHolder.getUserId()));

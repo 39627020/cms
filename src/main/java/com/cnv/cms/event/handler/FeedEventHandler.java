@@ -52,7 +52,7 @@ public class FeedEventHandler implements EventHandler {
 	private String buildFeedContent(EventModel event){
 		Map<String,Object> map = new HashMap<>();
 		int actorUserId = event.getOwnerId();
-		String actroUserName = userService.selectById(actorUserId).getUsername();
+		String actroUserName = userService.selectByIdWithoutRoleGroup(actorUserId).getUsername();
 		
 		map.put("actorUserId", actorUserId);
 		map.put("actroUserName", actroUserName);
@@ -67,7 +67,7 @@ public class FeedEventHandler implements EventHandler {
 			
 		}else if(type==EventType.FOLLOW || type==EventType.UNFOLLOW){
 			int receiverId = (int) event.getExtData("userId");
-			String receiverUserName = userService.selectById(receiverId).getUsername();
+			String receiverUserName = userService.selectByIdWithoutRoleGroup(receiverId).getUsername();
 			map.put("receiverId", receiverId);
 			map.put("receiverUserName", receiverUserName);
 		}else if(type==EventType.COMMENT){

@@ -44,7 +44,7 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
     private CacheService cacheService;
 	
 	ZSetOperations<String,String> zsetOps = null;
-	HashOperations<String,String,Long> hashOps=null;
+	HashOperations<String, String, String> hashOps=null;
 	SetOperations<String, String> setOps = null;
 	
 	@Autowired
@@ -181,15 +181,17 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 					//根据更新时间表，poll最新的feed
 					Date date = this.getFeedUpdatetime(String.valueOf(userId), folloId);
 					List<Feed> pollFeeds = this.listByUserId(Integer.valueOf(folloId), date, 0, CmsConfig.getTimelineLen());
-					//push到自己的timeline
-					this.pushFeedsToUser(pollFeeds, userId);
-					//设置timeline更新时间
-					this.setFeedUpdateTime(userId, folloId, date);
+					if(pollFeeds!=null && !pollFeeds.isEmpty()){
+						//push到自己的timeline
+						this.pushFeedsToUser(pollFeeds, userId);
+						//设置timeline更新时间
+						this.setFeedUpdateTime(userId, folloId, date);
+					}
+	
 				}
 			}
 		}
 
-		//List<Object> rs = redisTemplate.exec();
 
 		//删除多余的feed，timeline中只保留100个
 		this.retainFeedsInTimeline(userId, CmsConfig.getTimelineLen());
@@ -208,16 +210,20 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 		//如果timeline中没有足够的数据
 		if(usersAndIds==null || usersAndIds.size()<len){
 			feeds = this.pollFeeds(userId, offset, len);
-			//poll到的数据存到timeline
-			//超出timeline范围的，暂时缓存到timeline，下次刷新时在updateTimeline中删除
-			this.pushFeedsToUser(feeds, userId);
-		}else{
-			//根据feed流读取feed
-			
-			feeds = this.listByTimelineMsg(usersAndIds);
+			if(feeds!=null && !feeds.isEmpty()){
+				//poll到的数据存到timeline
+				//超出timeline范围的，暂时缓存到timeline，下次刷新时在updateTimeline中删除
+				this.pushFeedsToUser(feeds, userId);
+				
+				usersAndIds = zsetOps.reverseRange(key, offset, offset+len-1);
+			}
+
 		}
 		
-
+		//根据feed流读取feed
+		
+		feeds = this.listByTimelineMsg(usersAndIds);
+	
 		return feeds;
 	}
 	@Override
@@ -334,9 +340,9 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 		//HashOperations<String,String,Long> hashOps=redisTemplate.opsForHash();
 		String  key = RedisKeyUtil.getFeedUpdateTimeKey(Integer.valueOf(userId));
 		//hashOps.put(key, folloId, 0);
-		Long timeLong = hashOps.get(key, targetUserId);
-		if(timeLong==null)
-			timeLong = 1L;
+		String tstr = hashOps.get(key, targetUserId);
+		Long timeLong = tstr==null? 1L:Long.valueOf(tstr);
+
 		Date date = new Date(timeLong);
 		return date;
 	}
@@ -344,7 +350,7 @@ public class FeedServiceImpl implements FeedService, InitializingBean{
 	public  void setFeedUpdateTime(int userId, String targetUserId, Date date){
 		//HashOperations<String,String,Long> hashOps=redisTemplate.opsForHash();
 		String  key = RedisKeyUtil.getFeedUpdateTimeKey(Integer.valueOf(userId));
-		hashOps.put(key, targetUserId, date.getTime());
+		hashOps.put(key, targetUserId, String.valueOf(date.getTime()));
 	}
 	@Override
 	public void afterPropertiesSet() throws Exception {
