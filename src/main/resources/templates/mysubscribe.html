@@ -56,7 +56,7 @@
 		
 			<!-- 左侧图片 -->
 			<div class="col-sm-1 col-xs-2">
-				<img th:src="'http://oqr1n6rjk.bkt.clouddn.com/user/head/B0'+${art.userId}+'.jpg?imageView2/1/w/30/h/30/format/jpg/q/75|imageslim'" alt="User Avatar" class="img-circle" />
+				<img th:src="'http://oqr1n6rjk.bkt.clouddn.com/user/head/G0'+${#numbers.formatInteger(art.userId%55,2)}+'.jpg?imageView2/1/w/30/h/30/format/jpg/q/75|imageslim'" alt="User Avatar" class="img-circle" />
 			</div>
 			<!-- 右侧内容 -->
 			<div class="col-sm-11 col-xs-10">

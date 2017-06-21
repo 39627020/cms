@@ -118,7 +118,7 @@ public class ChannelServiceImpl implements ChannelService {
 		return false;
 	}
 
-	@Cacheable(value="channelsCache",key="#root.methodName")
+	//@Cacheable(value="channelsCache",key="#root.methodName")
 	public List<Channel> selectAll() {
 		return channelMapper.selectAll();
 	}
@@ -135,7 +135,7 @@ public class ChannelServiceImpl implements ChannelService {
 	 * 获取Channel信息
 	 * @param id
 	 */
-	@Cacheable(value="channelsCache",key="#root.methodName+#id")
+	//@Cacheable(value="channelsCache",key="#root.methodName+#id")
 	public Channel selectById(int id) {
 		return channelMapper.selectById(id);
 	}
